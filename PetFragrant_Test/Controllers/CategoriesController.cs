@@ -36,7 +36,7 @@ namespace PetFragrant_Test.Controllers
 
             var categories = await _context.Categories
                 .Include(c => c.FatherCategory)
-                .FirstOrDefaultAsync(m => m.CategoryID == id);
+                .FirstOrDefaultAsync(m => m.CategoryId == id);
             if (categories == null)
             {
                 return NotFound();
@@ -57,7 +57,7 @@ namespace PetFragrant_Test.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryID,CategoryName,FatherCategoryID")] Categories categories)
+        public async Task<IActionResult> Create([Bind("CategoryID,CategoryName,FatherCategoryID")] Category categories)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace PetFragrant_Test.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FatherCategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", categories.FatherCategoryID);
+            ViewData["FatherCategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", categories.FatherCategoryId);
             return View(categories);
         }
 
@@ -82,7 +82,7 @@ namespace PetFragrant_Test.Controllers
             {
                 return NotFound();
             }
-            ViewData["FatherCategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", categories.FatherCategoryID);
+            ViewData["FatherCategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", categories.FatherCategoryId);
             return View(categories);
         }
 
@@ -91,9 +91,9 @@ namespace PetFragrant_Test.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("CategoryID,CategoryName,FatherCategoryID")] Categories categories)
+        public async Task<IActionResult> Edit(string id, [Bind("CategoryID,CategoryName,FatherCategoryID")] Category categories)
         {
-            if (id != categories.CategoryID)
+            if (id != categories.CategoryId)
             {
                 return NotFound();
             }
@@ -107,7 +107,7 @@ namespace PetFragrant_Test.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoriesExists(categories.CategoryID))
+                    if (!CategoriesExists(categories.CategoryId))
                     {
                         return NotFound();
                     }
@@ -118,7 +118,7 @@ namespace PetFragrant_Test.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FatherCategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", categories.FatherCategoryID);
+            ViewData["FatherCategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", categories.FatherCategoryId);
             return View(categories);
         }
 
@@ -132,7 +132,7 @@ namespace PetFragrant_Test.Controllers
 
             var categories = await _context.Categories
                 .Include(c => c.FatherCategory)
-                .FirstOrDefaultAsync(m => m.CategoryID == id);
+                .FirstOrDefaultAsync(m => m.CategoryId == id);
             if (categories == null)
             {
                 return NotFound();
@@ -154,7 +154,7 @@ namespace PetFragrant_Test.Controllers
 
         private bool CategoriesExists(string id)
         {
-            return _context.Categories.Any(e => e.CategoryID == id);
+            return _context.Categories.Any(e => e.CategoryId == id);
         }
     }
 }

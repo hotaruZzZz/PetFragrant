@@ -68,7 +68,7 @@ namespace PetFragrant_Test.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProdcutId"] = new SelectList(_context.Products, "ProdcutId", "ProdcutId", productSpec.ProdcutId);
-            ViewData["SpecID"] = new SelectList(_context.Specs, "SpecID", "SpecID", productSpec.SpecID);
+            ViewData["SpecID"] = new SelectList(_context.Specs, "SpecID", "SpecID", productSpec.SpecId);
             return View(productSpec);
         }
 
@@ -86,7 +86,7 @@ namespace PetFragrant_Test.Controllers
                 return NotFound();
             }
             ViewData["ProdcutId"] = new SelectList(_context.Products, "ProdcutId", "ProdcutId", productSpec.ProdcutId);
-            ViewData["SpecID"] = new SelectList(_context.Specs, "SpecID", "SpecID", productSpec.SpecID);
+            ViewData["SpecID"] = new SelectList(_context.Specs, "SpecID", "SpecID", productSpec.SpecId);
             return View(productSpec);
         }
 
@@ -123,7 +123,7 @@ namespace PetFragrant_Test.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ProdcutId"] = new SelectList(_context.Products, "ProdcutId", "ProdcutId", productSpec.ProdcutId);
-            ViewData["SpecID"] = new SelectList(_context.Specs, "SpecID", "SpecID", productSpec.SpecID);
+            ViewData["SpecID"] = new SelectList(_context.Specs, "SpecID", "SpecID", productSpec.SpecId);
             return View(productSpec);
         }
 

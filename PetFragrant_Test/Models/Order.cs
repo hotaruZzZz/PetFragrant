@@ -1,33 +1,28 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+
+#nullable disable
 
 namespace PetFragrant_Test.Models
 {
-    public class Order
+    public partial class Order
     {
-        [Key]
-        [Display(Name = "訂單ID")]
-        public string OrderID { get; set; }
-        [Required]
-        [Display(Name = "顧客ID")]
-        public string CustomerID { get; set; }
-        [Display(Name = "訂購日期")]
+        public Order()
+        {
+            Coupons = new HashSet<Coupon>();
+            OrderDetails = new HashSet<OrderDetail>();
+        }
+
+        public string OrderId { get; set; }
+        public string CustomerId { get; set; }
         public DateTime Orderdate { get; set; }
-        [Display(Name = "送貨日期")]
         public DateTime Shipdate { get; set; }
-        [Display(Name = "到達日期")]
         public DateTime Arriiveddate { get; set; }
-        [Display(Name = "付款方式")]
         public string Payment { get; set; }
-        [Display(Name = "運送方式")]
         public string Delivery { get; set; }
-        public ICollection<OrderDetail> Ordertails { get; set; }
 
-        [ForeignKey("CustomerID")]
-        public Customer Customer { get; set; }
-
+        public virtual Customer Customer { get; set; }
+        public virtual ICollection<Coupon> Coupons { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

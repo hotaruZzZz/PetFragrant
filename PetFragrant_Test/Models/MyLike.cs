@@ -1,16 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace PetFragrant_Test.Models
 {
-    public class MyLike
+    public partial class MyLike
     {
-        [Display(Name = "產品ID")]
         public string ProdcutId { get; set; }
-        [Display(Name = "顧客ID")]
-        public string CustomerID { get; set; }
+        public string CustomerId { get; set; }
 
-        public Product Product { get; set; }
-        public Customer Customer { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual Product Prodcut { get; set; }
     }
 }

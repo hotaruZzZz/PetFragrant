@@ -1,35 +1,32 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+
+#nullable disable
 
 namespace PetFragrant_Test.Models
 {
-    public class Customer
+    public partial class Customer
     {
-        [Key]
-        [Display(Name = "顧客ID")]
-        public string CustomerID { get; set; }
-        [Display(Name = "顧客姓名")]
+        public Customer()
+        {
+            MyLikes = new HashSet<MyLike>();
+            Orders = new HashSet<Order>();
+            ShoppingCarts = new HashSet<ShoppingCart>();
+        }
+
+        public string CustomerId { get; set; }
         public string CustomerName { get; set; }
-        [Display(Name = "是否為管理者")]
         public bool IsAdmin { get; set; }
-        [Display(Name = "密碼")]
         public string Password { get; set; }
-        [Display(Name = "Email")]
         public string Email { get; set; }
-        [Display(Name = "電話")]
         public string PhoneNumber { get; set; }
-        [Display(Name = "地址")]
         public string Address { get; set; }
-        [Display(Name = "會員等級")]
         public string Level { get; set; }
-        [Display(Name = "生日")]
         public DateTime Birthday { get; set; }
+        public bool? EmailConfirmed { get; set; }
 
-        public ICollection<MyLike> MyLike { get; set; }
-
-        public ICollection<ShoppingCart> ShoppingCarts { get; set; }
-
+        public virtual ICollection<MyLike> MyLikes { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; }
     }
 }

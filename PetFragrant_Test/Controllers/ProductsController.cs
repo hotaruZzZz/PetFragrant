@@ -47,8 +47,8 @@ namespace PetFragrant_Test.Controllers
             int len = piclen.GetFiles("*.png").Length;
             if(user != null)
             {
-                string userId = user.CustomerID;
-                trace = _context.MyLikes.Any(p => p.ProdcutId == id && p.CustomerID == userId);
+                string userId = user.CustomerId;
+                trace = _context.MyLikes.Any(p => p.ProdcutId == id && p.CustomerId == userId);
             }
             
             ViewData["IsLike"] = trace;
@@ -98,7 +98,7 @@ namespace PetFragrant_Test.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriesID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", product.CategoriesID);
+            ViewData["CategoriesID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", product.CategoriesId);
             return View(product);
         }
 
@@ -115,7 +115,7 @@ namespace PetFragrant_Test.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoriesID"] = new SelectList(_context.Categories, "CategoryID", "CategoryName", product.CategoriesID);
+            ViewData["CategoriesID"] = new SelectList(_context.Categories, "CategoryID", "CategoryName", product.CategoriesId);
             return View(product);
         }
 
@@ -151,7 +151,7 @@ namespace PetFragrant_Test.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoriesID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", product.CategoriesID);
+            ViewData["CategoriesID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", product.CategoriesId);
             return View(product);
         }
 
@@ -235,7 +235,7 @@ namespace PetFragrant_Test.Controllers
                         _context.Add(specValue);
                         await _context.SaveChangesAsync();
                         
-                        ProductSpec ps = new ProductSpec { ProdcutId = product.ProdcutId, SpecID = specValue.SpecID};
+                        ProductSpec ps = new ProductSpec { ProdcutId = product.ProdcutId, SpecId = specValue.SpecId};
                         _context.Add(ps);
                         _context.SaveChanges();
                     }
@@ -244,7 +244,7 @@ namespace PetFragrant_Test.Controllers
 
                 return RedirectToAction("ProductList");
             }
-            ViewData["CategoriesID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", product.CategoriesID);
+            ViewData["CategoriesID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", product.CategoriesId);
             return View(product);
         }
         private bool ProductExists(string id)

@@ -1,4 +1,4 @@
-﻿@model PetFragrant_Test.Models.Categories
+﻿@model Category
 
 @{
     ViewData["Title"] = "Details";
@@ -20,11 +20,11 @@
             @Html.DisplayNameFor(model => model.FatherCategory)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FatherCategory.CategoryID)
+            @Html.DisplayFor(model => model.FatherCategory.CategoryId)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.CategoryID">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.CategoryId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

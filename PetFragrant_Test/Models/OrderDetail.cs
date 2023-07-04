@@ -1,19 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace PetFragrant_Test.Models
 {
-    public class OrderDetail
+    public partial class OrderDetail
     {
-        [Display(Name = "產品ID")]
         public string ProdcutId { get; set; }
-        [Display(Name = "訂單ID")]
-        public string OrderID { get; set; }
-        [Display(Name = "數量")]
+        public string OrderId { get; set; }
         public int Amount { get; set; }
-        [Display(Name = "折扣")]
         public decimal QtDiscount { get; set; }
 
-        public Order Order { get; set; }
-        public Product Product { get; set; }
+        public virtual Order Order { get; set; }
+        public virtual Product Prodcut { get; set; }
     }
 }

@@ -1,16 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace PetFragrant_Test.Models
 {
-    public class ProductSpec
+    public partial class ProductSpec
     {
-
-        [Display(Name = "規格ID")]
-        public string SpecID { get; set; }
-        [Display(Name = "產品ID")]
+        public string SpecId { get; set; }
         public string ProdcutId { get; set; }
 
-        public Spec Spec { get; set; }
-        public Product Product { get; set; }    
+        public virtual Product Product { get; set; }
+        public virtual Spec Spec { get; set; }
     }
 }

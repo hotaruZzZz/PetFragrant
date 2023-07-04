@@ -1,21 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace PetFragrant_Test.Models
 {
-    public class ShoppingCart
+    public partial class ShoppingCart
     {
-        [Display(Name = "產品ID")]
         public string ProdcutId { get; set; }
-        [Display(Name = "顧客ID")]
-        public string CustomerID { get; set; }
-        [Display(Name = "購買數量")]
+        public string CustomerId { get; set; }
         public int Quantity { get; set; }
-        [Display(Name = "規格")]
-        public string SpecID { get; set; }
+        public string SpecId { get; set; }
 
-        public Product Product { get; set; }
-        public Customer Customer { get; set; }
-
+        public virtual Customer Customer { get; set; }
+        public virtual Product Prodcut { get; set; }
+        public virtual Spec Spec { get; set; }
     }
 }

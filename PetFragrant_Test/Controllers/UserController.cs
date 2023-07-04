@@ -55,11 +55,11 @@ namespace PetFragrant_Test.Controllers
 
                 var user = await _ctx.Customers
                   .FirstOrDefaultAsync(u => u.CustomerName == User.Identity.Name);
-                string userId = user.CustomerID;
+                string userId = user.CustomerId;
                 var products = _ctx.Products
-            .Include(p => p.MyLike)
+            .Include(p => p.MyLikes)
                 .ThenInclude(pp => pp.Customer)
-            .Where(p => p.MyLike.Any(pp => pp.CustomerID.Equals(userId)));
+            .Where(p => p.MyLikes.Any(pp => pp.CustomerId.Equals(userId)));
                 
                 return View(products);
                 }
@@ -73,7 +73,7 @@ namespace PetFragrant_Test.Controllers
                 var user = await _ctx.Customers.FirstOrDefaultAsync(u => u.CustomerName == User.Identity.Name);
                 if (user != null)
                 {
-                    string userId = user.CustomerID;
+                    string userId = user.CustomerId;
                     return userId;
                 }
 
@@ -90,10 +90,10 @@ namespace PetFragrant_Test.Controllers
                 var user = await _ctx.Customers.FirstOrDefaultAsync(u => u.CustomerName == User.Identity.Name);
                 if (user != null)
                 {
-                    string userId = user.CustomerID;
+                    string userId = user.CustomerId;
 
                     // 檢查是否已經存在追蹤資料
-                    bool alreadyLiked = _ctx.MyLikes.Any(ml => ml.ProdcutId == id && ml.CustomerID == userId);
+                    bool alreadyLiked = _ctx.MyLikes.Any(ml => ml.ProdcutId == id && ml.CustomerId == userId);
                     if (!alreadyLiked)
                     {
                         Product product = _ctx.Products.FirstOrDefault(p => p.ProdcutId == id);
@@ -102,7 +102,7 @@ namespace PetFragrant_Test.Controllers
                             MyLike myLike = new MyLike
                             {
                                 ProdcutId = id,
-                                CustomerID = userId
+                                CustomerId = userId
                             };
                             _ctx.Add(myLike);
                             _ctx.SaveChanges();
@@ -111,7 +111,7 @@ namespace PetFragrant_Test.Controllers
                     }
                     else
                     {
-                        var Like = _ctx.MyLikes.FirstOrDefault(p => p.ProdcutId  == id && p.CustomerID == userId);
+                        var Like = _ctx.MyLikes.FirstOrDefault(p => p.ProdcutId  == id && p.CustomerId == userId);
                         _ctx.MyLikes.Remove(Like);
                         _ctx.SaveChanges();
                         return Redirect("/Products/ProductDetail/" + id);
@@ -135,12 +135,12 @@ namespace PetFragrant_Test.Controllers
                 var user = await _ctx.Customers.FirstOrDefaultAsync(u => u.CustomerName == User.Identity.Name);
                 if (user != null)
                 {
-                    string userId = user.CustomerID;
+                    string userId = user.CustomerId;
 
                     ShoppingCart shopping = new ShoppingCart{
-                        CustomerID = userId,
+                        CustomerId = userId,
                         ProdcutId=productID,
-                        SpecID = spec,
+                        SpecId = spec,
                         Quantity = quantity
                     };
                     _ctx.Add(shopping);
@@ -160,12 +160,12 @@ namespace PetFragrant_Test.Controllers
 
                 var user = await _ctx.Customers
                   .FirstOrDefaultAsync(u => u.CustomerName == User.Identity.Name);
-                string userId = user.CustomerID;
+                string userId = user.CustomerId;
                 var products = _ctx.Products
                     .Include(p => p.ShoppingCarts)
                     .Include(p => p.ProductSpecs)
                         .ThenInclude(ps => ps.Spec)
-                    .Where(p => p.ShoppingCarts.Any(pp => pp.CustomerID.Equals(userId)));
+                    .Where(p => p.ShoppingCarts.Any(pp => pp.CustomerId.Equals(userId)));
                 
                 return View(products);
             }
@@ -179,7 +179,7 @@ namespace PetFragrant_Test.Controllers
             string userId = await UserID();
             if(id != null)
             {
-                var cart = await _ctx.shoppingCarts.FirstAsync(p => p.ProdcutId == id && p.CustomerID == userId);
+                var cart = await _ctx.ShoppingCarts.FirstAsync(p => p.ProdcutId == id && p.CustomerId == userId);
                 _ctx.Remove(cart);
                 await _ctx.SaveChangesAsync();
             }
@@ -193,7 +193,7 @@ namespace PetFragrant_Test.Controllers
         public async Task<IActionResult> CountProduct()
         {
             string userId = await UserID();
-            int total = await _ctx.shoppingCarts.Where(p => p.CustomerID == userId).CountAsync();
+            int total = await _ctx.ShoppingCarts.Where(p => p.CustomerId == userId).CountAsync();
             ViewBag.TotalCount = total;
             return PartialView("_NavbarPartial", total);
 

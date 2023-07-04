@@ -1,4 +1,4 @@
-﻿@model PetFragrant_Test.Models.Categories
+﻿@model Category
 
 @{
     ViewData["Title"] = "Create";
@@ -13,9 +13,9 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CategoryID" class="control-label"></label>
-                <input asp-for="CategoryID" class="form-control" />
-                <span asp-validation-for="CategoryID" class="text-danger"></span>
+                <label asp-for="CategoryId" class="control-label"></label>
+                <input asp-for="CategoryId" class="form-control" />
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryName" class="control-label"></label>
@@ -23,8 +23,8 @@
                 <span asp-validation-for="CategoryName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FatherCategoryID" class="control-label"></label>
-                <select asp-for="FatherCategoryID" class ="form-control" asp-items="ViewBag.FatherCategoryID">
+                <label asp-for="FatherCategoryId" class="control-label"></label>
+                <select asp-for="FatherCategoryId" class="form-control" asp-items="ViewBag.FatherCategoryID">
                     <option value="">選擇父類別</option>
                 </select>
             </div>

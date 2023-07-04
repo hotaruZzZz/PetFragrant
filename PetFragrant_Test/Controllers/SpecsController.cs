@@ -34,7 +34,7 @@ namespace PetFragrant_Test.Controllers
             }
 
             var spec = await _context.Specs
-                .FirstOrDefaultAsync(m => m.SpecID == id);
+                .FirstOrDefaultAsync(m => m.SpecId == id);
             if (spec == null)
             {
                 return NotFound();
@@ -88,7 +88,7 @@ namespace PetFragrant_Test.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("SpecID,SpecName")] Spec spec)
         {
-            if (id != spec.SpecID)
+            if (id != spec.SpecId)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace PetFragrant_Test.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SpecExists(spec.SpecID))
+                    if (!SpecExists(spec.SpecId))
                     {
                         return NotFound();
                     }
@@ -125,7 +125,7 @@ namespace PetFragrant_Test.Controllers
             }
 
             var spec = await _context.Specs
-                .FirstOrDefaultAsync(m => m.SpecID == id);
+                .FirstOrDefaultAsync(m => m.SpecId == id);
             if (spec == null)
             {
                 return NotFound();
@@ -147,7 +147,7 @@ namespace PetFragrant_Test.Controllers
 
         private bool SpecExists(string id)
         {
-            return _context.Specs.Any(e => e.SpecID == id);
+            return _context.Specs.Any(e => e.SpecId == id);
         }
     }
 }

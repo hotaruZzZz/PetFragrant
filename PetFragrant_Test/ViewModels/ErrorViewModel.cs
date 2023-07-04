@@ -1,6 +1,6 @@
 using System;
 
-namespace PetFragrant_Test.Models
+namespace PetFragrant_Test.ViewModels
 {
     public class ErrorViewModel
     {

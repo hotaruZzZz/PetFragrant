@@ -119,7 +119,7 @@ namespace PetFragrant_Test.Controllers
             {
                 Customer user = new Customer
                 {
-                    CustomerID = Guid.NewGuid().ToString(),
+                    CustomerId = Guid.NewGuid().ToString(),
                     CustomerName = registerVM.UserName,
                     Password = _hashService.MD5Hash(registerVM.Password),
                     PhoneNumber = registerVM.PhoneNumber,
