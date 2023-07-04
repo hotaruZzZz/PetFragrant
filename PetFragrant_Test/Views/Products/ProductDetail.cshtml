@@ -1,0 +1,245 @@
+﻿@model PetFragrant_Test.Models.Product
+
+@{
+    ViewData["Title"] = Model.ProductName;
+    int len =   (int)ViewData["len"];
+    int s = 1;
+}
+@section topJS{
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+}
+
+@section topCSS{
+    <link rel="stylesheet" href="~/css/product_page.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+}
+
+
+<!-- 麵包屑 -->
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">首頁</a></li>
+        <li class="breadcrumb-item" aria-current="page"><a asp-action="ProductList" asp-controller="Products">飼料</a></li>
+    </ol>
+</nav>
+<!-- 購買page -->
+<div class="row d-flex justify-content-evenly p-4 shadow-sm" style="background-color: #ffffff;">
+    <div class="col-md-12 col-lg-4">
+        <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
+            <div class="swiper-wrapper">
+                @for (var i = 1; i <= len; i++)
+                {
+                    <div class="swiper-slide" style="">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#@(i)-model">
+                            <div class="img-wrap"><img class="img-thumbnail" src="~/images/@(Model.ProdcutId)/@(i).png" /></div>
+                        </a>
+                    </div>
+
+                }
+
+            </div>
+
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+        <div thumbsSlider="" class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                @for (var i = 1; i <= len; i++)
+                {
+                    <div class="swiper-slide">
+                        @*<img src="https://picsum.photos/300/300?random=1">*@
+                        <img src="~/images/@(Model.ProdcutId)/@(i).png" />
+                    </div>
+
+                }
+
+
+            </div>
+        </div>
+        @for (var i = 1; i <= len; i++)
+        {
+            <div class="modal fade" id="@(i)-model" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div>
+                        <div class="modal-body">
+                            <img class="img-fluid " src="~/images/@(Model.ProdcutId)/@(i).png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+
+
+    </div>
+
+    <div class="col-md-12 col-lg-7 ">
+            <form method="post" id="product">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" value="@Model.ProdcutId" name="productID"/>
+
+                <h3 style="font-family: Arial, Helvetica, sans-serif;font-weight: bold;">@Model.ProductName</h3>
+                <div class="price">
+                    <h2 style="color: rgb(194, 22, 22);">NT @Math.Round(Model.Price*(decimal)0.9)</h2>
+                    <h6 class="text-black-50"><del>NT @Math.Round(Model.Price)</del></h6>
+                    <p class="text-black-50">庫存: @Model.Inventory</p>
+                    <div class="row">
+                        <div class="amount col-5 d-flex flex-column">
+                            <p style="color: #6f5f5f;">數量:</p>
+                            <div class="d-flex mb-2">
+                                <span><input type="button" class="sub" value="-" /></span>
+                                <input type="text" value="1" style="width: 40px;" id="quantity" name="quantity" class="ms-1 me-1">
+                                <span><input type="button" class="add" value="+" /></span>
+                            </div>
+
+                        </div>
+                        <div class="col-5 d-flex flex-column justify-content-between">
+                            <input type="hidden" name="productId" value="@Model.ProdcutId" />
+                            <p style="color: #6f5f5f;">規格:</p>
+                            <div class="d-flex flex-wrap">
+
+                                @foreach (var sp in Model.ProductSpecs)
+                                {
+
+                                    <label class="">
+                                        <input type="radio" name="spec" value="@sp.Spec.SpecID" @(s == 1 ? "checked" : "") />
+
+                                        <span class="button">
+                                            @sp.Spec.SpecName
+                                        </span>
+                                    </label>
+
+                                    s++;
+
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="describe mt-2 p-3" style="background-color: #f6f6f6;">
+                        <p><b>付款方式 </b>雞腿、飼料、罐罐，與其他多種方式</p>
+                        <p><b>運費 </b>$87</p>
+                        <p><b>配送方式 </b>狗狗會送來你家</p>
+                    </div>
+                    <div class="buy d-flex justify-content-end align-items-center">
+                        <a class="btn btn-danger d-flex align-content-center" id="cart" asp-action="CreateLike" asp-controller="User" asp-route-id="@Model.ProdcutId">@((bool)ViewData["IsLike"] ? Html.Raw("<i class=\"material-icons\">favorite</i>已追蹤") : Html.Raw("<i class=\"material-icons\">favorite_border</i>追蹤"))</a>
+                        <button type="submit" class="m-2 btn btn-danger" id="shopcart" value="加入購物車" asp-route-id="@Model.ProdcutId">加入購物車</button>
+                        <button type="submit" class="m-2 btn btn-danger">直接購買</button>
+
+                    </div>
+                </div>
+            </form>
+    </div>
+</div>
+
+<div class="row shadow-sm bg-white mt-4 p-4">
+    <h4 class="d-flex justify-content-center w-100"><b>商品詳情</b></h4>
+ 
+        <h5 class="fw-bold">商品規格</h5>
+        @foreach (var item in Model.ProductSpecs)
+        {
+
+            <p>@item.Spec.SpecName</p>
+        }
+        <hr>
+
+    <h5 class="fw-bold">商品描述</h5>
+        <p>@Model.ProductDescription</p>
+
+
+        <hr>
+    <h5 class="fw-bold">商品評價</h5>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptate rerum quidem provident, ratione at laborum! Unde, amet debitis assumenda cum magnam similique. Magnam quae provident eos, quaerat perferendis alias earum.</p>
+
+ 
+</div>
+
+<div class="row shadow-sm bg-white  p-4">
+    <h4><b>推薦</b></h4>
+    <div class="col-12">
+    </div>
+</div>
+
+<a href="@ViewContext.HttpContext.Request.Headers["Referer"].ToString()"
+   class="btn btn-primary mt-4">Back返回上一頁</a>
+
+
+
+
+@section endJS{
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+
+    <script>
+        let add = document.querySelector(".add");
+        let sub = document.querySelector(".sub");
+        let quantity = document.getElementById("quantity");
+        let shopcart = document.getElementById("shopcart");
+
+        // 增減按鈕
+        add.addEventListener("click", function () {
+            let v = parseInt(quantity.value) + 1;
+            quantity.value = v;
+            console.log(quantity.innerText);
+        });
+
+        sub.addEventListener("click", function () {
+            let v = parseInt(quantity.value) - 1;
+            if (v < 0) quantity.value = 0;
+            else quantity.value = v;
+
+            console.log(quantity.innerText);
+        });
+
+
+
+        // add product
+        $(document).ready(function () {
+            $('#shopcart').click(function () {
+                // 禁用按鈕，防止重複點擊
+                $(this).prop('disabled', true);
+
+                // 加入購物車動畫
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: '成功加入購物車！',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                // 等待5秒後提交表單
+                setTimeout(function () {
+                    var formData = $('#product').serialize();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/User/AddProduct',
+                        data: formData,
+                        success: function (response) {
+                            // 在成功回調函式中處理伺服器的回應
+                        },
+                        error: function (xhr, status, error) {
+                            // 在錯誤回調函式中處理請求的錯誤
+                        }
+                    });
+
+                    // 啟用按鈕
+                    $('#shopcart').prop('disabled', false);
+                    location.reload();
+                }, 1500); 
+                
+            });
+
+ 
+            
+        });
+
+
+    </script>
+}

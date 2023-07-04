@@ -1,0 +1,286 @@
+﻿@model IEnumerable<PetFragrant_Test.Models.Product>
+@{
+    ViewData["Title"] = "首頁";
+}
+
+
+    <!-- nav -->
+    <div class="row d-flex justify-content-between align-items-center mb-4">
+        <!-- icon -->
+        <div class="icon col-12 col-md-2">
+            <a asp-action="Index" asp-controller="Home"><img src="~/images/dog.png" alt="" width="100%"></a>
+        </div>
+        <!-- 搜尋欄 -->
+        <div class="col-12 col-md-6">
+            <form class="input-group mb-1" action="~/Search" method="get">
+                <input type="text" class="form-control" placeholder="尋找毛孩商品" aria-label="尋找毛孩商品"
+                        aria-describedby="basic-addon2" name="keyword">
+                <div class="input-group-append">                  
+                    <button class="btn  bg-warning text-white" type="submit">搜尋</button>
+                </div>
+            </form>
+            <div class="Topic d-flex flex-wrap">
+                <a href="#" class="me-2">罐頭食品</a>
+                <a href="#" class="me-2">零食</a>
+                <a href="#" class="me-2">貓頭套</a>
+                <a href="#" class="me-2">項圈</a>
+                <a href="#" class="me-2">胸背帶</a>
+                <a href="#" class="me-2">寵物尿墊</a>
+                <a href="#" class="me-2">貓草</a>
+                <a href="#" class="me-2">寵物除蚤藥</a>
+            </div>
+        </div>
+
+        @*廣告優惠*@
+        <div class="col-12 col-md-4">
+            <a href="#"><img src="~/images/uhui.png" alt="優惠狗狗"></a>
+        </div>
+    </div>
+
+
+
+<partial name="_categoriesPartial" />
+
+<div class="container mb-3 ">
+
+    @*幻燈片*@
+    
+    <div id="carouselExampleIndicators" class="carousel slide carousel-fade " data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button style="width: 15px;height: 15px; border-radius: 50%;" type="button"
+                    data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true"
+                    aria-label="Slide 1"></button>
+            <button style="width: 15px;height: 15px;border-radius: 50%;" type="button"
+                    data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button style="width: 15px;height: 15px;border-radius: 50%;" type="button"
+                    data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button style="width: 15px;height: 15px;border-radius: 50%;" type="button"
+                    data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="2000">
+                <img src="https://resource02.ulifestyle.com.hk/ulcms/content/article/image/w600/ut/20190829133417__07.3.jpg"
+                     class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item" data-bs-interval="2000">
+                <img src="https://il.beauty321.com/gallery/articleIMG/AL_26786.jpg"
+                     class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item" data-bs-interval="2000">
+                <img src="https://media.karousell.com/media/photos/products/2021/9/6/893_kakao_friends__ryan__apeac_1630949520_4c4a7262_progressive"
+                     class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item" data-bs-interval="2000">
+                <img src="https://www.niusnews.com/upload/imgs/default/2019AugJenny/28Kakao/6.jpg" class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+
+    @*推薦商品*@
+    <div class="row mt-3 bg-white p-2 ">
+        <h1><center>熱銷商品</center></h1>
+        <div class="col-12 col-md-3">
+            <div class="card ">
+                <div class="pic">
+                    <img src="~/images/home (1).jpg"
+                         class="card-img-top " alt="...">
+                </div>
+                <div class="card-body ">
+                    <h5 class="card-title tcenter ">Pooh Story !</h5>
+                    <p class="card-text">
+                        Pooh is so adorable, isn't it? <br> Winnie the Pooh!!! <br> We need the
+                        Pooh!!!
+                    </p>
+                    <div class=" d-flex justify-content-between ">
+                        <a>$499</a>
+                        <button><i class="material-icons empty">add_shopping_cart</i></button>
+                    </div>
+                </div>
+                <div class="soldout ">Soldout</div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="card ">
+                <div class="soldoutcard">
+                    <div class="soldout">Soldout</div>
+                    <img src="~/images/home (2).jpg"
+                         class="card-img-top" alt="...">
+                </div>
+                <div class="card-body ">
+                    <h5 class="card-title tcenter ">Ballon!</h5>
+                    <p class="card-text">
+                        Pooh is so adorable, isn't it? <br> Winnie the Pooh!!! <br> We need the Pooh!!!
+                    </p>
+                    <div class="d-flex justify-content-between">
+                        <a>$499</a>
+                        <button><i class="material-icons empty">add_shopping_cart</i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="card">
+                <div class="pic">
+                    <img src="~/images/home (3).jpg"
+                         class="card-img-top" alt="...">
+                </div>
+                <div class="card-body ">
+                    <h5 class="card-title tcenter ">Piglet</h5>
+                    <p class="card-text">
+                        Pooh is so adorable, isn't it? <br> Winnie the Pooh!!! <br> We need the Pooh!!!
+                    </p>
+                    <div class="d-flex justify-content-between ">
+                        <a>$499</a>
+                        <button><i class="material-icons ">add_shopping_cart</i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-3">
+            <div class="card">
+                <div class="pic">
+                    <img src="~/images/home (4).jpg" class="card-img-top " alt="...">
+                </div>
+                <div class="card-body ">
+                    <h5 class="card-title tcenter "> Rabbit!</h5>
+                    <p class="card-text">
+                        Pooh is so adorable, isn't it? <br> Winnie the Pooh!!! <br> We need the Pooh!!!
+                    </p>
+                    <div class="d-flex justify-content-between">
+                        <a>$499</a>
+                        <button><i class="material-icons ">add_shopping_cart</i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*推薦*@
+    <div class="row  bg-white p-2 mt-3 rounded-2 shadow-sm">
+        <h1 style="color: darkblue;" class="fw-bold"><center>香檳毛孩產品心得分享</center></h1>
+
+        <div class="share d-flex align-items-center mt-2 flex-wrap">
+            <div class="col-12 col-md-6 d-flex flex-wrap justify-content-center">
+                <div class="img-container">
+                    <img src="~/images/home (6).jpg" alt="..." class="rounded-circle ">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 ">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Molly</h3>
+                    <table class="table">
+                        <tr>
+                            <td>年齡:&ensp;6歲</td>
+                            <td>性別:&ensp;女</td>
+                        </tr>
+                        <tr>
+                            <td>品種:&ensp;臘腸</td>
+                            <td>使用商品:&ensp;潔牙骨</td>
+                        </tr>
+                    </table>
+                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi totam tempora minima commodi voluptas beatae!</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+            </div>
+        </div>
+        <div class="share d-flex align-items-center mt-2 flex-wrap">
+            <div class="col-12 col-md-6 d-flex flex-wrap justify-content-center">
+                <div class="img-container">
+                    <img src="https://cdn-v2.dogcatstar.com/prod/2020/07/03/1077797/recommend4.jpeg.webp" alt="..." class="rounded-circle ">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 ">
+                <div class="card-body">
+                    <h3 class="card-title text-center">笨貓貓</h3>
+                    <table class="table">
+                        <tr>
+                            <td>年齡:&ensp;3歲</td>
+                            <td>性別:&ensp;男</td>
+                        </tr>
+                        <tr>
+                            <td>品種:&ensp;三花</td>
+                            <td>使用商品:&ensp;肉泥</td>
+                        </tr>
+                    </table>
+                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi totam tempora minima commodi voluptas beatae!</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+            </div>
+        </div>
+     
+                <div class="share d-flex align-items-center mt-2 flex-wrap">
+            <div class="col-12 col-md-6 d-flex flex-wrap justify-content-center">
+                <div class="img-container">
+                    <img src="~/images/Leo.jpg" alt="..." class="rounded-circle ">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 ">
+                <div class="card-body">
+                    <h3 class="card-title text-center">Leo</h3>
+                    <table class="table">
+                        <tr>
+                            <td>年齡:&ensp;2歲</td>
+                            <td>性別:&ensp;男</td>
+                        </tr>
+                        <tr>
+                            <td>品種:&ensp;米克斯</td>
+                            <td>使用商品:&ensp;罐頭</td>
+                        </tr>
+                    </table>
+                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi totam tempora minima commodi voluptas beatae!</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+            </div>
+        </div>
+                <div class="share d-flex align-items-center mt-2 flex-wrap">
+            <div class="col-12 col-md-6 d-flex flex-wrap justify-content-center">
+                <div class="img-container">
+                    <img src="data:image/jpeg;base64,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" alt="..." class="rounded-circle ">
+                </div>
+            </div>
+            <div class="col-12 col-md-6 ">
+                <div class="card-body">
+                    <h3 class="card-title text-center">貓</h3>
+                    <table class="table">
+                        <tr>
+                            <td>年齡:&ensp;?歲</td>
+                            <td>性別:&ensp;男</td>
+                        </tr>
+                        <tr>
+                            <td>品種:&ensp;三花</td>
+                            <td>使用商品:&ensp;罐頭</td>
+                        </tr>
+                    </table>
+                    <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi totam tempora minima commodi voluptas beatae!</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+ 
+
+    @*推薦*@
+    <partial name="_recommendPartial" />
+
+    
+</div>
+
+
+
+@section topCSS{
+    <link rel="stylesheet" href="~/css/home.css" />
+}
+              
+                      
