@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Backstage";
+}
+
+<div class="container d-flex bordercolor">
+    <div class="left-block left">
+        <button>客戶管理</button><hr>
+        <button>訂單管理</button><hr>
+        <button>上架商品</button><hr>
+        <button>商品管理</button><hr>
+        <button>折價券管理</button><hr>
+        <button>已售出的商品</button><hr>
+        <button>銷售報表</button>
+    </div>
+    <div class="right-block d-flex">
+        <div class="top ">
+            <div class="block">
+                <button><i class="material-icons large">more_horiz</i></button>
+                <span>1</span>
+                <p>待處理訂單</p>
+            </div><hr>
+            <div class="block">
+                <button><i class="material-icons large">assignment</i></button>
+                <span>2</span>
+                <p>今日訂單量</p>
+            </div><hr>
+            <div class="block">
+                <button><i class="material-icons large">monetization_on</i></button>
+                <span>3</span>
+                <p>今日銷售總金額</p>
+            </div>
+        </div>
+        <div class="middle d-flex gap-lg-2 p-0">
+            <div class="block">
+                <button><i class="material-icons large">file_upload</i></button>
+                <p>上架商品</p>
+            </div>
+            <div class="block">
+                <button><i class="material-icons large">build</i></button>
+                <p>管理商品</p>
+            </div>
+            <div class="block">
+                <button><i class="material-icons large">assignment</i></button>
+                <p>訂單管理</p>
+            </div>
+            <div class="block">
+                <button><i class="material-icons large">card_giftcard</i></button>
+                <p>優惠券管理</p>
+            </div>
+            <div class="block">
+                <button><i class="material-icons large">person</i></button>
+                <p>會員管理</p>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="bottom-left">
+                <img src="https://picsum.photos/300/200/?random=30">
+            </div>
+            <div class="bottom-right">
+                <img src="https://picsum.photos/300/200/?random=40">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section topCSS{
+    <link rel="stylesheet" href="~/css/home.css" />
+    <link rel="stylesheet" href="~/css/Backstage.css" />
+}

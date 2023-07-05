@@ -1,0 +1,47 @@
+﻿@model IEnumerable<PetFragrant_Test.Models.Product>
+@{
+    ViewData["Title"] = "likes";
+}
+
+<h1>按讚好物</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>商品名稱</th>
+            <th>價錢</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+                <td><img src="~/images/@(item.ProdcutId)/1.png" class="img-con-s mt-1 "></td>
+                <td><h6 class="card-title w-100" style="color:midnightblue">@item.ProductName</h6></td>
+                <td><p>@(item.Price * (decimal)(0.9))</p></td>
+                <td><a class="btn btn-danger"  onclick="unfollow('@item.ProdcutId')">取消追蹤</a></td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section endJS{
+    <script>
+        function unfollow(productId) {
+
+            $.ajax({
+                url: '/User/Unfollow',
+                type: 'POST',
+                data: { id: productId },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (error) {
+
+                }
+            });
+        }
+    </script>
+}
+

@@ -1,0 +1,189 @@
+﻿@model PetFragrant_Test.Models.Product
+
+@{
+    ViewData["Title"] = "AddProduct";
+}
+
+<h1>新增產品</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddProduct" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label class="btn btn-secondary m-2">
+                    上傳圖片
+                    <input type="file" name="file" multiple accept="image/png, image/gif, image/jpeg" style="display:none;" onchange="previewImages()" />
+                </label>
+            </div>
+
+            <div class="form-group d-flex">
+                <div class="w-50">
+                    <label class="control-label">主類別</label>
+                    <select id="mainCategory"  class="form-control" asp-items="ViewBag.CategoriesID"></select>
+                </div>
+                <div class="w-50 ms-2">
+                    <label class="control-label">子類別</label>
+                    <select id="subCategory" name="CategoriesId" class="form-control"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">規格</label>
+                <div class="spec" id="spec">
+                    <button type="button" class="btn btn-secondary m-2" id="add">
+                        新增規格+
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductName" class="control-label"></label>
+                <textarea asp-for="ProductName" class="form-control"></textarea>
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductDescription" class="control-label"></label>
+                <textarea asp-for="ProductDescription" class="form-control"></textarea>
+                <span asp-validation-for="ProductDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Inventory" class="control-label"></label>
+                <input asp-for="Inventory" class="form-control" />
+                <span asp-validation-for="Inventory" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+
+    </div>
+    <div id="imagePreviewContainer" class="form-group col-md-4">
+        <label>圖片預覽</label>
+        <div id="imagePreview"></div>
+    </div>
+
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section endJS{
+    <script>
+        // 取得子類
+
+        $(document).ready(function () {
+            var mainCategory = $('#mainCategory');
+            var subCategory = $('#subCategory');
+
+            updateSubCategory(mainCategory.val());
+            mainCategory.change(function () {
+                var selectedMainCategory = $(this).val();
+                updateSubCategory(selectedMainCategory);
+            });
+
+            function updateSubCategory(selectedMainCategory) {
+                $.ajax({
+                    url: '/Products/GetSubcategory',
+                    type: 'GET',
+                    data: { id: selectedMainCategory },
+                    success: function (data) {
+                        // console.log(data);
+                        subCategory.empty();
+                        $.each(data, function (index, item) {
+                            var option = $('<option>').val(item.categoryId
+                            ).text(item.categoryName);
+                            subCategory.append(option);
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
+
+
+
+        // 新增規格
+        var spec = document.getElementById("spec");
+        var add = document.getElementById("add");
+
+        spec.addEventListener("click", function (event) {
+            if (event.target.classList.contains("btn-close")) {
+                var div = event.target.parentNode;
+                div.remove();
+            }
+        });
+
+        add.addEventListener("click", function () {
+            var div = document.createElement("div");
+            div.setAttribute("class", "bg-warning btn m-2 p-0");
+            var new_spec = document.createElement("input");
+            new_spec.setAttribute("value", "規格");
+            new_spec.setAttribute("name", "SpecName");
+            new_spec.setAttribute("type", "text");
+            new_spec.setAttribute("class", "position-relative btn btn-warning");
+            inner_input = document.createElement("input");
+            inner_input.setAttribute("type", "button");
+            inner_input.setAttribute("class", "btn-close");
+            inner_input.setAttribute("aria-label", "Close");
+
+            div.appendChild(new_spec);
+            div.appendChild(inner_input);
+            spec.appendChild(div);
+        });
+
+        //圖片預覽
+        function previewImages() {
+            var previewContainer = document.getElementById("imagePreview");
+            var files = document.querySelector("input[type=file]").files;
+
+            // 清空預覽區域
+            previewContainer.innerHTML = "";
+
+            // 遍歷選中的圖片並顯示預覽
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var reader = new FileReader();
+
+                reader.onloadend = (function (file) {
+                    return function (e) {
+                        var imgElement = document.createElement("img");
+                        imgElement.className = "preview-image";
+                        imgElement.src = e.target.result;
+                        previewContainer.appendChild(imgElement);
+                    };
+                })(file);
+
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+}
+
+@section topCSS{
+    <style>
+        #preview {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        #imagePreviewContainer {
+            margin-top: 20px;
+
+        }
+
+        .preview-image {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 10px;
+        }
+    </style>
+}

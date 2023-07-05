@@ -1,0 +1,92 @@
+﻿@model PetFragrant_Test.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row d-flex justify-content-center ">
+    
+    
+    <div class="col-md-4 login d-flex justify-content-center flex-column z-3">
+        <h3 class="text-center">登入</h3>
+        
+        <form asp-action="Login" class="p-2 ">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserEmail" class="control-label"></label>
+                <input asp-for="UserEmail" type="email" class="form-control" placeholder="請輸入電子信箱" />
+                <span asp-validation-for="UserEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" placeholder="請輸入密碼" /> 
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group text-center mt-4">
+                <input type="submit" value="登入" class="btn login-btn" />
+            </div>
+            <div class="mt-2 d-flex justify-content-center row">
+                <input type="button" value="google登入" class="btn btn-danger m-2 col-12 col-md-3" />
+                <input type="button" value="facebook登入" class="btn btn-primary m-2 col-12 col-md-3" />
+                <div class="mt-2 text-center">
+                    @*<div id="g_id_onload"
+                         data-client_id="1075970522008-e64gvn74rhh9b2us6rol0hohh201agdu.apps.googleusercontent.com"
+                         data-login_uri="https://localhost:44383/"
+                         data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin"
+                         data-type="standard"
+                         data-size="large"
+                         data-theme="outline"
+                         data-text="sign_in_with"
+                         data-shape="rectangular"
+                         data-logo_alignment="left">
+                    </div>*@
+                
+                </div>
+            </div>
+            <span class="text-secondary">沒有帳號嗎?</span><a href="@Url.Action("Register", "Account")">註冊</a>
+            <br />
+            <a href="#">忘記密碼</a>
+        </form>
+
+
+        </div>
+    </div>
+
+</div>
+
+<div class="bg"></div>
+
+@section topCSS{
+    <style>
+        
+        main{
+            position:relative;
+            background: #E1DBC5;
+           z-index:0;
+        }
+
+        .bg {
+            z-index: 1;
+            position:absolute;
+            height:300px;
+            width:100%; 
+            left: 0;
+            bottom: 0;
+            background: #CCB79E;
+        }
+        .login {
+            background: #F5F5F5;
+            width: 40%;
+            height: 60vh;
+            border-radius: 12px;
+        }
+        .login-btn{
+            background-color: #807967;
+            color:white;
+        }
+    </style>
+}
+@section topJS{
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+}

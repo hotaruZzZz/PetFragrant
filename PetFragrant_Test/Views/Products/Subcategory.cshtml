@@ -1,0 +1,25 @@
+﻿@model IEnumerable<PetFragrant_Test.Models.Product>
+@{
+    ViewData["Title"] = ViewBag.Name;
+}
+<h1>@ViewBag.Name</h1>
+
+<div class="d-flex"> 
+@foreach (var item in Model)
+{
+    <a asp-action="ProductDetail" asp-route-id="@item.ProdcutId" class="card bg-white col-4 col-md-2 mt-2 text-decoration-none">
+        <div class="d-flex flex-column  align-items-center">
+            <div class="img-con"><img src="~/images/@(item.ProdcutId)/1.png" class="w-100 mt-1"></div>
+
+            <div class="card-body w-100">
+                <h6 class="card-title w-100" style="color:midnightblue">@item.ProductName</h6>
+                <p class="m-0 p-0"><del style="color:gray;">$ @Math.Round(item.Price)</del></p>
+                <div class="d-flex justify-content-between  w-100">
+                    <h5 class="card-text" style="color:darkred;">$ @Math.Round(item.Price * (decimal)(0.9))</h5>
+                </div>
+            </div>
+        </div>
+    </a>
+
+}
+</div>

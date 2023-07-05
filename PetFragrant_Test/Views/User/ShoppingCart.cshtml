@@ -1,0 +1,267 @@
+﻿@model IEnumerable<PetFragrant_Test.Models.Product>
+@{
+    ViewData["Title"] = "購物車";
+}
+
+
+
+<form action="post">
+    <!-- 上層商品 -->
+    <div class="row bg-white mt-2 mb-2">
+        <h2 class="fw-bold m-4"><center>購物車</center></h2>
+
+
+        @if (Model.Count() == 0)
+        {
+            <h1 class="text-center">您的購物車是空的喔!</h1>
+        }
+        else
+        {
+            <div class="col-12">
+                <input type="checkbox" id="select-all">
+                <!-- <hr> -->
+            </div>
+            foreach(var item in Model)
+            {
+                <!-- product -->
+                <div class="product col-12 d-flex flex-wrap align-items-center mt-1 mb-1">
+                    <hr class="col-12">
+                    <!-- 勾選 -->
+                    <div class="col-1">
+                        <input type="checkbox" name="check">
+                    </div>
+                    <!-- 商品圖 -->
+                    <div class="pic col-2">
+                        <a asp-controller="Products" asp-action="ProductDetail" asp-route-id="@item.ProdcutId">
+                            <img src="~/images/@(item.ProdcutId)/1.png" class="w-50">
+                        </a>
+                    </div>
+                    <!-- 商品標題 -->
+                    <div class="pro-title col-3">
+                        <h4>@item.ProductName</h4>
+                        <div class="d-flex  align-content-center ">
+                            @if(item.ProductSpecs.Count() > 0)
+                            {
+                                <p class="text-secondary m-2">規格</p>
+
+                                <select>
+                                    @foreach (var sp in item.ProductSpecs)
+                                    {
+                                        <option>@sp.Spec.SpecName</option>
+                                    }
+                                </select>
+                            }
+
+                        </div>
+
+                    </div>
+                    <!-- 顯示目前價錢 -->
+                    <div class="col-1">
+                        <p class="text-secondary">商品單價</p>
+                        <p class="price">NT @Math.Round(item.Price)</p>
+                    </div>
+                    <!-- 選擇數量 -->
+                    <div class="col-2">
+                        <p style="color: #6f5f5f;">數量:</p>
+                        <div class="d-flex mb-2">
+                            <span><input type="button" class="sub" value="-" /></span>
+                            <input type="text" value="1" style="width: 40px;" name="quantity" class="quantity">
+                            <span><input type="button" class="add" value="+" /></span>
+                        </div>
+                    </div>
+                    <!-- 顯示目前價錢 -->
+                    <div class="price col-1">
+                        <p class="text-secondary">商品小記</p>
+                        <p class="subtotal">NT @Math.Round(item.Price)</p>
+                    </div>
+                    <button type="button" class="col-1 btn btn-danger delete" id="@item.ProdcutId" >
+                        移除
+                    </button>
+
+                </div>
+            }
+
+        }
+
+
+
+    </div>
+
+    <!-- 配送方式 -->
+    <div class="row bg-white mt-4 p-4">
+        <h3>配送方式</h3>
+        <div class="d-flex">
+            <div class="form-check me-2">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    宅配到府
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                <label class="form-check-label" for="flexRadioDefault1">
+                    超商取貨
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- 折價券 -->
+    <div class="row mt-4">
+        <div class="discount">
+            <button type="button" class="btn btn-secondary btn-lg" data-bs-toggle="modal" data-bs-target="#couponModal">
+                折價券
+            </button>
+
+        </div>
+    </div>
+
+    <!-- 小記 -->
+    <div class="row mt-4 bg-white p-4">
+        <div class="note col-8">
+            <div class="coupon-result d-flex">
+                <h3 class="me-4">折價券</h3>
+                <h4>-</h4>
+            </div>
+            <div class="freight d-flex">
+                <h3 class="me-4">運費</h3>
+                <h4>NT 0</h4>
+            </div>
+            <div class="shopping d-flex">
+                <h3 class="me-4">商品小記</h3>
+                <h4 class="total">NT 0</h4>
+            </div>
+        </div>
+        <div class="shopping-total col-4 d-flex align-items-end">
+            <h2>總價</h2>
+            <h3 class="total-price">NT 0</h3>
+
+            <button type="submit" class="btn btn-danger btn-lg ms-4">
+                結帳
+            </button>
+        </div>
+    </div>
+
+    <!-- Coupon Modal -->
+    <div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title d-flex align-content-center" id="coupon">折價券</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="coupon d-flex">
+                        <input type="radio">
+                        <div class="coupon-style w-100  ms-2" style="background-color: #efde8b;">
+                            <p class="d-flex align-items-center">滿200免運</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                    <button type="button" class="btn btn-danger">儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+
+@section endJS{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+        $(document).ready(function () {
+            // 計算小計的函式
+            function calculateSubtotal() {
+                var product = $(this).closest('.product');
+                var quantity = parseInt(product.find('.quantity').val());
+                var price = parseFloat(product.find('.price').text().replace('NT ', ''));
+                var subtotal = quantity * price;
+                var formattedSubtotal = subtotal.toLocaleString('en-US', { maximumFractionDigits: 0 });
+                product.find('.subtotal').text('NT ' + formattedSubtotal);
+            }
+
+            // 數量變更的事件處理器
+            $('.quantity').on('change', calculateSubtotal);
+
+            // 增加和減少按鈕的事件處理器
+            $('.sub').on('click', function () {
+                var quantityInput = $(this).closest('.product').find('.quantity');
+                var quantity = parseInt(quantityInput.val());
+                if (quantity > 1) {
+                    quantityInput.val(quantity - 1);
+                    calculateSubtotal.call(this); // 計算更新後的小計
+                }
+            });
+
+            $('.add').on('click', function () {
+                var quantityInput = $(this).closest('.product').find('.quantity');
+                var quantity = parseInt(quantityInput.val());
+                quantityInput.val(quantity + 1);
+                calculateSubtotal.call(this); // 計算更新後的小計
+            });
+        });
+
+
+        // 呼叫函式以啟用功能
+        updateSubtotal();
+
+
+        // 全選商品
+        let selectAll = document.getElementById("select-all");
+
+        selectAll.addEventListener("click", function () {
+            var check = document.querySelectorAll("input[name='check']");
+
+            if (this.checked == true) {
+                check.forEach(element => {
+                    element.checked = true;
+                });
+            }
+            else {
+                check.forEach(element => {
+                    element.checked = false;
+                });
+            }
+
+        });
+
+        //delete
+
+        $(document).ready(function () {
+            $('.delete').click(function () {
+                var id = $(this).attr('id');
+                $.ajax({
+                    url: '@Url.Action("RemoveProduct", "User")',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (response) {
+                      
+                        // 在成功回調函式中處理伺服器的回應
+                        Swal.fire({
+                            title: '刪除成功!',
+                            showConfirmButton: false,
+                            timer: 1000,
+                            onOpen: function () {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        setTimeout(function () {
+                            Swal.close();
+                            location.reload();
+                        }, 1000);
+
+                    },
+                    error: function (xhr, status, error) {
+                        // 在錯誤回調函數中處理錯誤情況
+                        alert('刪除失敗');
+                    }
+                });
+            });
+        });
+    </script>
+}

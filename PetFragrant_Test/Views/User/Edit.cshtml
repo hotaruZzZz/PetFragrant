@@ -1,0 +1,58 @@
+﻿@model PetFragrant_Test.Data.ApplicationUser
+@{
+    ViewData["Title"] = "編輯使用者資料";
+}
+
+<form class="bg-white rounded-2 shadow-sm p-4 d-flex" enctype="multipart/form-data" method="post" action="Edit">
+    <div class="col-4 d-flex flex-column align-items-center">
+        <img id="avatarPreview" src="~/images//User/@Model.UserID/@(Model.UserID).png" class="rounded-circle avatar ava-con" >
+        <label for="uploadInput" class="btn btn-secondary m-2">
+            上傳圖片
+            <input type="file" id="uploadInput" name="file" accept="image/png, image/gif, image/jpeg" style="display:none;" onchange="previewImage(event)" />
+        </label>
+    </div>
+    <div class="col-4">
+        <div>
+            <input value="@Model.UserID" name="UserID" hidden />
+            <label class="form-label">
+                姓名
+            </label>
+            <input value="@Model.Name" type="text" class="input-group-text" name="Name" />
+        </div>
+        <div>
+            <label class="form-label">
+                電話
+            </label>
+            <input value="@Model.PhoneNo" type="tel" class="input-group-text" name="PhoneNo" />
+        </div>
+    </div>
+    <div class="col-4 d-flex align-items-end">
+        <button class="btn btn-success m-2" asp-action="Index" asp-controller="User">返回</button>
+        <button class="btn btn-danger m-2">儲存</button>
+    </div>
+
+</form>
+
+@section endJS{
+    <script>
+        function previewImage(event) {
+            var fileInput = event.target;
+            var avatarPreview = document.getElementById("avatarPreview");
+
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    avatarPreview.src = e.target.result;
+                };
+
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+        var imageElement = document.getElementById("avatar");
+
+        imageElement.onerror = function () {
+            imageElement.src = "https://picsum.photos/200/200/?random=10";
+        };
+    </script>
+}

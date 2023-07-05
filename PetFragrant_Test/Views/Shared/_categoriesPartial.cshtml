@@ -1,0 +1,190 @@
+﻿<div class="row">
+    <ul class="d-flex classification">
+        <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
+            <a href="/Products/食品"
+               class="text-white d-flex justify-content-center">
+                <i class="material-icons">local_dining</i>
+                食品
+            </a>
+
+            <div class="classify_list shadow">
+                <!-- 細項分類 -->
+                <div class="brand mt-2">
+                    <ul class="text-black ">
+                        @foreach (var item in ViewBag.Food)
+                        {
+                            <li><a onclick="showBrandImages(this, '@item.CategoryId')">@item.CategoryName</a></li>
+                        }
+                    </ul>
+                </div>
+                <!-- 細項分類 -->
+                <!-- 小卡片 -->
+                <div class="content mt-2">
+                </div>
+            </div>
+        </li>
+        <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
+            <a href="/Products/外出" class="text-white d-flex justify-content-center">
+                <i class="material-icons">restaurant</i>
+                外出
+            </a>
+
+            <div class="classify_list shadow">
+                <!-- 細項分類 -->
+                <div class="brand mt-2">
+                    <ul class="text-black ">
+                        @foreach (var item in ViewBag.Out)
+                        {
+                            <li><a onclick="showBrandImages(this, '@item.CategoryId')">@item.CategoryName</a></li>
+                        }
+                    </ul>
+                </div>
+                <!-- 細項分類 -->
+                <!-- 小卡片 -->
+                <div class="content mt-2">
+                </div>
+            </div>
+        </li>
+        <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
+            <a href="/Products/玩具" class="text-white d-flex justify-content-center">
+                <i class="material-icons">pets</i>
+                玩具
+            </a>
+
+            <div class="classify_list shadow">
+                <!-- 細項分類 -->
+                <div class="brand mt-2">
+                    <ul class="text-black ">
+                        @foreach (var item in ViewBag.Toy)
+                        {
+                            <li><a onclick="showBrandImages(this, '@item.CategoryId')">@item.CategoryName</a></li>
+                        }
+                    </ul>
+                </div>
+                <!-- 細項分類 -->
+                <!-- 小卡片 -->
+                <div class="content mt-2">
+                </div>
+            </div>
+        </li>
+        <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
+            <a href="/Products/居家" class="text-white d-flex justify-content-center">
+                <i class="material-icons">sanitizer</i>
+                居家
+            </a>
+
+            <div class="classify_list shadow">
+                <!-- 細項分類 -->
+                <div class="brand mt-2">
+                    <ul class="text-black ">
+                        @foreach (var item in ViewBag.Home)
+                        {
+                            <li><a onclick="showBrandImages(this, '@item.CategoryId')">@item.CategoryName</a></li>
+                        }
+                    </ul>
+                </div>
+                <!-- 細項分類 -->
+                <!-- 小卡片 -->
+                <div class="content mt-2">
+                </div>
+            </div>
+        </li>
+        <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
+            <a href="/Products/保健" class="text-white d-flex justify-content-center">
+                <i class="material-icons">health_and_safety</i>
+                保健
+            </a>
+
+            <div class="classify_list shadow">
+                <!-- 細項分類 -->
+                <div class="brand mt-2">
+                    <ul class="text-black ">
+                        @foreach (var item in ViewBag.Health)
+                        {
+                            <li><a onclick="showBrandImages(this, '@item.CategoryId')">@item.CategoryName</a></li>
+                        }
+                    </ul>
+                </div>
+                <!-- 細項分類 -->
+                <!-- 小卡片 -->
+                <div class="content mt-2">
+                </div>
+            </div>
+        </li>
+        <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
+            <a href="/Products/美容" class="text-white d-flex justify-content-center">
+                <i class="material-icons">auto_awesome</i>
+                美容
+            </a>
+
+            <div class="classify_list shadow">
+                <!-- 細項分類 -->
+                <div class="brand mt-2">
+                    <ul class="text-black ">
+                        @foreach (var item in ViewBag.Beauty)
+                        {
+                            <li><a onclick="showBrandImages(this, '@item.CategoryId')">@item.CategoryName</a></li>
+                        }
+                    </ul>
+                </div>
+                <!-- 細項分類 -->
+                <!-- 小卡片 -->
+                <div class="content mt-2">
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+
+
+<script>
+
+    function displaySubMenu(li) {
+
+        var subMenu = li.getElementsByTagName("div")[0]
+        subMenu.style.display = "flex";
+    }
+
+    function hideSubMenu(li) {
+        var subMenu = li.getElementsByTagName("div")[0];
+        subMenu.style.display = "none";
+    }
+
+    function showBrandImages(link, id) {
+        var contentDiv = $(link).closest(".classify_list").find(".content");
+        contentDiv.html("");
+
+        $.ajax({
+            url: '/Products/GetProduct',
+            type: 'GET',
+            data: { id: id },
+            success: function (data) {
+                //console.log(data);
+
+                $.each(data, function (index, item) {
+                   
+                    var cardDiv = $("<a>").addClass("m-2");
+                    cardDiv.attr("href", "Products/ProductDetail/" + item.prodcutId)
+                    var imgsrc = "/images/" + item.prodcutId + "/1.png";
+                    var cardImage = $("<img>").attr("src", imgsrc);
+                    cardImage.attr("class", "img-con-s m-1");
+                    var cardDescription = $("<p>").addClass("text-black text-center").text(item.productName);
+                    console.log(imgsrc);
+                    cardDiv.append(cardImage);
+                    cardDiv.append(cardDescription);
+
+                    contentDiv.append(cardDiv);
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+
+
+
+</script>
