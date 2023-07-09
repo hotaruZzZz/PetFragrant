@@ -112,7 +112,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/Products/美容" class="text-white d-flex justify-content-center">
+            <a href="/Products/美容" class="text-white d-flex justify-content-center ">
                 <i class="material-icons">auto_awesome</i>
                 美容
             </a>
@@ -120,7 +120,7 @@
             <div class="classify_list shadow">
                 <!-- 細項分類 -->
                 <div class="brand mt-2">
-                    <ul class="text-black ">
+                    <ul class="text-black">
                         @foreach (var item in ViewBag.Beauty)
                         {
                             <li><a onclick="showBrandImages(this, '@item.CategoryId')">@item.CategoryName</a></li>
@@ -165,11 +165,12 @@
                 $.each(data, function (index, item) {
                    
                     var cardDiv = $("<a>").addClass("m-2");
-                    cardDiv.attr("href", "Products/ProductDetail/" + item.prodcutId)
+                    cardDiv.attr("href", "Products/ProductDetail/" + item.prodcutId);
+                    cardDiv.attr("class", "d-flex  justify-content-center flex-column align-items-center")
                     var imgsrc = "/images/" + item.prodcutId + "/1.png";
                     var cardImage = $("<img>").attr("src", imgsrc);
                     cardImage.attr("class", "img-con-s m-1");
-                    var cardDescription = $("<p>").addClass("text-black text-center").text(item.productName);
+                    var cardDescription = $("<p>").addClass("text-black text-center text-wrap").text(item.productName);
                     console.log(imgsrc);
                     cardDiv.append(cardImage);
                     cardDiv.append(cardDescription);

@@ -19,6 +19,7 @@ namespace PetFragrant_Test.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string SpecId { get; set; }
         public string SpecName { get; set; }
+        public int Inventory { get; set; }
 
         public virtual ICollection<ProductSpec> ProductSpecs { get; set; }
         public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; }

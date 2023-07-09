@@ -10,6 +10,7 @@ using PetFragrant_Test.Data;
 using PetFragrant_Test.Models;
 using System.IO;
 using Microsoft.VisualBasic.FileIO;
+using PetFragrant_Test.ViewModels;
 
 namespace PetFragrant_Test.Controllers
 {
@@ -34,29 +35,60 @@ namespace PetFragrant_Test.Controllers
             return View(await _context.Products.ToListAsync());
         }
 
-        public async Task<IActionResult> ProductDetail(string? id)
+        // 取得使用者ID
+        private string UserID()
         {
-            var user = await _context.Customers.FirstOrDefaultAsync(u => u.CustomerName == User.Identity.Name);
-            var product = await _context.Products
-                .Include(p => p.Categories)
-                    .ThenInclude(c => c.FatherCategory)
-                .Include(p => p.ProductSpecs)
-                    .ThenInclude(ps => ps.Spec)
-                .FirstOrDefaultAsync(m => m.ProdcutId == id);
-            DirectoryInfo piclen = new DirectoryInfo(@"wwwroot\images\" + product.ProdcutId);
-            bool trace = false;
-            int len = piclen.GetFiles("*.png").Length;
-            if(user != null)
+            if (User.Identity.IsAuthenticated)
             {
-                string userId = user.CustomerId;
-                trace = _context.MyLikes.Any(p => p.ProdcutId == id && p.CustomerId == userId);
-            }
-            
-            ViewData["IsLike"] = trace;
-            ViewData["len"] = len;
+                var user = User.Claims.FirstOrDefault(c => c.Type == "UserID");
 
-       
-            return View(product);
+                if (user != null)
+                {
+                    string userId = user.Value;
+                    return userId;
+                }
+            }
+            return null;
+        }
+
+        public IActionResult ProductDetail(string? id)
+        {
+            if(id != null)
+            {
+                var data = _context.Products
+                    .Include(p => p.Categories)
+                        .ThenInclude(p => p.FatherCategory)
+                    .Include(p => p.ProductSpecs)
+                        .ThenInclude(ps => ps.Spec)
+                    .Where(p => p.ProdcutId == id).FirstOrDefault();
+
+                ProductViewModel products = new ProductViewModel
+                {
+                    ProductData = data,
+                    CategoryData = data.Categories,
+                    SpecData = data.ProductSpecs.Select(ps => ps.Spec)
+                };
+
+                DirectoryInfo piclen = new DirectoryInfo(@"wwwroot\images\" + products.ProductData.ProdcutId);
+                var user = _context.Customers.FirstOrDefault(u => u.CustomerId == UserID());
+                bool trace = false;
+                int len = piclen.GetFiles("*.png").Length;
+                // 當使用者有登入，確認是否有追蹤此商品
+                if (user != null)
+                {
+                    trace = _context.MyLikes.Any(p => p.ProdcutId == id && p.CustomerId == user.CustomerId);
+                }
+
+                ViewData["IsLike"] = trace;
+                ViewData["len"] = len;
+
+
+                return View(products);
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
 
@@ -231,6 +263,7 @@ namespace PetFragrant_Test.Controllers
             var products = _context.Products
                 .Where(p => p.Categories.FatherCategory.CategoryName == name)
                 .ToList();
+            
             ViewData["Name"] = name;
             ViewData["MainCategory"] = _context.Categories.Where(c => c.FatherCategory.CategoryName == name);
             return View(products);

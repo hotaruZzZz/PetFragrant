@@ -1,7 +1,21 @@
 ﻿
 @{
-    ViewData["Title"] = "SendMessage";
+    ViewData["Title"] = "Email 驗證";
 }
 
-<h1>SendMessage</h1>
+
+<div class="bg-white rounded-2 shadow-sm p-2 mb-3 align-content-center align-items-center d-flex flex-column">
+    <h4>已發送驗證信到您的電子信箱</h4>
+    <hr />
+    @if (!String.IsNullOrEmpty(ViewData["ErrorMessage"].ToString()))
+    {
+        <h4 class="bg-danger">ViewData["ErrorMessage"] </h4>
+    }
+    <form method="post" action="Verification" class="d-flex flex-column align-items-center">
+        <input name="email" value="@ViewBag.Email" hidden />
+        <label class="form-label">請輸入驗證碼:</label>
+        <input type="text" name="code" class="input-group-text" />
+        <button class="btn btn-danger m-2">送出</button>
+    </form>
+</div>
 

@@ -17,6 +17,11 @@ using CoreMvc5_CookieAuthentication.ViewModels;
 using PetFragrant_Test.Models;
 using Google.Apis.Auth;
 using Microsoft.Extensions.Configuration;
+using System.Net.Mail;
+using System.Text;
+using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace PetFragrant_Test.Controllers
 {
@@ -24,11 +29,14 @@ namespace PetFragrant_Test.Controllers
     {
         private readonly PetContext _ctx;
         private readonly IHashService _hashService;
+        private readonly IConfiguration _config;
 
-        public AccountController(PetContext ctx, IHashService hashService)
+        public AccountController(PetContext ctx, IHashService hashService, IConfiguration config)
         {
             _ctx = ctx;
             _hashService = hashService;
+            _config = config;
+
         }
         public IActionResult Index()
         {
@@ -55,6 +63,10 @@ namespace PetFragrant_Test.Controllers
                 ModelState.AddModelError(string.Empty, "帳號或密碼有誤");
                 return View(logvVM);
             }
+            if(user.EmailConfirmed == false)
+                {
+                    return RedirectToAction("SendMessage", new { user = JsonConvert.SerializeObject(user) });
+                }
             
             //成功，通過帳比對，以下開始建立授權
             var claims = new List<Claim>
@@ -81,6 +93,20 @@ namespace PetFragrant_Test.Controllers
             return View(logvVM);
         }
 
+        private string UserID()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = User.Claims.FirstOrDefault(c => c.Type == "UserID");
+
+                if (user != null)
+                {
+                    string userId = user.Value;
+                    return userId;
+                }
+            }
+            return null;
+        }
         private async Task<ApplicationUser> AuthenticateUser(LoginViewModel loginVM)
         {
             var user = await _ctx.Customers
@@ -96,7 +122,8 @@ namespace PetFragrant_Test.Controllers
                     Name = user.CustomerName,
                     Email = user.Email,
                     PhoneNo = user.PhoneNumber,
-                    IsAdmin = user.IsAdmin
+                    IsAdmin = user.IsAdmin,
+                    EmailConfirmed = (bool)user.EmailConfirmed
                 };
                 return userInfo;
             }
@@ -127,16 +154,24 @@ namespace PetFragrant_Test.Controllers
                     Birthday = registerVM.Birthdate,
                     Address = registerVM.Address,
                     IsAdmin = false,
+                    EmailConfirmed = false,
                     Level = "一般會員"
                 };
 
                 _ctx.Customers.Add(user);
                 _ctx.SaveChanges();
+                ApplicationUser applicationUser = new ApplicationUser
+                {
+                    UserID = user.CustomerId,
+                    Name = user.CustomerName,
+                    Email = user.Email,
+                    PhoneNo = user.PhoneNumber,
+                    IsAdmin = user.IsAdmin
+                };
+               
 
-                ViewData["Title"] = "帳號註冊";
-                ViewData["Message"] = "使用者帳號註冊成功!";  //顯示訊息
+                return RedirectToAction("SendMessage", new { user = JsonConvert.SerializeObject(applicationUser) });
 
-                return View("~/Views/Shared/ResultMessage.cshtml");
 
             }
             return View();
@@ -162,7 +197,7 @@ namespace PetFragrant_Test.Controllers
             string? formToken = Request.Form["g_csrf_token"]; // 回傳 token
             string? cookiesToken = Request.Cookies["g_csrf_token"]; // cookie token
 
-            GoogleJsonWebSignature.Payload? payload = VerifyGoogleToken(formCredential, formToken, cookiesToken).Result;
+            GoogleJsonWebSignature.Payload payload = VerifyGoogleToken(formCredential, formToken, cookiesToken).Result;
 
             if(payload == null)
             {
@@ -227,9 +262,69 @@ namespace PetFragrant_Test.Controllers
             return payload;
         }
 
-        public IActionResult SendMessage()
+        [HttpGet]
+        public IActionResult SendMessage(string user)
         {
+            ApplicationUser applicationUser = JsonConvert.DeserializeObject<ApplicationUser>(user);
+            string GoogleID = "petsfragrant@gmail.com";
+            string TempPwd = _config["TempPwd"];
+            string ReceiveMail = applicationUser.Email;
+
+            string SmtpServer = "smtp.gmail.com";
+            string vcode = _hashService.MD5Hash(applicationUser.Email);
+            int SmtpPort = 587;
+            MailMessage mss = new MailMessage();
+            mss.From = new MailAddress(GoogleID);
+            mss.Subject = "寵物香園信箱驗證信";
+            mss.Body = "<p>\n    親愛的" + applicationUser.Name + "， 感謝您註冊成為「寵物香園」的會員！為了確保您的郵件地址正確並驗證您的帳戶，請點擊以下連結完成驗證程序：<br /> \n    <a href=\"#\">點擊此處驗證郵件地址 </a>\n    這個連結將會帶您到我們的網站，驗證您的郵件地址並啟用您的會員帳戶。如果上述連結無效，您也可以在瀏覽器中輸入以下驗證碼進行驗證：\n    <br /><span style=\"background-color:#FFD54A;color:#12130F;\">" + vcode +
+                "</span><br />\n     謝謝您的合作！如有任何疑問或需要協助，請隨時聯繫我們的客戶服務團隊。 祝您有愉快的購物體驗！ 寵物香園團隊\n</p>\n";
+            mss.IsBodyHtml = true;
+            mss.SubjectEncoding = Encoding.UTF8;
+            mss.To.Add(new MailAddress(ReceiveMail));
+            using (SmtpClient client = new SmtpClient(SmtpServer, SmtpPort))
+            {
+                client.EnableSsl = true;
+                client.Credentials = new NetworkCredential(GoogleID, TempPwd);
+                client.Send(mss);
+            }
+            ViewData["ErrorMessage"] = "";
+            ViewData["Email"] = ReceiveMail;
             return View();
         }
+        [HttpPost]
+        public IActionResult Verification(string code, string email)
+        {
+            ViewData["Title"] = "帳號註冊";
+            if (ModelState.IsValid)
+            {
+                var user = _ctx.Customers.First(c => c.Email == email);
+                if (user != null)
+                {
+                    if (code == _hashService.MD5Hash(user.Email))
+                    {
+
+                        user.EmailConfirmed = true;
+                        _ctx.Update(user);
+                        _ctx.SaveChanges();
+                        ViewData["ResultMessage"] = "建立使用者成功!";  //顯示訊息
+                        ViewData["RedirectUrl"] = "/Home/Index";       //跳轉頁網址
+                        ViewData["RedirectTime"] = 6; //倒數幾秒
+                        ViewData["Message"] = "使用者帳號註冊成功!";  //顯示訊息
+                        return View("~/Views/Shared/ResultMessage.cshtml");
+                    }
+                    else
+                    {
+                        ViewData["ErrorMessage"] = "驗證碼錯誤，請重新輸入。";
+                        return Redirect("Home");
+                    }
+                }
+                return View();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
     }
 }

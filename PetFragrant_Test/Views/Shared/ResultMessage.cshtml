@@ -11,3 +11,43 @@
 {
     <p>@ViewData["Message"]</p>
 }
+@{
+    //Redirect URL
+    string redirectUrl = ViewData["RedirectUrl"] != null ? ViewData["RedirectUrl"].ToString() : "";
+
+    //After some seconds Redirect to URL
+    int seconds = ViewData["RedirectTime"] != null ? (int)ViewData["RedirectTime"] : 3;
+    //將秒數轉換成ms
+    int milliseconds = seconds * 1000;
+}
+
+
+@if (!string.IsNullOrEmpty(redirectUrl))
+{
+    <h3>在@(seconds)秒後將導向@(redirectUrl)網址</h3>
+
+    @section endJS
+    {
+    <script>
+        const redirectUrl = "@Html.Raw(redirectUrl)";
+        let seconds = @seconds;
+        const milliseconds = @milliseconds
+
+            let h3 = document.querySelector("h3");
+        let intervalId;
+        window.onload = function () {
+            intervalId = setInterval(() => {
+                h3.innerHTML = `在${seconds}秒後將導向首頁`;
+                seconds--;
+            }, 1000);
+        }
+
+
+        if (redirectUrl != null && redirectUrl != "") {
+            setTimeout(() => {
+                location = redirectUrl;
+            }, milliseconds)
+        }
+    </script>
+    }
+}

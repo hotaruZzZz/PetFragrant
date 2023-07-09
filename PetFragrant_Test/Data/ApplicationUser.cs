@@ -15,5 +15,7 @@ namespace PetFragrant_Test.Data
         public string Name { get; set; }
         public string PhoneNo { get; set; }
         public bool IsAdmin { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public string Level { get; set; }
     }
 }

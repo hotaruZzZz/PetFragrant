@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -13,6 +15,8 @@ namespace PetFragrant_Test.Models
             OrderDetails = new HashSet<OrderDetail>();
         }
 
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string OrderId { get; set; }
         public string CustomerId { get; set; }
         public DateTime Orderdate { get; set; }

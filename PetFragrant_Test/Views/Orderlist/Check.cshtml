@@ -1,0 +1,67 @@
+﻿@model IEnumerable<PetFragrant_Test.ViewModels.ShoppingCartViewModel>
+@{
+    ViewData["Title"] = "訂單確認";
+}
+
+<h1><center>訂單確認</center></h1>
+<div class="bg-white p-2 mb-3 shadow-sm">
+    <h4>一共 @Model.Count() 個商品，總金額NT 1234</h4>
+    <hr />
+    @foreach(var item in Model)
+    {
+        <div class="row">
+            <div class="col-1">
+                <img src="~/images/@item.ShoppingCartData.ProdcutId/1.png" class="w-75">
+            </div>
+            <div class="col-2">
+                <h5>@item.ShoppingCartData.Prodcut.ProductName</h5>
+                @if(item.ShoppingCartData.Spec.SpecName != null)
+                {
+                    <p>規格: @item.ShoppingCartData.Spec.SpecName</p>
+                }
+                
+            </div>
+            <div class="col-2">
+                <p>NT @item.ShoppingCartData.Prodcut.Price</p>
+            </div>
+            <div class="col-2">
+                <p>x @item.ShoppingCartData.Quantity</p>
+            </div>
+            <div class="col-2">
+                <p>NT @(item.ShoppingCartData.Quantity*item.ShoppingCartData.Prodcut.Price)</p>
+            </div>
+        </div>
+        <hr />
+    }
+
+    <div class="row">
+        <div class="col-5">
+            <h5>付款方式</h5>
+            <ul>
+                <li>貨到付款
+                    <ul>
+                        <li>7-11取貨</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-5">
+
+            <h5>收件者資料</h5>
+            <ul>
+                <li>姓名: 寶包貓咪</li>
+                <li>電話: 09*****861</li>
+                <li>取貨店家: 新竹中華店</li>
+            </ul>
+        </div>
+        
+
+
+    </div>
+    <center>
+        <button class="btn btn-danger">
+            確定
+        </button>
+    </center>
+
+</div>

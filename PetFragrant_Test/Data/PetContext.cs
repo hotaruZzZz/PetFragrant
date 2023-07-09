@@ -15,6 +15,7 @@ namespace PetFragrant_Test.Data
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Coupon> Coupons { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Discount> Discounts { get; set; }
         public virtual DbSet<MyLike> MyLikes { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -115,6 +116,14 @@ namespace PetFragrant_Test.Data
                     .HasForeignKey(d => d.ProdcutId);
             });
 
+
+            modelBuilder.Entity<Discount>(entity =>
+            {
+                entity.HasKey(e => e.DiscoutID);
+                entity.Property(e => e.DiscoutName).HasColumnName("Name");
+                entity.Property(e => e.Description).HasColumnName("Description");
+            });
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(e => e.ProdcutId);
@@ -149,7 +158,7 @@ namespace PetFragrant_Test.Data
 
             modelBuilder.Entity<ShoppingCart>(entity =>
             {
-                entity.HasKey(e => new { e.ProdcutId, e.CustomerId });
+                entity.HasKey(e => new { e.ProdcutId, e.CustomerId, e.SpecId });
 
                 entity.ToTable("shoppingCarts");
 
@@ -179,6 +188,7 @@ namespace PetFragrant_Test.Data
             {
                 entity.Property(e => e.SpecId).HasColumnName("SpecID");
             });
+
 
             OnModelCreatingPartial(modelBuilder);
         }

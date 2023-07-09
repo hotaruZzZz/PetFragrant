@@ -11,14 +11,14 @@
     background-color: black;
 }
 
-    .left-block button {
+    .left-block a {
         color: white;
         font-size: 25px;
         cursor: pointer;
         transition: background-color 0.5s ease;
     }
 
-        .left-block button:hover {
+        .left-block a:hover {
             color: #E0B547;
         }
 

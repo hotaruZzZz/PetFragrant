@@ -3,125 +3,24 @@
     <div class="col-12">
         <div id="carouselcard" class="carousel carousel-dark slide " data-bs-ride="carousel">
             <div class="carousel-inner">
-                <!-- 第一頁 -->
+              
+                @for(int i = 0; i < 2; i++){
                 <div class="carousel-item active " data-bs-interval="2000">
                     <div class="col-12 d-flex justify-content-around ">
-                        <div class="card col-3 ">
-                            <img src="https://picsum.photos/600/400/?random=10">
+                        @for(int j = 1; j <5;j++ ){
+                                <a class="card col-3 " asp-controller="Products" asp-action="ProductDetail" asp-route-id="@ViewBag.recom[((i*4)+j-1)].ProdcutId">
+                                    <img src="~/images/@ViewBag.recom[((i*4)+j-1)].ProdcutId/1.png">
                             <div class="card-body">
-                                <h5 class="card-title"><b></b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">888</p>
-
+                                        <h5 class="card-title"><b>NT @Math.Round( ViewBag.recom[((i*4)+j-1)].Price *(decimal)0.9)</b></h5>
+                                        <p class="card-text">@ViewBag.recom[((i*4)+j-1)].ProductName</p>
+                                       
                             </div>
-                        </div>
-
-                        <div class="card col-3 soldoutcard">
-                            <img src="https://picsum.photos/600/400?random=15">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                            <div class="soldout ">
-                                <span>售完</span>
-                            </div>
-                        </div>
-                        <div class="card col-3">
-                            <img src="https://picsum.photos/600/400?random=20">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                        </div>
-                        <div class="card col-3">
-                            <img src="https://picsum.photos/600/400?random=25">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                        </div>
-
+                        </a>
+                            }
+              
                     </div>
                 </div>
-                <!-- 第二頁 -->
-                <div class="carousel-item" data-bs-interval="2000">
-                    <div class="col-12 d-flex justify-content-around">
-                        <div class="card col-3">
-                            <img src="https://picsum.photos/600/400?random=30">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                        </div>
-                        <div class="card col-3">
-                            <img src="https://picsum.photos/600/400?random=35">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                        </div>
-                        <div class="card col-3">
-                            <img src="https://picsum.photos/600/400?random=40">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                        </div>
-                        <div class="card col-3">
-                            <img src="https://picsum.photos/600/400?random=45">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 第三頁 -->
-                <div class="carousel-item" data-bs-interval="2000">
-                    <div class="col-12 d-flex justify-content-around">
-                        <div class="card col-3">
-                            <img src="https://picsum.photos/600/400?random=50">
-                            <div class="card-body">
-
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                        </div>
-                        <div class="card col-3">
-                            <img src="https://picsum.photos/600/400?random=55">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                        </div>
-                        <div class="card col-3">
-                            <img src="https://picsum.photos/600/400?random=60">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                        </div>
-                        <div class="card col-3">
-                            <img src="https://picsum.photos/600/400?random=25">
-                            <div class="card-body">
-                                <h5 class="card-title"><b>商品</b></h5>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, quae repellendus quidem consequuntur maxime quo?
-                                <p class="card-text">$666</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+         }
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselcard" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>

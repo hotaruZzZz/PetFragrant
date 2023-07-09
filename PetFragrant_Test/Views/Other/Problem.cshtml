@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewData["Title"] = "Problem";
+}
+
+<div class="container w-75 d-flex justify-content-center align-items-center gap-2 mt-lg-3">
+    <button class="qbtn p-2">常見問題</button>
+    <button class="qbtn p-2">產品問題</button>
+    <button class="qbtn p-2">付款問題</button>
+    <button class="qbtn p-2">物流問題</button>
+    <button class="qbtn p-2">聯繫我們</button>
+</div>
+<div class="container w-75 d-flex justify-content-center align-items-center ">
+    <div id="cnt1" class="cnt m-2 text-center">
+        <h2 class="qtxt"><b>常見問題</b></h2><hr class="qhr">
+        <img src="https://media.tenor.com/P9ZoFFIetJQAAAAC/wut.gif" alt="">
+        <h4><b>Are you sure your questions are real questions?</b></h4>
+    </div>
+    <div id="cnt2" class="cnt m-2 text-center">
+        <h2 class="qtxt"><b>產品問題</b></h2><hr class="qhr">
+        <img src="https://media.nownews.com/nn_media/thumbnail/2022/01/1641368451017-d6a4e7494b7647ed99baa35188dc4957-1136x633.jpg?unShow=false" class="w-100" alt="">
+        <h4><b>維尼直接泡在蜂蜜裡給你看</b></h4>
+    </div>
+    <div id="cnt3" class="cnt m-2 text-center">
+        <h2 class="qtxt"><b>付款問題</b></h2><hr class="qhr">
+        <img src="https://images.pexels.com/photos/47344/dollar-currency-money-us-dollar-47344.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
+    </div>
+    <div id="cnt4" class="cnt m-2 text-center">
+        <h2 class="qtxt"><b>物流問題</b></h2><hr class="qhr">
+        <img src="https://cdn2.ettoday.net/images/5424/5424606.jpg" class="w-100" alt="">
+    </div>
+    <div id="cnt5" class="cnt m-2 text-xxl-center">
+        <h2 class="qtxt"><b>歡迎來加盟或是支持寵物香園!</b></h2><hr class="qhr">
+        <img src="https://www.grunge.com/img/gallery/messed-up-things-we-ignore-about-winnie-the-pooh/pooh-should-be-beyond-obese-given-how-much-he-eats-1528836295.jpg" alt="">
+        <h5><b>聯絡電話: 0987-987-987 <br>聯絡信箱: petsfragrant@gmail.com</b></h5>
+    </div>
+</div>
+
+@section endJS{
+<script>
+    $(document).ready(function () {
+        // 預設套用CSS到第一個按鈕
+        $('.qbtn:first').addClass('active');
+        $('#cnt1').addClass('active');
+        // 按鈕點擊事件
+        $('.qbtn').click(function () {
+            // 移除所有按鈕的CSS套用
+            $('.qbtn').removeClass('active');
+            $('.cnt').removeClass('active');
+
+            // 套用CSS到被點擊的按鈕
+            $(this).addClass('active');
+            var cntId = $(this).index() + 1;
+            $('#cnt' + cntId).addClass('active');
+        });
+    });
+</script>
+}
+@section topCSS{
+    <style>
+        .qbtn {
+            width: 200px;
+            border-radius: 50px;
+            font-size: larger;
+            font-weight: bold;
+            color: #6C5C53;
+        }
+
+            .qbtn.active {
+                border: 2px solid black;
+                background-color: #6C5C53;
+                font-weight: bolder;
+                color: white !important
+            }
+
+        .cnt {
+            display: none;
+        }
+
+            .cnt.active {
+                display: block;
+            }
+
+        .qhr {
+            border: 5px solid;
+            color: #641E16;
+        }
+
+        .qtxt {
+            color: #6C5C53
+        }
+    </style>
+}

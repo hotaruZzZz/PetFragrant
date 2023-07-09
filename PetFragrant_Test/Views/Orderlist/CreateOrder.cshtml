@@ -1,0 +1,27 @@
+﻿@using System.Collections;
+@model IEnumerable<ECPay.Payment.Integration.AllInOneResult>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <form id="form" name="form" action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="POST">
+        @foreach (var item in Model)
+        {
+            foreach (DictionaryEntry h in item.htParameters)
+            {
+                <label>@h.Key</label>
+                <input type="text" name="@h.Key" value="@h.Value" />
+            }
+            <br />
+        }
+        <input type="submit" value="Submit" />
+    </form>
+@*    <script type="text/javascript">
+        window.onload = function () {
+            document.getElementById("form").submit();
+        }
+    </script>*@
+</body>
+</html>

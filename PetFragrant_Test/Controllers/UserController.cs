@@ -11,15 +11,20 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.IO;
+using Microsoft.Extensions.Configuration;
+using PetFragrant_Test.ViewModels;
+using System;
 
 namespace PetFragrant_Test.Controllers
 {
     public class UserController : Controller
     {
         private readonly PetContext _ctx;
-        public UserController(PetContext ctx)
+        private readonly IConfiguration _config;
+        public UserController(PetContext ctx, IConfiguration config)
         {
             _ctx = ctx;
+            _config = config;
         }
 
         // 使用者資訊
@@ -36,7 +41,8 @@ namespace PetFragrant_Test.Controllers
                     Name = user.CustomerName,
                     Email = user.Email,
                     PhoneNo = user.PhoneNumber,
-                    IsAdmin = user.IsAdmin
+                    IsAdmin = user.IsAdmin,
+                    Level = user.Level
                 };
                 ViewBag.User = userInfo;
                 return View(userInfo);
@@ -64,7 +70,7 @@ namespace PetFragrant_Test.Controllers
             };
             return View(userInfo);
         }
-
+        // 編輯使用者資料
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit([Bind("UserID, Name, PhoneNo")]ApplicationUser user, IFormFile file)
@@ -117,6 +123,7 @@ namespace PetFragrant_Test.Controllers
                 return null;
             }
 
+        // 取得使用者ID
         private string UserID()
         {
             if (User.Identity.IsAuthenticated)
@@ -187,13 +194,17 @@ namespace PetFragrant_Test.Controllers
                 if (user != null)
                 {
                     string userId = user.CustomerId;
-
+                    if(spec == null)
+                    {
+                        spec = "-1";
+                    }
                     ShoppingCart shopping = new ShoppingCart{
-                        CustomerId = userId,
+                        CustomerId = UserID(),
                         ProdcutId=productID,
                         SpecId = spec,
                         Quantity = quantity
                     };
+                    var s = shopping;
                     _ctx.Add(shopping);
                     _ctx.SaveChanges();
                 }
@@ -204,21 +215,30 @@ namespace PetFragrant_Test.Controllers
 
         // 購物車頁面
         [Authorize]
-        public async Task<IActionResult> ShoppingCart()
+        public IActionResult ShoppingCart()
         {
             if (User.Identity.IsAuthenticated)
             {
 
-                var user = await _ctx.Customers
-                  .FirstOrDefaultAsync(u => u.CustomerId == UserID());
-                string userId = user.CustomerId;
-                var products = _ctx.Products
-                    .Include(p => p.ShoppingCarts)
-                    .Include(p => p.ProductSpecs)
-                        .ThenInclude(ps => ps.Spec)
-                    .Where(p => p.ShoppingCarts.Any(pp => pp.CustomerId.Equals(userId)));
-                
-                return View(products);
+                var cart = _ctx.ShoppingCarts
+                    .Include(p => p.Spec)
+                    .Include(p => p.Prodcut)
+                        .ThenInclude(p => p.ProductSpecs)
+                            .ThenInclude(p => p.Spec)
+                    .Where(p => p.CustomerId.Equals(UserID()));
+
+                IEnumerable<ShoppingCartViewModel> cartViewModels = cart.Select(c => new ShoppingCartViewModel
+                {
+                    ProductData = new ProductViewModel
+                    {
+                        ProductData = c.Prodcut,
+                        SpecData = c.Prodcut.ProductSpecs.Select(ps => ps.Spec)
+                    },
+                    ShoppingCartData = c
+                }).ToList();
+
+
+                return View(cartViewModels);
             }
             return null;
         }
@@ -263,6 +283,34 @@ namespace PetFragrant_Test.Controllers
             return View();
         }
 
+        [Authorize]
+        public IActionResult Test()
+        {
+            var cart = _ctx.ShoppingCarts
+                .Include(p => p.Spec)
+                .Include(p => p.Prodcut)
+                    .ThenInclude(p => p.ProductSpecs)
+                        .ThenInclude(p => p.Spec)
+                .Where(p => p.CustomerId.Equals(UserID()));
 
+            IEnumerable<ShoppingCartViewModel> cartViewModels = cart.Select(c => new ShoppingCartViewModel
+            {
+                ProductData = new ProductViewModel
+                {
+                    ProductData = c.Prodcut,
+                    SpecData = c.Prodcut.ProductSpecs.Select(ps => ps.Spec)
+                },
+                ShoppingCartData = c
+            }).ToList(); 
+
+
+
+            return View(cartViewModels);
+        }
+
+        public IActionResult ForgotPsw(string id)
+        {
+            return View();
+        }
     }
 }

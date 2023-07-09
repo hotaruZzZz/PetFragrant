@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PetFragrant_Test.Data;
 
 namespace PetFragrant_Test.Migrations
 {
     [DbContext(typeof(PetContext))]
-    partial class PetContextModelSnapshot : ModelSnapshot
+    [Migration("20230706133644_UpdateDB3")]
+    partial class UpdateDB3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,34 +113,6 @@ namespace PetFragrant_Test.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("PetFragrant_Test.Models.Discount", b =>
-                {
-                    b.Property<string>("DiscoutID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Description");
-
-                    b.Property<string>("DiscountType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("DiscountValue")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("DiscoutName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Name");
-
-                    b.Property<DateTime>("Period")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("DiscoutID");
-
-                    b.ToTable("Discounts");
-                });
-
             modelBuilder.Entity("PetFragrant_Test.Models.MyLike", b =>
                 {
                     b.Property<string>("ProdcutId")
@@ -158,7 +132,6 @@ namespace PetFragrant_Test.Migrations
             modelBuilder.Entity("PetFragrant_Test.Models.Order", b =>
                 {
                     b.Property<string>("OrderId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("OrderID");
 
@@ -265,14 +238,14 @@ namespace PetFragrant_Test.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("CustomerID");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("SpecId")
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("SpecID");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProdcutId", "CustomerId", "SpecId");
+                    b.HasKey("ProdcutId", "CustomerId");
 
                     b.HasIndex(new[] { "CustomerId" }, "IX_shoppingCarts_CustomerID");
 
@@ -411,8 +384,7 @@ namespace PetFragrant_Test.Migrations
                     b.HasOne("PetFragrant_Test.Models.Spec", "Spec")
                         .WithMany("ShoppingCarts")
                         .HasForeignKey("SpecId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Customer");
 

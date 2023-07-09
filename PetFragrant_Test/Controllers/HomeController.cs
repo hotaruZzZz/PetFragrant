@@ -31,7 +31,7 @@ namespace PetFragrant_Test.Controllers
             ViewData["Home"] = _petContext.Categories.Where(c => c.FatherCategory.CategoryName == "居家");
             ViewData["Health"] = _petContext.Categories.Where(c => c.FatherCategory.CategoryName == "保健");
             ViewData["Beauty"] = _petContext.Categories.Where(c => c.FatherCategory.CategoryName == "美容");
-            
+            ViewData["recom"] = _petContext.Products.OrderByDescending(p => p.Inventory).Take(8).ToList();
             return View(await　_petContext.Products.ToListAsync());
         }
 

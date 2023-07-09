@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewData["Title"] = "新增折價券";
+}
+
+<form asp-action="CreateCoupon" method="post">
+    <div class="bg-white rounded-2 shadow-sm p-2">
+        <h1 class="text-center m-2">新增折價券</h1>
+        <div class="p-2">
+            <div class="m-3">
+                <label  class="form-label">折價券名稱</label>
+                <input type="text" class="form-control" placeholder="折價券名稱" name="DiscoutName">
+            </div>
+            <div class="m-3">
+                <label  class="form-label">折價券類型</label>
+                <select class="form-select" name="DiscountType">
+                    <option value="折扣(%)">折扣(%)</option>
+                    <option value="運費折抵">運費折抵</option>
+                    <option value="折抵">折抵</option>
+                </select>
+            </div>
+            <div class="m-3">
+                <label class="form-label">折價券金額</label>
+                <input type="text" class="form-control" placeholder="請輸入折價金額，免運費則輸入0" name="DiscountValue">
+            </div>
+            <div class="m-3">
+                <label class="form-label">折價券到期日</label>
+                <input type="date" class="form-control" name="Period">
+            </div>
+            <div class="form-floating m-3">
+                <textarea name="Description" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                <label for="floatingTextarea2">描述</label>
+            </div>
+
+        </div>
+    </div>
+    <div class="mt-2 text-end">
+        <button class="btn btn-danger" type="submit">儲存</button>
+        <button class="btn btn-success" asp-action="ManageCoupon">返回</button>
+    </div>
+
+</form>
+
