@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ECPay.Payment.Integration;
 using System;
+using PetFragrant_Test.Models;
 
 namespace PetFragrant_Test.Controllers
 {
@@ -30,12 +31,25 @@ namespace PetFragrant_Test.Controllers
         }
         [Authorize]
         [HttpPost]
-        public IActionResult Check(List<OrderlistViewModel> items)
+        public IActionResult Check(List<OrderlistViewModel> items, string couponID)
         {
-            
-          
-            List<ShoppingCartViewModel> cart = new List<ShoppingCartViewModel>();
 
+            Discount coupon = _ctx.Discounts.Find(couponID);
+            if (coupon != null)
+            {
+                CouponViewModel couponVM = new CouponViewModel()
+                {
+                    ID = coupon.DiscoutID,
+                    Name = coupon.DiscoutName,
+                    Description = coupon.Description,
+                    Value = coupon.DiscountValue,
+                    Period = coupon.Period,
+                    Type = coupon.DiscountType
+                };
+                ViewData["coupon"] = couponVM;
+            }
+            List<ShoppingCartViewModel> cart = new List<ShoppingCartViewModel>();
+            decimal total = 0;
             foreach (var item in items)
             {
                 if (item.check)
@@ -45,6 +59,7 @@ namespace PetFragrant_Test.Controllers
                         .Include(p => p.Spec)
                         .FirstOrDefault(p => p.SpecId == item.specID && p.ProdcutId == item.ProductId);
                     data.Quantity = item.quantity;
+                    total += data.Quantity * data.Prodcut.Price;
                     if (data != null)
                     {
                         cart.Add(new ShoppingCartViewModel
@@ -58,10 +73,15 @@ namespace PetFragrant_Test.Controllers
                     }
                 }
             }
-
+            ViewData["totalPrice"] = total;
             return View(cart);
         }
 
+        [Authorize]
+        public IActionResult FinishOrder()
+        {
+            return View();
+        }
         [Authorize]
         [HttpPost]
         public ActionResult CreateOrder(List<OrderlistViewModel> items)

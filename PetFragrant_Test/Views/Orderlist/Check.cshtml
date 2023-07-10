@@ -5,7 +5,7 @@
 
 <h1><center>訂單確認</center></h1>
 <div class="bg-white p-2 mb-3 shadow-sm">
-    <h4>一共 @Model.Count() 個商品，總金額NT 1234</h4>
+    <h4>一共 @Model.Count() 個商品，總金額NT @Math.Round( ViewBag.totalPrice)</h4>
     <hr />
     @foreach(var item in Model)
     {
@@ -33,9 +33,25 @@
         </div>
         <hr />
     }
+    
+    <div class="row p-3">
+        <div class="col-4">
+            <h5>折價券</h5>
+            @if(ViewData["coupon"] != null)
+            {
+                <ul>
+                    <li>@ViewBag.coupon.Name</li>
+                </ul>
 
-    <div class="row">
-        <div class="col-5">
+            }
+            else
+            {
+                <ul>
+                    <li>無</li>
+                </ul>
+            }
+        </div>
+        <div class="col-4">
             <h5>付款方式</h5>
             <ul>
                 <li>貨到付款
@@ -45,7 +61,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-5">
+        <div class="col-4">
 
             <h5>收件者資料</h5>
             <ul>
@@ -59,9 +75,9 @@
 
     </div>
     <center>
-        <button class="btn btn-danger">
+        <a class="btn btn-danger" asp-action="FinishOrder">
             確定
-        </button>
+        </a>
     </center>
 
 </div>

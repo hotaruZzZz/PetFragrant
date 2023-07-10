@@ -237,7 +237,18 @@ namespace PetFragrant_Test.Controllers
                     ShoppingCartData = c
                 }).ToList();
 
+                var coupon = _ctx.Discounts.ToList();
+                List<CouponViewModel> coupons = coupon.Select(c => new CouponViewModel
+                {
+                    ID = c.DiscoutID,
+                    Name = c.DiscoutName,
+                    Description = c.Description,
+                    Value = c.DiscountValue,
+                    Period = c.Period,
+                    Type = c.DiscountType
 
+                }).ToList();
+                ViewData["coupon"] = coupons;
                 return View(cartViewModels);
             }
             return null;

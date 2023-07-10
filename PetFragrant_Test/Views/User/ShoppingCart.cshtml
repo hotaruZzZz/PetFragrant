@@ -5,7 +5,7 @@
 
 
 
-<form asp-action="CreateOrder" asp-controller="Orderlist" method="post">
+<form asp-action="Check" asp-controller="Orderlist" method="post">
     <!-- 上層商品 -->
     <div class="row bg-white mt-2 mb-2">
         <h2 class="fw-bold m-4"><center>購物車</center></h2>
@@ -162,17 +162,21 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="coupon d-flex">
-                        <input type="radio">
-                        <div class="coupon-style w-100  ms-2" >
-                            <p class="d-flex align-items-center">滿200免運</p>
+                    @foreach(var c in ViewBag.coupon)
+                    {
+                        <div class="coupon d-flex">
+                            <input type="radio" name="couponID" value="@c.ID">
+                            <div class="coupon-style w-100  ms-2">
+                                <p class="d-flex align-items-center">@c.Name</p>
+                            </div>
                         </div>
-                    </div>
-                    <hr />
+                        <hr />
+                    }
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
-                    <button type="button" class="btn btn-danger">儲存</button>
+                    @*<button type="button" class="btn btn-danger">儲存</button>*@
                 </div>
             </div>
         </div>

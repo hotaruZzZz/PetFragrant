@@ -87,8 +87,16 @@ namespace PetFragrant_Test.Controllers
                    new ClaimsPrincipal(claimsIdentity),
                    authProperties
                    );
-
-            return LocalRedirect("~/Home");
+                bool isadmin = Convert.ToBoolean( claims.FirstOrDefault(c => c.Type == "IsAdmin").Value);
+                if (isadmin)
+                {
+                    return Redirect("~/Backstage");
+                }
+                else
+                {
+                    return LocalRedirect("~/Home");
+                }
+            
             }
             return View(logvVM);
         }
