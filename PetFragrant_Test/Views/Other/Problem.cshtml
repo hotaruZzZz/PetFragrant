@@ -1,60 +1,247 @@
-﻿
-@{
-    ViewData["Title"] = "Problem";
+﻿@{
+    ViewData["Title"] = "購買相關問題";
 }
 
 <div class="container w-75 d-flex justify-content-center align-items-center gap-2 mt-lg-3">
-    <button class="qbtn p-2">常見問題</button>
-    <button class="qbtn p-2">產品問題</button>
-    <button class="qbtn p-2">付款問題</button>
-    <button class="qbtn p-2">物流問題</button>
-    <button class="qbtn p-2">聯繫我們</button>
+    <button id="qbtn1" class="qbtn p-2">常見問題</button>
+    <button id="qbtn2" class="qbtn p-2">產品問題</button>
+    <button id="qbtn3" class="qbtn p-2">付款問題</button>
+    <button id="qbtn4" class="qbtn p-2">配送問題</button>
+    <button id="qbtn5" class="qbtn p-2">聯繫我們</button>
 </div>
 <div class="container w-75 d-flex justify-content-center align-items-center ">
-    <div id="cnt1" class="cnt m-2 text-center">
-        <h2 class="qtxt"><b>常見問題</b></h2><hr class="qhr">
-        <img src="https://media.tenor.com/P9ZoFFIetJQAAAAC/wut.gif" alt="">
-        <h4><b>Are you sure your questions are real questions?</b></h4>
+    <div id="cnt1" class="cnt m-2  text-center">
+        <h2 class="qtxt"><b>常見問題</b></h2>
+        <hr class="qhr">
+        <img src="https://memeprod.ap-south-1.linodeobjects.com/user-template/f62904b2dc9ff906795a0a00fbded29e.png"
+             alt="" class="w-100  mb-3">
+        <div class="accordion accordion-flush " id="accordionFlushExample">
+            <div class="accordion-item ">
+                <h1 class="qtxt" id="flush-headingOne">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Q: 如何選擇最適合我的寵物？
+                    </button>
+                </h1>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body qtxt">選擇寵物需考慮生活型態、住宅環境與寵物品種。了解寵物需求與您能提供的關愛，如此才能找到最適合的夥伴。</div>
+                </div>
+            </div>
+            <div class="accordion-item ">
+                <h3 class="qtxt" id="flush-headingTwo">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        Q: 寵物的日常餵食應注意哪些？
+                    </button>
+                </h3>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body qtxt">寵物需提供均衡的飲食，適量的水源。快來寵物香園挑選您毛孩的食品吧!</div>
+                </div>
+            </div>
+            <div class="accordion-item ">
+                <h3 class="qtxt" id="flush-headingThree">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                        Q: 我該如何處理寵物毛髮問題？
+                    </button>
+                </h3>
+                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body qtxt">保持寵物清潔，常規梳毛可減少掉毛。選擇適合的寵物毛髮清潔用品也是關鍵。</div>
+                </div>
+            </div>
+            <div class="accordion-item ">
+                <h3 class="qtxt" id="flush-headingFour">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                        Q: 寵物如何進行牙齒保健？
+                    </button>
+                </h3>
+                <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body qtxt">A：定期刷牙、提供可以咀嚼的玩具、獸醫洗牙是維護寵物口腔健康的重要措施。</div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="cnt2" class="cnt m-2 text-center">
-        <h2 class="qtxt"><b>產品問題</b></h2><hr class="qhr">
-        <img src="https://media.nownews.com/nn_media/thumbnail/2022/01/1641368451017-d6a4e7494b7647ed99baa35188dc4957-1136x633.jpg?unShow=false" class="w-100" alt="">
-        <h4><b>維尼直接泡在蜂蜜裡給你看</b></h4>
+        <h2 class="qtxt wrap-text"><b>產品問題</b></h2>
+        <hr class="qhr">
+        <img src="https://cteeimgs.azureedge.net/nownews/20210419/a03601002021041913225915_20210419133055_850.jpg" class="mb-3"
+             alt="">
+        <div class="accordion accordion-flush " id="accordionFlushExample">
+            <div class="accordion-item ">
+                <h1 class="qtxt" id="flush-headingOne">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Q: 如何挑選適合的食品？
+                    </button>
+                </h1>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class=" qtxt">根據寵物的品種、年齡、大小和健康狀況，選擇適合的寵物食品。<br>確保食品提供全面的營養，包括蛋白質、碳水化合物、脂肪、維生素和礦物質。</div>
+                </div>
+            </div>
+            <div class="accordion-item ">
+                <h3 class="qtxt" id="flush-headingTwo">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        Q: 如何吃的健康？
+                    </button>
+                </h3>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class=" qtxt">仔細閱讀食品包裝上的成分表。選擇含有高品質肉類、蔬菜和穀物的食品，避免過多添加劑和人工色素。<br> 寵物香園應有盡有!</div>
+                </div>
+            </div>
+            <div class="accordion-item ">
+                <h3 class="qtxt" id="flush-headingThree">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                        Q: 不同年齡的毛寵要怎麼買？
+                    </button>
+                </h3>
+                <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="qtxt">根據寵物的年齡階段，選擇相應的用品。<br>幼年寵物需要適合玩具以及肉泥與罐罐。<br>老年寵物需要更多保健食品與舒適的居家用品。</div>
+                </div>
+            </div>
+            <div class="accordion-item ">
+                <h3 class="qtxt" id="flush-headingFour">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                        Q: 寵物如何進行牙齒保健？
+                    </button>
+                </h3>
+                <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="qtxt">A：定期刷牙、提供可以咀嚼的玩具、獸醫洗牙是維護寵物口腔健康的重要措施。</div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div id="cnt3" class="cnt m-2 text-center">
-        <h2 class="qtxt"><b>付款問題</b></h2><hr class="qhr">
-        <img src="https://images.pexels.com/photos/47344/dollar-currency-money-us-dollar-47344.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
+        <h2 class="qtxt"><b>付款問題</b></h2>
+        <hr class="qhr">
+        <img src="https://images.pexels.com/photos/47344/dollar-currency-money-us-dollar-47344.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" class="mb-3"
+             alt="">
+        <div class="accordion accordion-flush " id="accordionFlushExample">
+            <div class="accordion-item ">
+                <h1 class="qtxt" id="flush-headingOne">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Q: 如何付款？
+                    </button>
+                </h1>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="qtxt">
+                        目前我們使用綠界有的支付方式 : <br>信用卡、ATM虛擬帳號 / 網路ATM、超商代碼 / 條碼
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     <div id="cnt4" class="cnt m-2 text-center">
-        <h2 class="qtxt"><b>物流問題</b></h2><hr class="qhr">
-        <img src="https://cdn2.ettoday.net/images/5424/5424606.jpg" class="w-100" alt="">
+        <h2 class="qtxt"><b>配送問題</b></h2>
+        <hr class="qhr">
+        <img src="https://cdn2.ettoday.net/images/5424/5424606.jpg" class="mb-3 w-100" alt="">
+        <div class="accordion accordion-flush " id="accordionFlushExample">
+            <div class="accordion-item ">
+                <h1 class="qtxt" id="flush-headingOne">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Q: 我該如何取貨？
+                    </button>
+                </h1>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="qtxt">
+                        我們會通知您到離您最近的貓貓 & 狗狗店來取貨喔!
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="cnt5" class="cnt m-2 text-xxl-center">
-        <h2 class="qtxt"><b>歡迎來加盟或是支持寵物香園!</b></h2><hr class="qhr">
-        <img src="https://www.grunge.com/img/gallery/messed-up-things-we-ignore-about-winnie-the-pooh/pooh-should-be-beyond-obese-given-how-much-he-eats-1528836295.jpg" alt="">
-        <h5><b>聯絡電話: 0987-987-987 <br>聯絡信箱: petsfragrant@gmail.com</b></h5>
+        <h2 class="qtxt"><b>歡迎來加盟或是支持寵物香園!</b></h2>
+        <hr class="qhr">
+        <img src="https://www.whitehorsefarm.co.uk/wp-content/uploads/2019/01/petswelcome.gif" alt="">
+        <div class="accordion accordion-flush " id="accordionFlushExample">
+            <div class="accordion-item ">
+                <h1 class="qtxt" id="flush-headingOne">
+                    <button class="accordion-button collapsed qtxt" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Q: 如何聯繫我們？
+                    </button>
+                </h1>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="qtxt">
+                        <h5><b>聯絡電話: 0972-953-960 <br>聯絡信箱: petsfragrant@gmail.com</b></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
 @section endJS{
-<script>
-    $(document).ready(function () {
-        // 預設套用CSS到第一個按鈕
-        $('.qbtn:first').addClass('active');
-        $('#cnt1').addClass('active');
-        // 按鈕點擊事件
-        $('.qbtn').click(function () {
-            // 移除所有按鈕的CSS套用
+    <script>
+        $(document).ready(function () {
+            // 預設套用CSS到第一個按鈕
+            $('.qbtn:first').addClass('active');
+            $('#cnt1').addClass('active');
+            $('.qbtn').click(function () {
+                // 移除所有按鈕的CSS套用
+                $('.qbtn').removeClass('active');
+                $('.cnt').removeClass('active');
+                // 套用CSS到被點擊的按鈕
+                $(this).addClass('active');
+                var cntId = $(this).index() + 1;
+                $('#cnt' + cntId).addClass('active');
+            });
+        });
+        function goToButton(buttonText) {
             $('.qbtn').removeClass('active');
             $('.cnt').removeClass('active');
+            // 尋找具有指定文字的按鈕
+            var targetButton = $('.qbtn:contains("' + buttonText + '")');
+            if (targetButton.length > 0) {
+                // 套用CSS到指定的按鈕
+                targetButton.addClass('active');
+                // 取得按鈕的索引值
+                var cntId = targetButton.index() + 1;
+                // 套用CSS到相應的內容區域
+                $('#cnt' + cntId).addClass('active');
 
-            // 套用CSS到被點擊的按鈕
-            $(this).addClass('active');
-            var cntId = $(this).index() + 1;
-            $('#cnt' + cntId).addClass('active');
+            }
+        }
+        $(document).ready(function () {
+            // 检查 URL 中的哈希值
+            var hash = window.location.hash;
+            if (hash) {
+                // 去除哈希值中的井号
+                var buttonText = hash.substring(1);
+                // 跳转到指定的按钮
+                goToButton(buttonText);
+            }
         });
-    });
-</script>
+        function goToButton(buttonId) {
+            // 移除所有按钮的CSS套用
+            $('.qbtn').removeClass('active');
+            $('.cnt').removeClass('active');
+            // 套用CSS到指定的按钮
+            $('#' + buttonId).addClass('active');
+            // 显示相应的内容
+            var cntId = buttonId.replace('qbtn', 'cnt');
+            $('#' + cntId).addClass('active');
+        }
+    </script>
 }
 @section topCSS{
     <style>
@@ -64,14 +251,46 @@
             font-size: larger;
             font-weight: bold;
             color: #6C5C53;
+            border: none;
+            background-color: transparent;
         }
 
             .qbtn.active {
-                border: 2px solid black;
                 background-color: #6C5C53;
                 font-weight: bolder;
                 color: white !important
             }
+
+            .qbtn:hover {
+                cursor: grab;
+                animation: grabAnimation 3s infinite alternate;
+            }
+
+            .qbtn.active:hover {
+                animation: none;
+            }
+
+        @@keyframes grabAnimation {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(25deg);
+            }
+
+            50% {
+                transform: rotate(0deg);
+            }
+
+            75% {
+                transform: rotate(-25deg);
+            }
+
+            100% {
+                transform: rotate(0deg);
+            }
+        }
 
         .cnt {
             display: none;

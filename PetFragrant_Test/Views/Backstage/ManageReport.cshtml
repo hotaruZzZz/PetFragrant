@@ -1,0 +1,28 @@
+﻿@model IEnumerable<ReportViewModel>
+@{
+    ViewData["Title"] = "用戶問題回報";
+}
+
+<h1 class="text-center commontxt">用戶問題回報</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">顧客Email</th>
+            <th scope="col">問題</th>
+            <th scope="col">內容</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.Email</td>
+                <th>@item.Title</th>
+                <td>@item.Description</td>
+                
+            </tr>
+        }
+
+
+    </tbody>
+</table>

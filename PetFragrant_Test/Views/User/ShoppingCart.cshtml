@@ -7,7 +7,7 @@
 
 <form asp-action="Check" asp-controller="Orderlist" method="post">
     <!-- 上層商品 -->
-    <div class="row bg-white mt-2 mb-2">
+    <div class="row bg-white shadow-sm mt-2 mb-2">
         <h2 class="fw-bold m-4"><center>購物車</center></h2>
 
 
@@ -18,23 +18,26 @@
         else
         {
             <div class="col-12">
+                
                 <input type="checkbox" id="select-all">
+                <label class="text-secondary">全選</label>
                 <!-- <hr> -->
             </div>
             @for (int i = 0; i < Model.Count(); i++)
             {
                 var item = Model.ElementAt(i);
                 <!-- product -->
-                <div class="product col-12 d-flex flex-wrap align-items-center mt-1 mb-1">
+                <div class="product col-12 d-flex flex-wrap align-items-center mt-1 mb-4">
                     <hr class="col-12">
                     <!-- 勾選 -->
                     <div class="col-1">
+                       
                         <input type="checkbox" name="items[@i].check" onclick="handleCheckboxClick(this)" class="checkbox" />
                     </div>
                     <!-- 商品圖 -->
                     <div class="pic col-2">
                         <a asp-controller="Products" asp-action="ProductDetail" asp-route-id="@item.ShoppingCartData.ProdcutId">
-                            <img src="~/images/@(item.ShoppingCartData.Prodcut.ProdcutId)/1.png" class="w-50">
+                            <img src="~/images/@(item.ShoppingCartData.Prodcut.ProdcutId)/1.png" class="img-con-s">
                         </a>
                     </div>
                     <!-- 商品標題 -->
@@ -45,7 +48,8 @@
                             @if (item.ProductData.SpecData.Count() > 0)
                             {
                                 <p class="text-secondary">規格:</p>
-                                <select name="items[@i].specID">
+                                <input type="text" value="@item.ShoppingCartData.Spec.SpecId" name="items[@i].oldspecID" hidden />
+                                <select name="items[@i].specID" >
                                     <option value="@item.ShoppingCartData.Spec.SpecId" selected>@item.ShoppingCartData.Spec.SpecName</option>
                                     @foreach (var sp in item.ProductData.SpecData)
                                     {
@@ -58,6 +62,7 @@
                             }
                             else
                             {
+                                <input type="text" value="-1" name="items[@i].oldspecID" hidden />
                                 <select hidden name="items[@i].specID">
                                     <option value="-1"></option>
                                 </select>
@@ -67,7 +72,7 @@
                     <!-- 顯示目前價錢 -->
                     <div class="col-1">
                         <p class="text-secondary">商品單價</p>
-                        <p class="price">NT @string.Format("{0:N0}", Math.Round(item.ShoppingCartData.Prodcut.Price))</p>
+                        <p class="price">NT @string.Format("{0:N0}", Math.Round(item.ShoppingCartData.Prodcut.Price*(decimal)0.9))</p>
                         <input type="hidden" value="@item.ShoppingCartData.Prodcut.Price" name="items[@i].Price" />
                     </div>
                     <!-- 選擇數量 -->
@@ -82,7 +87,7 @@
                     <!-- 顯示目前價錢 -->
                     <div class="price col-1">
                         <p class="text-secondary">商品小記</p>
-                        <p class="subtotal">NT @string.Format("{0:N0}", Math.Round(item.ShoppingCartData.Prodcut.Price * item.ShoppingCartData.Quantity))</p>
+                        <p class="subtotal">NT @string.Format("{0:N0}", Math.Round( item.ShoppingCartData.Quantity * (item.ShoppingCartData.Prodcut.Price *(decimal)0.9)))</p>
                         <input type="hidden" value="@Math.Round(item.ShoppingCartData.Prodcut.Price * item.ShoppingCartData.Quantity)" name="items[@i].Subtotal" />
                     </div>
                     <button type="button" class="col-1 btn btn-danger delete" id="@item.ShoppingCartData.ProdcutId">
@@ -98,24 +103,6 @@
 
     </div>
 
-@*    <!-- 配送方式 -->
-    <div class="row bg-white mt-4 p-4">
-        <h3>配送方式</h3>
-        <div class="d-flex">
-            <div class="form-check me-2">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                <label class="form-check-label" for="flexRadioDefault1">
-                    宅配到府
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                <label class="form-check-label" for="flexRadioDefault1">
-                    超商取貨
-                </label>
-            </div>
-        </div>
-    </div>*@
 
     <!-- 折價券 -->
     <div class="row mt-4">
@@ -134,13 +121,9 @@
                 <h3 class="me-4">折價券</h3>
                 <h4>-</h4>
             </div>
-            <div class="freight d-flex">
-                <h3 class="me-4">運費折扣</h3>
-                <h4>NT 0</h4>
-            </div>
             <div class="shopping d-flex">
                 <h3 class="me-4">商品小記</h3>
-                <h4 class="total">NT 0</h4>
+                <h4 class="total total-price">NT 0</h4>
             </div>
         </div>
         <div class="shopping-total col-4 d-flex align-items-end">
@@ -162,12 +145,24 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div class="coupon d-flex">
+                        <input type="radio" name="couponID" value="">
+                        <input type="hidden" name="couponName" value="">
+                        <div class="coupon-style w-100  ms-2">
+                            <h4 class="d-flex align-items-center">不使用</h4>
+                        </div>
+                    </div>
+                    <hr />
                     @foreach(var c in ViewBag.coupon)
                     {
+                        
                         <div class="coupon d-flex">
                             <input type="radio" name="couponID" value="@c.ID">
+                            <input type="hidden" name="couponName" value="@c.Name">
                             <div class="coupon-style w-100  ms-2">
-                                <p class="d-flex align-items-center">@c.Name</p>
+                                <h4 class="d-flex align-items-center">@c.Name</h4>
+                                <p class="text-secondary">到期日: @c.Period</p>
+
                             </div>
                         </div>
                         <hr />
@@ -188,7 +183,7 @@
 @section endJS{
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-       
+        var coupons = @Html.Raw(Json.Serialize(ViewBag.coupon));
             // 計算商品小計的函式
             function calculateSubtotal() {
                 var product = $(this).closest('.product');
@@ -262,8 +257,39 @@
                 calculateSubtotal.call(this); // 計算更新後的小計
             });
 
+        // coupon
+        $('input[name="couponID"]').on('change', function () {
+            var selectedCoupon = $(this).siblings('input[name="couponName"]').val();
+            $('.coupon-result h4').text(selectedCoupon);
+            console.log(selectedCoupon);
+            updateTotalPrice();
+            checkMinimumAmount(); // 檢查折價券最低金額
+        });
 
-     
+         // 檢查折價券最低金額
+        function checkMinimumAmount() {
+            var couponID = $('input[name="couponID"]:checked').val();
+            var selectedCoupon = coupons.find(c => c.id == couponID);
+            var totalText = $('.total-price').text().replace('NT ', '').replace(/,/g, '');
+            var total = parseFloat(totalText);
+            console.log(selectedCoupon)
+            if (selectedCoupon && total < selectedCoupon.minimumAmount) {
+                // 商品總價小於折價券最低金額，禁用結帳按鈕
+                $('#checkout-btn').prop('disabled', true);
+
+                // 顯示提示訊息
+                Swal.fire({
+                    title: '商品總價未達到折價券最低金額！',
+                    text: `您需要消費 NT ${selectedCoupon.minimumAmount} 或以上才能使用此折價券。`,
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: '確認'
+                });
+            } else {
+                // 商品總價達到折價券最低金額，啟用結帳按鈕
+                $('#checkout-btn').prop('disabled', false);
+            }
+        }
 
         // 處理勾選框點擊事件
         function handleCheckboxClick(checkbox) {
@@ -326,5 +352,7 @@
                 });
             });
         });
+
+
     </script>
 }

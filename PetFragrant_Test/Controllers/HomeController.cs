@@ -15,24 +15,35 @@ namespace PetFragrant_Test.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly PetContext _petContext;
-        public HomeController(ILogger<HomeController> logger, PetContext petContext)
+        private readonly PetContext _ctx;
+        public HomeController(ILogger<HomeController> logger, PetContext ctx)
         {
-            _petContext = petContext;
+            _ctx = ctx;
             _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
+            // 分類
+            ViewData["Food"] = _ctx.Categories.Where(c => c.FatherCategory.CategoryName == "食品");
+            ViewData["Out"] = _ctx.Categories.Where(c => c.FatherCategory.CategoryName == "外出");
+            ViewData["Toy"] = _ctx.Categories.Where(c => c.FatherCategory.CategoryName == "玩具");
+            ViewData["Home"] = _ctx.Categories.Where(c => c.FatherCategory.CategoryName == "居家");
+            ViewData["Health"] = _ctx.Categories.Where(c => c.FatherCategory.CategoryName == "保健");
+            ViewData["Beauty"] = _ctx.Categories.Where(c => c.FatherCategory.CategoryName == "美容");
+            ViewData["recom"] = _ctx.Products.OrderByDescending(p => p.Inventory).Take(8).ToList();
+            // 貓&狗商品
+            ViewData["dog"] = _ctx.Products.Where(c => c.ProductName.Contains("狗")).Take(4);
+            ViewData["cat"] = _ctx.Products.Where(c => c.ProductName.Contains("貓")).Take(4);
+            // 關鍵字
+            ViewData["keyword"] = _ctx.Keywords.OrderBy(k => k.Amount).Take(8).ToList();
+            return View(await　_ctx.Products.ToListAsync());
+        }
 
-            ViewData["Food"] = _petContext.Categories.Where(c => c.FatherCategory.CategoryName == "食品");
-            ViewData["Out"] = _petContext.Categories.Where(c => c.FatherCategory.CategoryName == "外出");
-            ViewData["Toy"] = _petContext.Categories.Where(c => c.FatherCategory.CategoryName == "玩具");
-            ViewData["Home"] = _petContext.Categories.Where(c => c.FatherCategory.CategoryName == "居家");
-            ViewData["Health"] = _petContext.Categories.Where(c => c.FatherCategory.CategoryName == "保健");
-            ViewData["Beauty"] = _petContext.Categories.Where(c => c.FatherCategory.CategoryName == "美容");
-            ViewData["recom"] = _petContext.Products.OrderByDescending(p => p.Inventory).Take(8).ToList();
-            return View(await　_petContext.Products.ToListAsync());
+        public JsonResult SearchKeyword(string keyword)
+        {
+            var product = _ctx.Products.Where(p => p.ProductName.Contains(keyword)).Select(p => p.ProductName).Take(6).ToList();
+            return Json(product);
         }
 
         public IActionResult About()
@@ -43,6 +54,12 @@ namespace PetFragrant_Test.Controllers
         {
             return View();
         }
+
+        public IActionResult CustomerLevel()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "新增商店";
+}
+
+
+<form asp-action="CreateStore" method="post">
+    <div class="bg-white rounded-2 shadow-sm p-2">
+        <h1 class="text-center m-2">新增商店</h1>
+        <div class="p-2">
+            <div class="m-3">
+                <label class="form-label">商店ID</label>
+                <input type="text" class="form-control" placeholder="商店ID" name="ID">
+            </div>
+            <div class="m-3">
+                <label class="form-label">商店名稱</label>
+                <input type="text" class="form-control" placeholder="商店名稱" name="Name">
+            </div>
+            <div class="m-3">
+                <label class="form-label">商店地址</label>
+                <input type="text" class="form-control" placeholder="商店地址" name="Address">
+            </div>
+        </div>
+    </div>
+    <div class="mt-2 text-end">
+        <button class="btn btn-success" asp-action="ManageStore">返回</button>
+        <button class="btn btn-danger" type="submit">儲存</button>
+        
+    </div>
+
+</form>
+
+@section topCSS{
+    <link rel="stylesheet" href="~/css/Backstage.css" />
+}

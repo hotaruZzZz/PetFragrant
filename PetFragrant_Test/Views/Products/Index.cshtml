@@ -1,69 +1,215 @@
 ﻿@model IEnumerable<PetFragrant_Test.Models.Product>
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "管理商品";
+}
+<!-- 麵包屑 -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-chevron p-3 bg-white rounded-3">
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis text-decoration-none" href="/Home/">
+                <i class="bi bi-house-fill"></i>
+                <span class="breadcrumb-item">首頁</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/Index">後台</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">商品管理</a>
+        </li>
+        
+    </ol>
+</nav>
+<div class="d-flex bg-q text-white p-3 mb-2 justify-content-evenly align-content-center align-items-center">
+    <div class="form-group">
+        <label for="categorySelect">以商品名稱搜尋：</label>
+        <input type="text" class="form-control" id="searchInput" placeholder="輸入關鍵字...">
+    </div>
+    <div class="form-group">
+        <label for="categorySelect">類別：</label>
+
+        <select id="categorySelect" class="form-control" asp-items="ViewBag.CategoriesID">
+            <option value="all">全部</option>
+        </select>
+    </div>
+    <!-- 價格範圍過濾選項 -->
+    <div class="form-group">
+        <label for="priceRangeSelect">價格範圍：</label>
+        <select id="priceRangeSelect" class="form-control">
+            <option value="all">全部</option>
+            <option value="50">低於 $50</option>
+            <option value="100">低於 $100</option>
+            <option value="500">低於 $500</option>
+            <option value="1000">低於 $1000</option>
+            <option value="3000">低於 $3000</option>
+            <option value="5000">低於 $5000</option>
+            <!-- 其他價格範圍選項... -->
+        </select>
+    </div>
+
+    <!-- 只顯示有庫存的商品選項 -->
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="stockCheckbox">
+        <label class="form-check-label" for="stockCheckbox">只顯示有庫存的商品</label>
+    </div>
+</div>
+<div class="productlist container">
+    <hr>
+    @foreach (var item in Model){
+    <div class="product d-flex justify-content-center align-items-center">
+        <div class="left-edit d-flex justify-content-center align-items-center col-md-6 col-12">
+            <div>
+                <img src="~/images/@item.ProdcutId/1.png" class="likesimg">
+            </div>
+            <div class="d-flex">
+                    <a asp-action="Edit" asp-route-id="@item.ProdcutId" class="editbtn m-2">編輯商品</a>
+                    <a asp-action="Delete" asp-route-id="@item.ProdcutId" class="editbtn m-2">刪除商品</a>
+            </div>
+        </div>
+        <div class="right-edit qtxt col-md-6 col-12">
+            <div class="data m-0">
+                    <p>產品名稱: @item.ProductName</p>
+                <div class="d-flex">
+                    <p class="pr-5">主類別: @item.Categories.FatherCategory.CategoryName</p> &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                        <p>子類別: @item.Categories.CategoryName</p>
+                </div>
+                <p>金額: @item.Price</p>
+                <p>庫存: @item.Inventory</p>
+                <p>描述: @item.ProductDescription</p>
+            </div>
+        </div>
+    </div><hr>
+    }
+</div>
+
+
+
+@section endJS {
+    <script>
+        $(document).ready(function () {
+            $("#searchInput, #categorySelect, #priceRangeSelect, #stockCheckbox").on("change keyup", filterProducts);
+        });
+
+        function filterProducts() {
+            var category = $("#categorySelect").val();
+            var productName = $("#searchInput").val();
+            var price = $("#priceRangeSelect").val();
+            var stockCheckbox = $("#stockCheckbox").is(':checked');
+
+            $.ajax({
+                url: "/Products/GetFilteredProducts",
+                type: "GET",
+                dataType: "json",
+                data: {
+                    category: category,
+                    productName: productName,
+                    price: price,
+                    stockCheckbox: stockCheckbox
+                },
+                success: function (data) {
+                    //console.log(data);
+                    updateProductList(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+        function updateProductList(products) {
+            var productContainer = $(".productlist");
+
+            // 清空現有內容
+            productContainer.empty();
+            //console.log(products);
+            if (products.$values.length > 0 && Array.isArray(products.$values)) {
+                // 顯示符合條件的商品
+                $.each(products.$values, function (index, item) {
+                    if (item.$ref) {
+                        // Skip items with $ref
+                        return;
+                    }
+
+                    var product = $("<div>").addClass("product d-flex justify-content-center align-items-center");
+                    var leftEdit = $("<div>").addClass("left-edit d-flex justify-content-center align-items-center");
+                    var rightEdit = $("<div>").addClass("right-edit qtxt");
+                    var data = $("<div>").addClass("data m-0");
+
+                    leftEdit.append($("<div>").append($("<img>").attr("src", "/images/" + item.ProdcutId + "/1.png").addClass("likesimg")));
+                    leftEdit.append($("<div>").addClass("d-flex").append($("<a>").attr("href", "/Products/Edit/" + item.ProdcutId).addClass("editbtn m-2").text("編輯商品"), $("<a>").attr("href", "/Product/Delete/" + item.ProdcutId).addClass("editbtn m-2").text("刪除商品")));
+
+                    data.append($("<p>").text("產品名稱: " + item.ProductName));
+
+                    if (item.Categories && item.Categories.CategoryName) {
+                        data.append($("<div>").addClass("d-flex").append($("<p>").addClass("pr-5").text("主類別: " + item.Categories.FatherCategory.CategoryName), $("<p>").text("子類別: " + item.Categories.CategoryName)));
+                    }
+
+                    data.append($("<p>").text("金額: " + item.Price));
+                    data.append($("<p>").text("庫存: " + item.Inventory));
+                    data.append($("<pre>").text("描述: " + item.ProductDescription));
+
+                    rightEdit.append(data);
+                    product.append(leftEdit, rightEdit);
+                    productContainer.append(product, $("<hr>"));
+                });
+            } else {
+                // 顯示提示訊息
+                var noResults = $("<p>").text("沒有符合條件的商品。");
+                productContainer.append(noResults);
+            }
+        }
+
+
+
+
+    </script>
 }
 
+@section topCSS{
+    <style>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdcutId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
+        /* 左邊區塊的佈局 */
+        .left-edit {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
 
-            <th>
-                @Html.DisplayNameFor(model => model.ProductDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Inventory)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Categories)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Categories.CategoryName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdcutId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
+        }
 
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Inventory)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Categories.CategoryId)
-            </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Categories.CategoryName)
-                </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProdcutId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProdcutId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProdcutId">Delete</a>
-            </td>
-        </tr>
+        /* 右邊區塊的佈局 */
+        .right-edit {
+            flex: 2;
+        }
+        /* 資料區塊的樣式設定 */
+        .data {
+            margin-left: 10px;
+        }
+
+        .editbtn {
+            width: 80px !important;
+            border-radius: 50px;
+            background-color: #6C5C53 !important;
+            color: whitesmoke;
+            border-color: transparent;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .likesimg {
+            width: 150px;
+            height: 150px;
+        }
+
+        .pdtbordercolor {
+            border-color: lightslategray;
+        }
+
+        .qtxt {
+            color: #6C5C53;
+            font-weight: bold;
+        }
+
+        .bg-q{
+            background-color: #6C5C53;
+        }
+    </style>
 }
-    </tbody>
-</table>

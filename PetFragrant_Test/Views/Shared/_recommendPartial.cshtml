@@ -1,35 +1,49 @@
-﻿<div class="row shadow-sm bg-white mt-2 p-2 rounded-2 ">
-    <h4><b>推薦商品</b></h4>
-    <div class="col-12">
-        <div id="carouselcard" class="carousel carousel-dark slide " data-bs-ride="carousel">
-            <div class="carousel-inner">
-              
-                @for(int i = 0; i < 2; i++){
-                <div class="carousel-item active " data-bs-interval="2000">
-                    <div class="col-12 d-flex justify-content-around ">
-                        @for(int j = 1; j <5;j++ ){
-                                <a class="card col-3 " asp-controller="Products" asp-action="ProductDetail" asp-route-id="@ViewBag.recom[((i*4)+j-1)].ProdcutId">
-                                    <img src="~/images/@ViewBag.recom[((i*4)+j-1)].ProdcutId/1.png">
-                            <div class="card-body">
-                                        <h5 class="card-title"><b>NT @Math.Round( ViewBag.recom[((i*4)+j-1)].Price *(decimal)0.9)</b></h5>
-                                        <p class="card-text">@ViewBag.recom[((i*4)+j-1)].ProductName</p>
-                                       
+﻿@{
+    var recomList = ViewBag.recom as List<Product>;
+}
+
+@if (recomList != null && recomList.Count > 0)
+{
+    <div class="row shadow-sm bg-white mt-2 p-2 rounded-2">
+        <h4><b>推薦商品</b></h4>
+        <div class="col-12">
+            <div id="carouselcard" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+
+                    @for (int i = 0; i < 2; i++)
+                    {
+                        <div class="carousel-item @(i == 0 ? "active" : "")" data-bs-interval="2000">
+                            <div class="col-12 d-flex justify-content-around">
+                                @for (int j = 1; j < 5; j++)
+                                {
+                                    var index = i * 4 + j - 1;
+                                    if (index < recomList.Count)
+                                    {
+                                        var product = recomList[index];
+                                        <a class="card col-3" asp-controller="Products" asp-action="ProductDetail" asp-route-id="@product.ProdcutId">
+                                            <img src="~/images/@product.ProdcutId/1.png">
+                                            <div class="card-body">
+                                                <h5 class="card-title">@product.ProductName</h5>
+                                                <p class="card-text"><b>NT @Math.Round(product.Price * (decimal)0.9)</b></p>
+                                                
+                                            </div>
+                                        </a>
+                                    }
+                                }
+
                             </div>
-                        </a>
-                            }
-              
-                    </div>
+                        </div>
+                    }
                 </div>
-         }
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselcard" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselcard" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselcard" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselcard" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
         </div>
     </div>
-</div>
+}

@@ -3,17 +3,34 @@
 @{
     ViewData["Title"] = "AddProduct";
 }
+<!-- 麵包屑 -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-chevron p-3">
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis text-decoration-none" href="/Home/">
+                <i class="bi bi-house-fill"></i>
+                <span class="breadcrumb-item">首頁</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/Index">後台</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            新增產品
+        </li>
+    </ol>
+</nav>
 
-<h1>新增產品</h1>
+<h1 class="text-center" style="color:#6C5C53;"><b>新增產品</b></h1>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddProduct" enctype="multipart/form-data">
+<hr class="qhr" />
+<div class="row d-flex ">
+    <div class="col-md-8 d-flex justify-content-center align-items-center">
+        <form asp-action="AddProduct" enctype="multipart/form-data" class="w-50" onsubmit="return validateForm();">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label class="btn btn-secondary m-2">
+            <div class="form-group ">
+                <label class="btnproduct text-center">
                     上傳圖片
                     <input type="file" name="file" multiple accept="image/png, image/gif, image/jpeg" style="display:none;" onchange="previewImages()" />
                 </label>
@@ -22,7 +39,7 @@
             <div class="form-group d-flex">
                 <div class="w-50">
                     <label class="control-label">主類別</label>
-                    <select id="mainCategory"  class="form-control" asp-items="ViewBag.CategoriesID"></select>
+                    <select id="mainCategory" class="form-control" asp-items="ViewBag.CategoriesID"></select>
                 </div>
                 <div class="w-50 ms-2">
                     <label class="control-label">子類別</label>
@@ -32,7 +49,7 @@
             <div class="form-group">
                 <label class="control-label">規格</label>
                 <div class="spec" id="spec">
-                    <button type="button" class="btn btn-secondary m-2" id="add">
+                    <button type="button" class="btnproduct" id="add">
                         新增規格+
                     </button>
                 </div>
@@ -58,21 +75,22 @@
                 <span asp-validation-for="Inventory" class="text-danger"></span>
             </div>
             <div class="form-group mt-2">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btnproduct" />
             </div>
+            <a asp-action="Index" style="color:#6C5C53;">Back to List</a>
         </form>
 
     </div>
-    <div id="imagePreviewContainer" class="form-group col-md-4">
-        <label>圖片預覽</label>
+    <div id="imagePreviewContainer" class="form-group col-md-4 ">
+        <label style="font-size:25px ; color:#6C5C53; "><b>圖片預覽</b></label>
         <div id="imagePreview"></div>
     </div>
 
 </div>
 
-<div>
+@*<div>
     <a asp-action="Index">Back to List</a>
-</div>
+</div>*@
 
 @section endJS{
     <script>
@@ -124,16 +142,17 @@
 
         add.addEventListener("click", function () {
             var div = document.createElement("div");
-            div.setAttribute("class", "bg-warning btn m-2 p-0");
+            div.setAttribute("class", " btn ");
             var new_spec = document.createElement("input");
             new_spec.setAttribute("value", "規格");
             new_spec.setAttribute("name", "SpecName");
             new_spec.setAttribute("type", "text");
-            new_spec.setAttribute("class", "position-relative btn btn-warning");
+            new_spec.setAttribute("class", " btnproduct  w-150px text-center");
             inner_input = document.createElement("input");
             inner_input.setAttribute("type", "button");
-            inner_input.setAttribute("class", "btn-close");
+            inner_input.setAttribute("class", "btn-close ");
             inner_input.setAttribute("aria-label", "Close");
+
 
             div.appendChild(new_spec);
             div.appendChild(inner_input);
@@ -165,6 +184,28 @@
                 reader.readAsDataURL(file);
             }
         }
+
+        function validateForm() {
+            // 取得所有input text欄位
+            var inputTextFields = document.querySelectorAll("input[type='text']");
+            var hasEmptyField = false;
+
+            // 檢查input text欄位是否填寫完整
+            inputTextFields.forEach(function (field) {
+                if (field.value.trim() === '') {
+                    hasEmptyField = true;
+                }
+            });
+
+            // 檢查是否有未填寫的input text欄位
+            if (hasEmptyField) {
+                alert("請填寫所有必填欄位！");
+                return false; // 阻止表單提交
+            }
+
+            // 若表單驗證通過，允許提交
+            return true;
+        }
     </script>
 }
 
@@ -175,15 +216,32 @@
             max-height: 100px;
         }
 
-        #imagePreviewContainer {
-            margin-top: 20px;
-
+        #imagePreviewContainer img {
+            width: 100%;
         }
 
         .preview-image {
             max-width: 100px;
             max-height: 100px;
-            margin-right: 10px;
         }
+
+        .qhr {
+            border: 2.5px solid #641E16;
+        }
+
+        .btnproduct {
+            width: 150px;
+            background-color: #6C5C53;
+            border-radius: 50px;
+            border: none;
+            color: white;
+            font-size: larger;
+            font-weight: bold;
+            padding: 10px;
+        }
+
+            .btnproduct:hover {
+                cursor: grab;
+            }
     </style>
 }

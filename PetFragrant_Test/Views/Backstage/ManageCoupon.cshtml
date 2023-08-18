@@ -3,13 +3,27 @@
 @{
     ViewData["Title"] = "管理優惠券";
 }
+<!-- 麵包屑 -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-chevron p-3">
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis text-decoration-none" href="/Home/">
+                <i class="bi bi-house-fill"></i>
+                <span class="breadcrumb-item">首頁</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/Index">後台</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            優惠券管理
+        </li>
+    </ol>
+</nav>
 
 <h1 class="text-center">優惠券管理</h1>
 <div class="mt-4 p-2 bg-white rounded-2 row d-flex justify-content-center">
-    <a href="CreateCoupon"  class="col-2 btn btn-secondary m-2">新增</a>
-    <a class="col-2 btn btn-secondary m-2">編輯</a>
-    <a class="col-2 btn btn-secondary m-2">刪除</a>
-    <a class="col-2 btn btn-secondary m-2">查看</a>
+    <a asp-action="CreateCoupon" class="col-2 btn btn-secondary m-2">新增</a>
     <hr />
     <div class="col-12" >
         <h4 class="text-center">所有折價券</h4>
@@ -21,7 +35,11 @@
                     <th>描述</th>
                     <th>折扣</th>
                     <th>類型</th>
+                    <th>使用對象</th>
+                    <th>最低金額 (滿額折扣)</th>
+                    <th>開始日</th>
                     <th>到期日</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -33,26 +51,22 @@
                         <td>@coupon.Description</td>
                         <td>@coupon.Value</td>
                         <td>@coupon.Type</td>
+                        <td>@coupon.User</td>
+                        <td>@coupon.MinimumAmount</td>
+                        <td>@coupon.Start</td>
                         <td>@coupon.Period</td>
+                        <td>
+                            <a class="btn btn-secondary" asp-action="EditCoupon" asp-route-id="@coupon.ID">編輯</a>
+                            <a class="btn btn-danger delete-coupon" id="@coupon.ID">刪除</a>
+                        </td>
+                        
+
+
                     </tr>
                 }
-              
-                <tr>
-                    <td>23464565</td>
-                    <td>88折</td>
-                    <td>88折</td>
-                    <td>0.88</td>
-                    <td>折扣(%)</td>
-                    <td>折扣(%)</td>
-                </tr>
-                <tr>
-                    <td>23464565</td>
-                    <td>滿200折50</td>
-                    <td>滿200折50</td>
-                    <td>-50</td>
-                    <td>折扣</td>
-                    <td>折扣</td>
-                </tr>
+          
+
+
             </tbody>
         </table>
     </div>
@@ -61,3 +75,56 @@
 <a class="btn btn-primary mt-2" href="/Backstage">返回管理後台</a>
 
 
+@section endJS{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            $('.delete-coupon').click(function () {
+                var couponId = $(this).attr('id');
+               
+                Swal.fire({
+                    title: '確定要刪除嗎?',
+                    text: '您正要刪除這個折價券',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '確定'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteCoupon(couponId);
+                    }
+                });
+            });
+        });
+        function deleteCoupon(couponId) {
+            var requestVerificationToken = $('#requestVerificationToken').val();
+            console.log(requestVerificationToken)
+            $.ajax({
+                url: '/Backstage/DeleteCouponNow',
+                method: 'POST',
+                data: { id: couponId },
+                success: function (response) {
+                    Swal.fire(
+                        '刪除成功!',
+                        '您已成功刪除',
+                        'success'
+                    );
+                    // 可以在這裡執行其他操作，例如刷新頁面或更新表格等
+                    location.reload();
+                },
+                error: function () {
+                    // 處理錯誤情況
+                    Swal.fire(
+                        '刪除失敗!',
+                        '刪除時發生錯誤',
+                        'error'
+                    );
+                }
+            });
+        }
+
+        
+
+    </script>
+}

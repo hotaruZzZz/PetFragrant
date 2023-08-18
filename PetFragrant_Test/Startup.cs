@@ -31,6 +31,8 @@ namespace PetFragrant_Test
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            
+            services.AddSignalR();
 
             //加入Cookie驗證, 同時設定選項
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -56,6 +58,9 @@ namespace PetFragrant_Test
             services.AddTransient<AccountService>();
 
             services.AddSingleton<IHashService, HashService>();
+
+
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,6 +85,8 @@ namespace PetFragrant_Test
 
             app.UseAuthorization();
 
+
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -98,12 +105,12 @@ namespace PetFragrant_Test
 
                 endpoints.MapControllerRoute(
                     name: "MainCategory",
-                    pattern: "Products/{name}",
+                    pattern: "類別/{name}",
                     defaults: new { controller = "Products", action = "MainCategory" });
 
                 endpoints.MapControllerRoute(
                     name: "Subcategory",
-                    pattern: "ProductsSubcategory/{name}",
+                    pattern: "子類別/{name}",
                     defaults: new { controller = "Products", action = "Subcategory" });
 
             });

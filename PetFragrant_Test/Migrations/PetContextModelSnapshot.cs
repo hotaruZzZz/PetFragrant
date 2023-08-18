@@ -63,6 +63,9 @@ namespace PetFragrant_Test.Migrations
                     b.Property<decimal>("Rate")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("CouponId");
 
                     b.HasIndex(new[] { "OrderId" }, "IX_Coupons_OrderID");
@@ -131,12 +134,34 @@ namespace PetFragrant_Test.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Name");
 
+                    b.Property<decimal>("MinimumAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<DateTime>("Period")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("User")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DiscoutID");
 
                     b.ToTable("Discounts");
+                });
+
+            modelBuilder.Entity("PetFragrant_Test.Models.Keyword", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Keywords");
                 });
 
             modelBuilder.Entity("PetFragrant_Test.Models.MyLike", b =>
@@ -158,12 +183,17 @@ namespace PetFragrant_Test.Migrations
             modelBuilder.Entity("PetFragrant_Test.Models.Order", b =>
                 {
                     b.Property<string>("OrderId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("OrderID");
 
                     b.Property<DateTime>("Arriiveddate")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Check")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("CouponID")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CustomerId")
                         .IsRequired()
@@ -179,8 +209,17 @@ namespace PetFragrant_Test.Migrations
                     b.Property<string>("Payment")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Paymentdate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("Shipdate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("StoreID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OrderId");
 
@@ -256,6 +295,44 @@ namespace PetFragrant_Test.Migrations
                     b.ToTable("ProductSpecs");
                 });
 
+            modelBuilder.Entity("PetFragrant_Test.Models.ReciveStore", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ReciveStores");
+                });
+
+            modelBuilder.Entity("PetFragrant_Test.Models.Report", b =>
+                {
+                    b.Property<string>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Reports");
+                });
+
             modelBuilder.Entity("PetFragrant_Test.Models.ShoppingCart", b =>
                 {
                     b.Property<string>("ProdcutId")
@@ -297,6 +374,20 @@ namespace PetFragrant_Test.Migrations
                     b.HasKey("SpecId");
 
                     b.ToTable("Specs");
+                });
+
+            modelBuilder.Entity("PetFragrant_Test.Models.Verification", b =>
+                {
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("VerificationCode")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("VerificationCode");
+
+                    b.HasKey("Email");
+
+                    b.ToTable("Verifications");
                 });
 
             modelBuilder.Entity("PetFragrant_Test.Models.Category", b =>
@@ -394,6 +485,15 @@ namespace PetFragrant_Test.Migrations
                     b.Navigation("Spec");
                 });
 
+            modelBuilder.Entity("PetFragrant_Test.Models.Report", b =>
+                {
+                    b.HasOne("PetFragrant_Test.Models.Customer", "Customer")
+                        .WithMany("Reports")
+                        .HasForeignKey("CustomerId");
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("PetFragrant_Test.Models.ShoppingCart", b =>
                 {
                     b.HasOne("PetFragrant_Test.Models.Customer", "Customer")
@@ -433,6 +533,8 @@ namespace PetFragrant_Test.Migrations
                     b.Navigation("MyLikes");
 
                     b.Navigation("Orders");
+
+                    b.Navigation("Reports");
 
                     b.Navigation("ShoppingCarts");
                 });

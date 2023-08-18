@@ -10,7 +10,44 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .page-content.hidden {
+            opacity: 0;
+        }
 
+        @@media (max-width:767px) {
+            .icon-list {
+                flex-direction: column;
+                align-items: flex-end;
+                /*    justify-content: space-between; */
+            }
+
+                .icon-list a {
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+                    .icon-list a svg {
+                        width: 10%;
+                    }
+        }
+
+        @@media (min-width: 991px) {
+            .icon-list {
+                width: 28%;
+            }
+
+                .icon-list a {
+                    flex-direction: column;
+                    display: flex;
+                    align-items: center;
+                }
+
+            svg {
+                width: 40%;
+            }
+        }
+    </style>
     @await RenderSectionAsync("topJS", required: false)
     @await RenderSectionAsync("topCSS", required: false)
 </head>
@@ -18,16 +55,18 @@
         
         <partial name="_NavbarPartial" />
 
+<div class="w-100">
+        <main role="main" class="p-3">
+            <div class="container">
+                @RenderBody()
+                <p class=" m-1 btt shadow">
+                    <a href="#"><i class="material-icons">arrow_upward</i></a>
+                </p>
+            </div>
 
-    <main role="main" class="p-3">
-        <div class="container">
-            @RenderBody()
-            <p class=" m-1 btt shadow">
-                <a href="#"><i class="material-icons">arrow_upward</i></a>
-            </p>
-        </div>
+        </main>
+    </div>
 
-    </main>
 
     
     

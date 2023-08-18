@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "取消訂單";
+}
+
+<div class="w-75 p-4">
+    <h1>取消訂單</h1>
+    <form method="post">
+        @Html.AntiForgeryToken()
+        <input hidden value="@ViewData["id"]" name="id" />
+        <div class="form-group">
+            <label for="cancelReason">取消理由：</label>
+            <select id="cancelReason" name="CancelReason" class="form-control">
+                <option value="購買錯誤">購買錯誤</option>
+                <option value="改買其他商品">改買其他商品</option>
+                <option value="不需要了">不需要了</option>
+                <option value="其他原因">其他原因</option>
+            </select>
+        </div>
+
+        <div class="form-group" style="display:none;" id="otherReasonDiv">
+            <label for="otherReason">其他原因：</label>
+            <input type="text" id="otherReason" name="OtherReason" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary m-2">確認取消</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById("cancelReason").addEventListener("change", function () {
+        var otherReasonDiv = document.getElementById("otherReasonDiv");
+        var selectedValue = this.value;
+
+        if (selectedValue === "其他原因") {
+            otherReasonDiv.style.display = "block";
+        } else {
+            otherReasonDiv.style.display = "none";
+        }
+    });
+</script>

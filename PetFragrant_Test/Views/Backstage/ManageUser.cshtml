@@ -1,0 +1,86 @@
+﻿@model IEnumerable<PetFragrant_Test.Data.ApplicationUser>
+@{
+    ViewData["Title"] = "會員管理";
+}
+<!-- 麵包屑 -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-chevron p-3">
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis text-decoration-none" href="/Home/">
+                <i class="bi bi-house-fill"></i>
+                <span class="breadcrumb-item">首頁</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/Index">後台</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="#"> 會員管理</a>
+        </li>
+
+    </ol>
+</nav>
+<h1 class="qtxt"><center>會員管理</center></h1>
+<hr class="qhr" />
+
+@*<div class="d-flex justify-content-center align-items-center mb-2">
+    <div class="input-group w-50">
+        <input type="text" class="form-control" placeholder="輸入使用者姓名或Email...">
+        <button class="qbtn" type="submit">搜尋</button>
+    </div>
+</div>*@
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">姓名</th>
+            <th scope="col">Email</th>
+            <th scope="col">等級</th>
+            <th scope="col">管理員</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <th scope="row">@user.Name</th>
+                <td>@user.Email</td>
+                <td>@user.Level</td>
+                <td>@user.IsAdmin</td>
+                <td>
+                    <a class="btn btn-danger" asp-action="EditUser" asp-route-id="@user.UserID">編輯</a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+@section topCSS
+    {
+    <style>
+        .qhr {
+            border: 3px solid;
+            color: #641E16;
+        }
+
+        .qtxt {
+            color: #6C5C53;
+            font-weight: bolder;
+        }
+
+        .qbtn {
+            width: 120px;
+            border-radius: 10px;
+            border-color: transparent;
+            font-size: larger;
+            font-weight: bold;
+            background-color: #6C5C53;
+            color: white !important;
+        }
+
+    </style>
+
+
+}

@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "忘記密碼";
+}
+
+<div class=" bg-white rounded-2 shadow-sm p-2 mb-3 align-content-center align-items-center d-flex flex-column">
+    <h4>請輸入您的電子信箱，發驗證信驗證</h4>
+
+    <form method="post" asp-action="SendMessageForgot" asp-controller="Account" class="d-flex flex-column align-items-center">
+        <label class="form-label">請輸入電子信箱:</label>
+        <input type="email" name="email" class="input-group-text" />
+        <button class="btn btn-danger m-2" type="submit">送出</button>
+    </form>
+</div>
+

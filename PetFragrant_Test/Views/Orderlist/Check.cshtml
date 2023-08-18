@@ -1,46 +1,64 @@
-﻿@model IEnumerable<PetFragrant_Test.ViewModels.ShoppingCartViewModel>
+﻿@model IEnumerable<PetFragrant_Test.ViewModels.OrderCheckViewModel>
 @{
     ViewData["Title"] = "訂單確認";
 }
 
 <h1><center>訂單確認</center></h1>
-<div class="bg-white p-2 mb-3 shadow-sm">
-    <h4>一共 @Model.Count() 個商品，總金額NT @Math.Round( ViewBag.totalPrice)</h4>
+<form method="post" asp-action="CreateOrder" class="bg-white p-2 mb-3 shadow-sm">
+    <h4>
+        一共 @Model.Count() 個商品，總金額NT @Math.Round(ViewBag.totalPrice)
+
+    </h4>
+    
+    <input hidden type="text" value="@ViewBag.totalPrice" name="totalprice" />      
     <hr />
-    @foreach(var item in Model)
+    
+    @for (int i = 0; i < Model.Count(); i++)
     {
+        var item = Model.ElementAt(i);
         <div class="row">
             <div class="col-1">
-                <img src="~/images/@item.ShoppingCartData.ProdcutId/1.png" class="w-75">
+                <img src="~/images/@item.ProductID/1.png" class="w-75">
             </div>
             <div class="col-2">
-                <h5>@item.ShoppingCartData.Prodcut.ProductName</h5>
-                @if(item.ShoppingCartData.Spec.SpecName != null)
+                <input type="text" hidden value="@item.ProductID" name="items[@i].ProductID" />
+                <input type="text" hidden value="@item.Amount" name="items[@i].Amount" />
+                <input type="text" hidden value="@item.ProductName" name="items[@i].ProductName" />
+                <input type="text" hidden value="@item.SpecName" name="items[@i].SpecName" />
+                <input type="text" hidden value="@item.Price" name="items[@i].Price" />
+
+                <h5>@item.ProductName</h5>
+                @if (item.SpecName != null)
                 {
-                    <p>規格: @item.ShoppingCartData.Spec.SpecName</p>
+                    <input type="text" hidden value="@item.SpecID" name="items[@i].SpecID" />
+                    <p>規格: @item.SpecName</p>
                 }
-                
+                else
+                {
+                    <input type="text" hidden value="-1" name="items[@i].SpecID" />
+                }
             </div>
             <div class="col-2">
-                <p>NT @item.ShoppingCartData.Prodcut.Price</p>
+                <p>NT @Math.Round(item.Price)</p>
             </div>
             <div class="col-2">
-                <p>x @item.ShoppingCartData.Quantity</p>
+                <p>x @item.Amount</p>
             </div>
             <div class="col-2">
-                <p>NT @(item.ShoppingCartData.Quantity*item.ShoppingCartData.Prodcut.Price)</p>
+                <p>NT @Math.Round(item.Price * item.Amount)</p>
             </div>
         </div>
         <hr />
     }
-    
+
     <div class="row p-3">
         <div class="col-4">
             <h5>折價券</h5>
-            @if(ViewData["coupon"] != null)
+            @if (ViewData["coupon"] != null)
             {
                 <ul>
                     <li>@ViewBag.coupon.Name</li>
+                    <input type="text" hidden name="CouponID" value="@ViewBag.coupon.ID" />
                 </ul>
 
             }
@@ -51,33 +69,73 @@
                 </ul>
             }
         </div>
-        <div class="col-4">
-            <h5>付款方式</h5>
-            <ul>
-                <li>貨到付款
-                    <ul>
-                        <li>7-11取貨</li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <div class="col-4">
-
-            <h5>收件者資料</h5>
-            <ul>
-                <li>姓名: 寶包貓咪</li>
-                <li>電話: 09*****861</li>
-                <li>取貨店家: 新竹中華店</li>
-            </ul>
-        </div>
-        
-
-
     </div>
-    <center>
-        <a class="btn btn-danger" asp-action="FinishOrder">
-            確定
-        </a>
-    </center>
+    <hr />
+    <div class="row p-3">
+        <div class="col-4">
+            <h5>選擇取貨店家</h5>
+            <select id="storeSelect" name="storeID">
+                @foreach (var store in ViewBag.store)
+                {
+                    <option value="@store.Id" >@store.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-8">
+            <h5>店家地址</h5>
+            <div id="storeAddress"></div>
+        </div>
+    </div>
 
-</div>
+    <center>
+        <button type="submit" class="btn btn-danger">
+            進入付款頁面
+        </button>
+    </center>
+</form>
+
+@section endJS{
+    <script>
+        $(document).ready(function () {
+            // 獲取選擇的預設店家ID
+            var storeId = $('#storeSelect').val();
+
+            // 使用Ajax請求獲取預設店家的地址
+            $.ajax({
+                type: 'GET',
+                url: '/Backstage/GetAddress', // 假設有一個後端接口來獲取店家地址，URL根據您的實際情況修改
+                data: { id: storeId }, // 將storeId作為data的屬性傳遞給後端
+                success: function (response) {
+                    // 在成功回調函式中處理伺服器的回應
+                    $('#storeAddress').text(response.address); // 將店家地址顯示在#storeAddress元素中
+                },
+                error: function (xhr, status, error) {
+                    // 在錯誤回調函式中處理請求的錯誤
+                    console.error('Error:', error);
+                }
+            });
+
+            // 監聽選項變化
+            $('#storeSelect').change(function () {
+                // 獲取選擇的店家ID
+                var storeId = $(this).val();
+
+                // 使用Ajax請求獲取店家地址
+                $.ajax({
+                    type: 'GET',
+                    url: '/Backstage/GetAddress', // 假設有一個後端接口來獲取店家地址，URL根據您的實際情況修改
+                    data: { id: storeId }, // 正確地將storeId作為data的屬性傳遞給後端
+                    success: function (response) {
+                        // 在成功回調函式中處理伺服器的回應
+                        $('#storeAddress').text(response.address); // 將店家地址顯示在#storeAddress元素中
+                    },
+                    error: function (xhr, status, error) {
+                        // 在錯誤回調函式中處理請求的錯誤
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+
+    </script>
+}

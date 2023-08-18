@@ -1,0 +1,79 @@
+﻿@model PetFragrant_Test.Data.ApplicationUser
+@{
+    ViewData["Title"] = "編輯會員";
+}
+
+<div class="row d-flex">
+
+    <div class="col-md-12 d-flex justify-content-center align-content-center">
+        <form asp-action="EditUser" class="w-50 qtxt">
+
+            <h1>編輯會員</h1>
+            <hr class="qhr" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UserID" />
+
+            <div class="form-group">
+               <label>姓名</label>
+                <input value="@Model.Name" name="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input value="@Model.Email" name="Email" type="email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>電話</label>
+                <input value="@Model.PhoneNo" name="PhoneNo" class="form-control" />
+                <span asp-validation-for="PhoneNo" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>等級</label>
+                <select name="Level" class="form-select">
+                    <option value="一般香檳">一般香檳</option>
+                    <option value="金香檳">金香檳</option>
+                    <option value="鑽石香檳">鑽石香檳</option>
+                    <option value="管理員">管理員</option>
+                </select>
+                <span asp-validation-for="Level" class="text-danger"></span>
+            </div>
+
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" name="IsAdmin" @if (Model.IsAdmin)
+                {
+                    <text>checked</text>
+                } value="@Model.IsAdmin">
+
+                <label class="form-check-label" for="flexSwitchCheckChecked">管理員權限</label>
+                <span asp-validation-for="IsAdmin" class="text-danger"></span>
+            </div>
+            <div class="form-group d-flex justify-content-end">
+                <input type="submit" value="Save" class="qbtn mt-2" />
+            </div>
+            <div class="form-group d-flex justify-content-end">
+                <a asp-action="">回前頁</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section topCSS{
+    <link rel="stylesheet" href="~/css/Backstage.css" />
+}
+@section endJS{
+    <script>
+        const checkbox = document.getElementById("flexSwitchCheckChecked");
+
+        checkbox.addEventListener("change", function () {
+            if (checkbox.checked) {
+                checkbox.value = "true";
+            } else {
+                checkbox.value = "false";
+            }
+        });
+    </script>
+}

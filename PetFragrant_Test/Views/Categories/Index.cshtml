@@ -3,51 +3,94 @@
 @{
     ViewData["Title"] = "Index";
 }
+<!-- 麵包屑 -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-chevron p-3">
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis text-decoration-none" href="/Home/">
+                <i class="bi bi-house-fill"></i>
+                <span class="breadcrumb-item">首頁</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/Index">後台</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            商品類別總覽
+        </li>
+    </ol>
+</nav>
+<h1 class="qtxt"><center>商品類別總覽</center></h1>
 
-<h1>Index</h1>
+<div class="d-flex justify-content-center align-items-center">
+    <a asp-action="Create" class="qbtn text-center text-decoration-none">建立</a>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
+    <hr />
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryName)
+                @*@Html.DisplayNameFor(model => model.CategoryName)*@
+                類別名稱
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FatherCategory)
+                @* @Html.DisplayNameFor(model => model.CategoryId)*@
+                類別ID
             </th>
             <th>
                 父類別名稱
             </th>
-            <th></th>
+            <th>
+                編輯選項
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FatherCategory.CategoryId)
-            </td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CategoryId)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.FatherCategory.CategoryName)
                 </td>
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
-            </td>
-        </tr>
-}
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CategoryId" class="qtxt">編輯</a>
+                    <a asp-action="Delete" asp-route-id="@item.CategoryId" class="qtxt">刪除</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@section topCSS
+    {
+    <style>
+
+        .qhr {
+            border: 5px solid;
+            color: #641E16;
+        }
+
+        .qtxt {
+            color: #6C5C53;
+            font-weight: bold;
+            margin-right: 30px;
+        }
+
+        .qbtn {
+            width: 100px;
+            border-radius: 50px;
+            font-size: larger;
+            font-weight: bold;
+            color: white;
+            border: none;
+            background-color: #6C5C53;
+        }
+    </style>
+    }

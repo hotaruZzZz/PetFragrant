@@ -1,7 +1,7 @@
 ﻿<div class="row">
     <ul class="d-flex classification">
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/Products/食品"
+            <a href="/類別/食品"
                class="text-white d-flex justify-content-center">
                 <i class="material-icons">local_dining</i>
                 食品
@@ -24,7 +24,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/Products/外出" class="text-white d-flex justify-content-center">
+            <a href="/類別/外出" class="text-white d-flex justify-content-center">
                 <i class="material-icons">restaurant</i>
                 外出
             </a>
@@ -46,7 +46,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/Products/玩具" class="text-white d-flex justify-content-center">
+            <a href="/類別/玩具" class="text-white d-flex justify-content-center">
                 <i class="material-icons">pets</i>
                 玩具
             </a>
@@ -68,7 +68,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/Products/居家" class="text-white d-flex justify-content-center">
+            <a href="/類別/居家" class="text-white d-flex justify-content-center">
                 <i class="material-icons">sanitizer</i>
                 居家
             </a>
@@ -90,7 +90,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/Products/保健" class="text-white d-flex justify-content-center">
+            <a href="/類別/保健" class="text-white d-flex justify-content-center">
                 <i class="material-icons">health_and_safety</i>
                 保健
             </a>
@@ -112,7 +112,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/Products/美容" class="text-white d-flex justify-content-center ">
+            <a href="/類別/美容" class="text-white d-flex justify-content-center ">
                 <i class="material-icons">auto_awesome</i>
                 美容
             </a>
@@ -151,6 +151,14 @@
         subMenu.style.display = "none";
     }
 
+    function truncateText(text, maxLength) {
+        if (text.length > maxLength) {
+            return text.slice(0, maxLength) + "...";
+        }
+        return text;
+    }
+
+
     function showBrandImages(link, id) {
         var contentDiv = $(link).closest(".classify_list").find(".content");
         contentDiv.html("");
@@ -160,18 +168,18 @@
             type: 'GET',
             data: { id: id },
             success: function (data) {
-                //console.log(data);
-
                 $.each(data, function (index, item) {
-                   
                     var cardDiv = $("<a>").addClass("m-2");
-                    cardDiv.attr("href", "Products/ProductDetail/" + item.prodcutId);
-                    cardDiv.attr("class", "d-flex  justify-content-center flex-column align-items-center")
+                    cardDiv.attr("href", "/Products/ProductDetail/" + item.prodcutId);
+                    cardDiv.attr("class", "d-flex  flex-column align-items-center");
+
                     var imgsrc = "/images/" + item.prodcutId + "/1.png";
                     var cardImage = $("<img>").attr("src", imgsrc);
                     cardImage.attr("class", "img-con-s m-1");
-                    var cardDescription = $("<p>").addClass("text-black text-center text-wrap").text(item.productName);
-                    console.log(imgsrc);
+
+                    var cardDescription = $("<p>").addClass("text-black text-center text-wrap");
+                    cardDescription.text(truncateText(item.productName, 10)); // 限制字數為20
+
                     cardDiv.append(cardImage);
                     cardDiv.append(cardDescription);
 
@@ -183,9 +191,4 @@
             }
         });
     }
-
-
-
-
-
 </script>

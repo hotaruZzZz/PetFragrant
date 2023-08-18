@@ -4,60 +4,62 @@
 
 <div class="container d-flex bordercolor">
     <div class="left-block left">
-        <a href="#">客戶管理</a><hr>
-        <a href="#">訂單管理</a><hr>
+        <a href="/Backstage/ManageUser">客戶管理</a><hr>
+        <a href="/Backstage/ManageOrder">訂單管理</a><hr>
         <a href="/Products/AddProduct">上架商品</a><hr>
         <a href="/Products">商品管理</a><hr>
         <a href="/Backstage/ManageCoupon">折價券管理</a><hr>
-        <a href="#">已售出的商品</a><hr>
-        <a href="#">銷售報表</a>
+        <a href="/Categories/Index">商品類別管理</a><hr>
+        <a href="/Backstage/ManageStore">商店管理</a><hr>
+        <a href="/Backstage/ManageReport">問題回饋</a>
     </div>
     <div class="right-block d-flex">
-        <div class="top ">
+        <div class="top">
             <div class="block">
-                <button><i class="material-icons large">more_horiz</i></button>
-                <span>1</span>
+                <i class="material-icons large">more_horiz</i>
+                <span>@ViewBag.pending</span>
                 <p>待處理訂單</p>
             </div><hr>
             <div class="block">
-                <button><i class="material-icons large">assignment</i></button>
-                <span>2</span>
-                <p>今日訂單量</p>
+                <i class="material-icons large">assignment</i>
+                <span>@ViewBag.today</span>
+                <p>今月訂單量</p>
             </div><hr>
             <div class="block">
-                <button><i class="material-icons large">monetization_on</i></button>
-                <span>3</span>
-                <p>今日銷售總金額</p>
+                <i class="material-icons large">monetization_on</i>
+                <span>@Math.Round(ViewBag.total)</span>
+                <p>今月銷售總金額</p>
             </div>
         </div>
-        <div class="middle d-flex gap-lg-2 p-0">
-            <div class="block">
-                <button><i class="material-icons large">file_upload</i></button>
-                <p>上架商品</p>
-            </div>
-            <div class="block">
-                <button><i class="material-icons large">build</i></button>
-                <p>管理商品</p>
-            </div>
-            <div class="block">
-                <button><i class="material-icons large">assignment</i></button>
-                <p>訂單管理</p>
-            </div>
-            <div class="block">
-                <button><i class="material-icons large">card_giftcard</i></button>
-                <p>優惠券管理</p>
-            </div>
-            <div class="block">
-                <button><i class="material-icons large">person</i></button>
-                <p>會員管理</p>
-            </div>
-        </div>
+
         <div class="bottom">
-            <div class="bottom-left">
-                <img src="https://picsum.photos/300/200/?random=30">
+            <div class="bottom-left ms-2 border border-5 border-secondary rounded-3" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <input type="month" id="monthInput" class="m-4" />
+                <canvas id="leftchart"></canvas>
             </div>
-            <div class="bottom-right">
-                <img src="https://picsum.photos/300/200/?random=40">
+
+            <div class="bottom-right ms-2 border border-5 border-secondary rounded-3" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <input type="month" id="monthInput_category" class="m-4" />
+                <canvas id="rightchart" class="w-100"></canvas>
+            </div>
+        </div>
+
+        <div class="bottom">
+            <div class="bottom-left ms-2 border border-5 border-secondary rounded-3" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="d-flex m-4">
+                    <label for="yearSelect">選擇年份：</label>
+                    <select id="yearInput"></select>
+                </div>
+
+                <canvas id="yearleftchart"></canvas>
+            </div>
+
+            <div class="bottom-right ms-2 border border-5 border-secondary rounded-3" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="d-flex m-4">
+                    <label for="yearSelect">選擇年份：</label>
+                    <select id="yearInput_category"></select>
+                </div>
+                <canvas id="yearrightchart" class="w-100"></canvas>
             </div>
         </div>
     </div>
@@ -67,4 +69,383 @@
 @section topCSS{
     <link rel="stylesheet" href="~/css/home.css" />
     <link rel="stylesheet" href="~/css/Backstage.css" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.0/dist/echarts.min.js"></script>
+}
+
+@section endJS{
+    <script>
+        const monthInput = document.getElementById('monthInput');
+        const monthInput_category = document.getElementById('monthInput_category');
+        const yearInput = document.getElementById('yearInput');
+        const yearInput_category = document.getElementById('yearInput_category');
+
+
+        monthInput.addEventListener('change', function () {
+            // Get the value of the input element when it changes
+            const selectedValue = monthInput.value;
+
+            updateChartData(selectedValue);
+        });
+
+        yearInput.addEventListener('change', function () {
+            // Get the value of the input element when it changes
+            const selectedValue = yearInput.value;
+
+            updateYearChartData(selectedValue);
+        });
+
+        monthInput_category.addEventListener('change', function () {
+            // Get the value of the input element when it changes
+            const selectedValue = monthInput_category.value;
+            console.log(selectedValue)
+            updateCategoryChart(selectedValue);
+        });
+
+        yearInput_category.addEventListener('change', function () {
+            // Get the value of the input element when it changes
+            const selectedValue = yearInput_category.value;
+            console.log(selectedValue)
+            updateYearCategoryChart(selectedValue);
+        });
+
+
+        // Get the current date
+        const currentDate = new Date();
+
+        // Get the current year and month
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth() + 1; // Adding 1 to the month because getMonth() returns 0-indexed value (0 for January, 11 for December)
+
+        // Format the current year and month to 'YYYY-MM' format
+        const formattedDefaultMonth = `${currentYear}-${currentMonth.toString().padStart(2, '0')}`;
+
+
+        // 填充年份下拉選擇框
+        for (let year = currentYear; year >= 2000; year--) {
+            const option = new Option(year, year);
+            yearInput.appendChild(option);
+            yearInput_category.appendChild(option.cloneNode(true));
+        }
+
+        for (let year = currentYear; year >= 2000; year--) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            yearInput_category.appendChild(option);
+
+        }
+
+        // Set the default value of the input element
+        monthInput.value = formattedDefaultMonth;
+        monthInput_category.value = formattedDefaultMonth;
+
+        // 取得訂單數量
+        async function getOrderAmount(status, date) {
+            try {
+                const response = await fetch(`/Backstage/OrderAmount?name=${encodeURIComponent(status)}&date=${encodeURIComponent(date)}`);
+                const data = await response.json();
+                return data; // Return the order amount
+            } catch (error) {
+                console.error('獲取訂單數量時發生錯誤：', error);
+                return 0;
+            }
+        }
+
+        // 取得年分訂單數量
+        async function getYearOrderAmount(status, year) {
+            try {
+                const response = await fetch(`/Backstage/OrderAmountYear?name=${encodeURIComponent(status)}&year=${encodeURIComponent(year)}`);
+                const data = await response.json();
+                return data; // Return the order amount
+            } catch (error) {
+                console.error('獲取訂單數量時發生錯誤：', error);
+                return 0;
+            }
+        }
+
+        // 取得類別數量
+        async function getCategoryAmount(name, date) {
+            try {
+                const response = await fetch(`/Backstage/CategoryAmount?name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}`);
+                const data = await response.json();
+                return data; // Return the category amount
+            } catch (error) {
+                console.error('獲取類別銷售數量時發生錯誤：', error);
+                return 0;
+            }
+        }
+
+        // 取得年分類別數量
+        async function getYearCategoryAmount(name, year) {
+            try {
+                const response = await fetch(`/Backstage/CategoryAmountYear?name=${encodeURIComponent(name)}&year=${encodeURIComponent(year)}`);
+                const data = await response.json();
+                return data; // Return the category amount
+            } catch (error) {
+                console.error('獲取類別銷售數量時發生錯誤：', error);
+                return 0;
+            }
+        }
+
+        // 取得年分類別數量
+        async function getYearCategoryAmount(name, year) {
+            try {
+                const response = await fetch(`/Backstage/CategoryAmountYear?name=${encodeURIComponent(name)}&year=${encodeURIComponent(year)}`);
+                const data = await response.json();
+                return data; // Return the category amount
+            } catch (error) {
+                console.error('獲取類別銷售數量時發生錯誤：', error);
+                return 0;
+            }
+        }
+
+        // 更新圖表
+        async function updateChartData(selectedValue) {
+            try {
+                const amount1 = await getOrderAmount('完成', selectedValue);
+                const amount2 = await getOrderAmount('已確認，處理中', selectedValue);
+                const amount3 = await getOrderAmount('未確認', selectedValue);
+                const amount4 = await getOrderAmount('取消', selectedValue);
+                const amount5 = await getOrderAmount('已到貨', selectedValue);
+                console.log(amount1);
+
+                var myChart = echarts.init(document.getElementById('leftchart'));
+                myChart.resize({
+                    width: '400px',
+                    height: '340px',
+                });
+
+                    var optionL = {
+                    title: {
+                        text: selectedValue + '訂單',
+                        left: 'center',
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{b}: {c}', // Tooltip format: {b} represents name, {c} represents value
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        bottom: '0px',
+                    },
+                    series: [
+                        {
+                            name: 'Access From',
+                            type: 'pie', // Set chart type to pie chart
+                            radius: '50%', // Set pie chart radius
+                            data: [
+                                { value: amount1, name: '已完成' }, // Placeholder data for initial display
+                                { value: amount2, name: '未出貨' }, // Placeholder data for initial display
+                                { value: amount3, name: '未處理' }, // Placeholder data for initial display
+                                { value: amount4, name: '取消' }, // Placeholder data for initial display
+                                { value: amount5, name: '待取貨' }, // Placeholder data for initial display
+                            ],
+                            label: {
+                                show: true, // Show data labels
+                                position: 'inside', // Set data labels inside the pie chart
+                                formatter: '{b}: {c}', // Data labels format: {b} represents name, {c} represents value
+                            },
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                },
+                            },
+                        },
+                    ],
+                    };
+
+                myChart.setOption(optionL);
+            } catch (error) {
+                console.error('更新圖表資料時發生錯誤：', error);
+            }
+        }
+        updateChartData(formattedDefaultMonth);
+
+        // 更新年分圖表
+        async function updateYearChartData(selectedValue) {
+            try {
+                const amount1 = await getYearOrderAmount('完成', selectedValue);
+                const amount2 = await getYearOrderAmount('已確認，處理中', selectedValue);
+                const amount3 = await getYearOrderAmount('未確認', selectedValue);
+                const amount4 = await getYearOrderAmount('取消', selectedValue);
+                const amount5 = await getYearOrderAmount('已到貨', selectedValue);
+                //console.log(amount1);
+
+                var myChart = echarts.init(document.getElementById('yearleftchart'));
+                myChart.resize({
+                    width: '400px',
+                    height: '340px',
+                });
+
+                var optionL = {
+                    title: {
+                        text: selectedValue + '年訂單',
+                        left: 'center',
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{b}: {c}', // Tooltip format: {b} represents name, {c} represents value
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        bottom: '0px',
+                    },
+                    series: [
+                        {
+                            name: 'Access From',
+                            type: 'pie', // Set chart type to pie chart
+                            radius: '50%', // Set pie chart radius
+                            data: [
+                                { value: amount1, name: '已完成' }, // Placeholder data for initial display
+                                { value: amount2, name: '未出貨' }, // Placeholder data for initial display
+                                { value: amount3, name: '未處理' }, // Placeholder data for initial display
+                                { value: amount4, name: '取消' }, // Placeholder data for initial display
+                                { value: amount5, name: '待取貨' }, // Placeholder data for initial display
+                            ],
+                            label: {
+                                show: true, // Show data labels
+                                position: 'inside', // Set data labels inside the pie chart
+                                formatter: '{b}: {c}', // Data labels format: {b} represents name, {c} represents value
+                            },
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                },
+                            },
+                        },
+                    ],
+                };
+
+                myChart.setOption(optionL);
+            } catch (error) {
+                console.error('更新圖表資料時發生錯誤：', error);
+            }
+        }
+        updateYearChartData(currentYear);
+       
+        // 更新類別圖表
+        async function updateCategoryChart(date) {
+            try {
+                const categories = ['食品', '居家', '外出', '美容', '保健', '玩具'];
+                const amounts = await Promise.all(categories.map(category => getCategoryAmount(category, date)));
+
+                var myChartR = echarts.init(document.getElementById('rightchart'));
+                myChartR.resize({
+                    width: '400px',
+                    height: '340px',
+                });
+
+                var optionR = {
+                    title: {
+                        text: date + '類別銷售比例',
+                        left: 'center',
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b}: {c} ({d}%)',
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        bottom: '0px',
+                    },
+                    series: [
+                        {
+                            name: '銷售比例',
+                            type: 'pie', // 將圖表類型改為圓餅圖
+                            radius: '50%', // 設定圓餅圖半徑
+                            data: categories.map((category, index) => ({ value: amounts[index], name: category })),
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                },
+                            },
+                            label: {
+                                show: true, // 顯示數量標籤
+                                formatter: '{b}: {c}', // 數量標籤的格式，{b} 代表 name，{c} 代表 value
+                                position: 'outside', // 數量標籤顯示在圓餅圖外部
+                            },
+                            labelLine: {
+                                show: true, // 顯示數量標籤連接線
+                            },
+                        },
+                    ],
+                };
+
+                myChartR.setOption(optionR);
+            } catch (error) {
+                console.error('更新圓餅圖資料時發生錯誤：', error);
+            }
+        }
+        // 開始時呼叫 updateCategoryChart 函式以更新圓餅圖
+        updateCategoryChart(formattedDefaultMonth);
+
+
+        // 更新年分類別圖表
+        async function updateYearCategoryChart(date) {
+            try {
+                const categories = ['食品', '居家', '外出', '美容', '保健', '玩具'];
+                const amounts = await Promise.all(categories.map(category => getYearCategoryAmount(category, date)));
+
+                var myChartR = echarts.init(document.getElementById('yearrightchart'));
+                myChartR.resize({
+                    width: '400px',
+                    height: '340px',
+                });
+
+                var optionR = {
+                    title: {
+                        text: date + '年類別銷售比例',
+                        left: 'center',
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{a} <br/>{b}: {c} ({d}%)',
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'left',
+                        bottom: '0px',
+                    },
+                    series: [
+                        {
+                            name: '銷售比例',
+                            type: 'pie', // 將圖表類型改為圓餅圖
+                            radius: '50%', // 設定圓餅圖半徑
+                            data: categories.map((category, index) => ({ value: amounts[index], name: category })),
+                            emphasis: {
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                },
+                            },
+                            label: {
+                                show: true, // 顯示數量標籤
+                                formatter: '{b}: {c}', // 數量標籤的格式，{b} 代表 name，{c} 代表 value
+                                position: 'outside', // 數量標籤顯示在圓餅圖外部
+                            },
+                            labelLine: {
+                                show: true, // 顯示數量標籤連接線
+                            },
+                        },
+                    ],
+                };
+
+                myChartR.setOption(optionR);
+            } catch (error) {
+                console.error('更新圓餅圖資料時發生錯誤：', error);
+            }
+        }
+        // 開始時呼叫 updateCategoryChart 函式以更新圓餅圖
+        updateYearCategoryChart(currentYear);
+    </script>
 }

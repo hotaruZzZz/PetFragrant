@@ -1,29 +1,61 @@
-﻿@model IEnumerable<PetFragrant_Test.ViewModels.ShoppingCartViewModel>
+﻿@model PetFragrant_Test.ViewModels.MapViewModel
+
 @{
     ViewData["Title"] = "Test";
 }
-@Model.Count()
-@foreach(var item in Model)
-{
-    @item.ShoppingCartData.Prodcut.ProductName
-    @item.ShoppingCartData.Quantity
-    @item.ShoppingCartData.Spec.SpecName
+<!-- 通知欄區域 -->
+<div class="notification-area">
+    <p id="notificationMessage"></p>
+</div>
+<!-- 輸入通知內容的文字框 -->
+<input type="text" id="notificationInput" />
+<!-- 輸入使用者ID的文字框 -->
+<input type="text" id="userIdInput" />
 
-    @if(item.ProductData.SpecData.Count() > 0 )
-    {
-        <select>
-            <option selected>@item.ShoppingCartData.Spec.SpecName</option>
-            @foreach (var sp in item.ProductData.SpecData)
-            {
-                if (sp.SpecName != item.ShoppingCartData.Spec.SpecName)
-                {
-                    <option>@sp.SpecName</option>
-                }
-            }
-        </select>
+<!-- 發送通知按鈕 -->
+<button id="sendButton">發送通知</button>
 
-    }
+@section endJS{
+    <!-- 引入 SignalR JavaScript 客戶端 -->
+    <script src="~/lib/microsoft-signalr/signalr.js"></script>
 
-    <hr />
-    <br />
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/NotifyHub") // 指向NotifyHub的URL
+            .build();
+
+        // 訂閱receiveNotification事件
+        connection.on("receiveNotification", function (message) {
+            const notificationArea = document.querySelector(".notification-area");
+            const notificationMessage = document.getElementById("notificationMessage");
+            notificationMessage.textContent = message;
+            notificationArea.style.display = "block";
+
+            setTimeout(() => {
+                notificationArea.style.display = "none";
+            }, 5000);
+        });
+
+        // 啟動連線
+        connection.start()
+            .then(function () {
+                console.log("SignalR 連線已建立。");
+            })
+            .catch(function (error) {
+                console.error("無法建立 SignalR 連線：", error);
+            });
+
+        // 發送通知按鈕的點擊事件處理
+        document.getElementById("sendButton").addEventListener("click", function () {
+            const userId = document.getElementById("userIdInput").value;
+            const message = document.getElementById("notificationInput").value;
+            connection.invoke("SendNotificationToUser", userId, message)
+                .then(function () {
+                    console.log("通知已發送給指定使用者。");
+                })
+                .catch(function (error) {
+                    console.error("無法發送通知：", error);
+                });
+        });
+    </script>
 }

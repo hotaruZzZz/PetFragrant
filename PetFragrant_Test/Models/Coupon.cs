@@ -13,6 +13,7 @@ namespace PetFragrant_Test.Models
         public decimal Rate { get; set; }
         public string Description { get; set; }
         public string Name { get; set; }
+        public string Type { get; set; }
 
         public virtual Order Order { get; set; }
     }

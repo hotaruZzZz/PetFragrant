@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Report";
+}
+
+<h1 class="commontxt"><center>問題回報中心</center></h1>
+
+
+<form class="d-flex justify-content-center align-items-center" action="Report" method="post">
+    <div class="row w-50">
+        <select class="form-select  commontxt mb-2" aria-label="Default select example" name="Title">
+            <option selected>選擇要回報的問題</option>
+            <option value="購物相關問題">購物相關問題</option>
+            <option value="產品使用問題">產品使用問題</option>
+            <option value="使用者體驗問題">使用者體驗問題</option>
+            <option value="其他問題">其他問題</option>
+        </select>
+
+        <div class="commontxt ">
+            <label for="exampleFormControlTextarea1" class="form-label" style="font-size:larger">回饋內容</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="這個表格可以往下拉長喔!" name="Description"></textarea>
+            <div class="d-flex justify-content-end form-group mt-2">
+                <input type="submit" value="提交" class="btnproduct" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<style>
+    .btnproduct {
+        width: 80px;
+        background-color: #6C5C53;
+        border-radius: 20px;
+        border: none;
+        color: white;
+        font-size: larger;
+        font-weight: bold;
+        padding: 10px;
+        border-color: transparent;
+    }
+</style>

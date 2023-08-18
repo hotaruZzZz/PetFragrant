@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "QueryOrder";
+}
+
+<form action="https://payment-stage.ecpay.com.tw/Cashier/QueryTradeInfo/V5" method="post">
+
+    <div>
+        <label>MerchantID </label>
+        <input name="MerchantID " type="text" value="3002607" />
+    </div>
+    <div>
+        <label>MerchantTradeNo  </label>
+        <input name="MerchantTradeNo " type="text" value="ECPay764650" />
+    </div>
+    <div>
+        <label>TimeStamp  </label>
+        <input name="TimeStamp " type="text" />
+    </div>
+    <div>
+        <label>CheckMacValue  </label>
+        <input name="CheckMacValue " type="text" value="EE62E58F87BBB5EDAF5E31CC1B385C4690C0B0CF7122DF64CF4731E9DD7A5E3B" />
+    </div>
+    <div>
+        <label>PlatformID  </label>
+        <input name="PlatformID " type="text" />
+    </div>
+    <button class="btn btn-danger">submit</button>
+</form>

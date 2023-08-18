@@ -180,3 +180,17 @@ ul li .classify_list {
     .content .content-card img {
         width: 100%;
     }
+
+.searchbtn {
+    width: 100px;
+    height: 40px;
+    border-radius: 10px !important;
+    font-weight: bold;
+    background-color: #6C5C53 !important;
+    color: white;
+}
+
+.commontxt a{
+    color: #6C5C53;
+    font-weight: bold;
+}

@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "TestPost";
+}
+
+
+<div style='text-align:center;'>
+    <form id='ecpayForm' method='POST' action='https://logistics-stage.ecpay.com.tw/Express/map'>
+        <input value="2000132" name="MerchantID"  hidden />
+        <input value="202307162012529518" name="MerchantTradeNo" hidden />
+        <input value="CVS" name="LogisticsType" hidden />
+        <input value="N" name="IsCollection" hidden />
+        <input value="https://localhost:44383/User/TestPost" name="ServerReplyURL" hidden />
+        <input value="0" name="Device" hidden />
+        <input value="test" name="ButtonText" hidden />
+
+        <select name="LogisticsSubType">
+            <option value="FAMI">全家</option>
+            <option value="UNIMART">7-ELEVEN超商</option>
+            <option value="HILIFE">萊爾富</option>
+        </select>
+        <button class="btn btn-success" type="submit">選擇店家</button>
+    </form>
+</div>

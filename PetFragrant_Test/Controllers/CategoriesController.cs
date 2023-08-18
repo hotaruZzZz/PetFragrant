@@ -48,7 +48,7 @@ namespace PetFragrant_Test.Controllers
         // GET: Categories/Create
         public IActionResult Create()
         {
-            ViewData["FatherCategoryID"] = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            ViewData["FatherCategoryID"] = new SelectList(_context.Categories.Where(c => c.FatherCategoryId == null), "CategoryId", "CategoryName");
             return View();
         }
 

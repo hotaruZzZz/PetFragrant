@@ -1,0 +1,150 @@
+﻿@model PetFragrant_Test.ViewModels.OrderDetailViewModel
+@{
+    ViewData["Title"] = "訂單確認";
+}
+<!-- 麵包屑 -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-chevron p-3">
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis text-decoration-none" href="/Home/">
+                <i class="bi bi-house-fill"></i>
+                <span class="breadcrumb-item">首頁</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/Index">後台</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/ManageOrder">訂單管理</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            預覽訂單
+        </li>
+    </ol>
+</nav>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>名稱</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>訂單ID</td>
+                <td>@Model.OrderId</td>
+            </tr>
+            <tr>
+                <td>訂購日期</td>
+                <td>@Model.Orderdate</td>
+            </tr>
+            <tr>
+                <td>付款方式</td>
+                <td>@Model.Payment</td>
+            </tr>
+            <tr>
+                <td>付款日期</td>
+                <td>@Model.PaymentDate</td>
+            </tr>
+            <tr>
+                <td>訂單確認</td>
+                <td>@(Model.Check ? "已確認" : "未確認")</td>
+            </tr>
+            <tr>
+                <td>訂單狀態</td>
+                <td>@Model.Status</td>
+            </tr>
+            <tr>
+                <td>取貨店家</td>
+                <td>@Model.StoreName</td>
+            </tr>
+            <tr>
+                <td>總金額</td>
+                <td>@Model.TotalPrice</td>
+            </tr>
+
+        </tbody>
+    </table>
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>產品ID</th>
+                    <th>產品名稱</th>
+                    <th>產品數量</th>   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.orderproduct)
+                {
+                    <tr>
+                    <td><img src="~/images/@product.ProdcutId/1.png" class="img-con-ss" /></td>
+                        <td>@product.ProdcutId</td>
+                        <td>@product.ProductName @(product.SpecName != null ? @product.SpecName : "")</td>
+                        <td>@product.Amount</td>
+                    </tr>
+                }
+            </tbody>
+            
+        </table>
+
+    </div>
+
+    <div class="d-flex justify-content-end">
+        @switch (Model.Status)
+        {
+            case "未確認":
+                <form asp-action="Cancel" method="post">
+                    <input hidden value="@Model.OrderId" name="id" />
+                    <button class="btn btn-dark me-2">取消訂單</button>
+                </form>
+                <form asp-action="Confirm" method="post">
+                    <input hidden value="@Model.OrderId" name="id" />
+                    <button class="btn btn-danger">確認訂單</button>
+                </form>
+                break;
+            case "已確認，處理中":
+                if (Model.Shipdate == DateTime.MinValue)
+                {
+                    <form asp-action="Ship" method="post">
+                        <input hidden value="@Model.OrderId" name="id" />
+                        <button class="btn btn-success me-2">出貨</button>
+                    </form>
+                }
+                else if (Model.Arriiveddate == DateTime.MinValue)
+                {
+                    <form asp-action="Arrive" method="post">
+                        <input hidden value="@Model.OrderId" name="id" />
+                        <button class="btn btn-secondary me-2">已到貨</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-action="Finish" method="post">
+                        <input hidden value="@Model.OrderId" name="id" />
+                        <button class="btn btn-primary me-2">完成訂單</button>
+                    </form>
+                }
+                break;
+            case "已出貨":
+                <form asp-action="Arrive" method="post">
+                    <input hidden value="@Model.OrderId" name="id" />
+                    <button class="btn btn-secondary me-2">已到貨</button>
+                </form>
+                break;
+            case "已到貨":
+                <form asp-action="Finish" method="post">
+                    <input hidden value="@Model.OrderId" name="id" />
+                    <button class="btn btn-primary me-2">完成訂單</button>
+                </form>
+                break;
+            default:
+                // 不需要按鈕
+                break;
+        }
+    </div>
+
+</div>
+

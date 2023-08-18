@@ -11,5 +11,8 @@ namespace PetFragrant_Test.ViewModels
         public string Type { get; set; }
         public decimal Value { get; set; }
         public DateTime Period { get; set; }
+        public DateTime Start { get; set; }
+        public decimal MinimumAmount { get; set; }
+        public string User { set; get; }
     }
 }

@@ -1,0 +1,67 @@
+﻿@model PetFragrant_Test.ViewModels.TradeInfo
+
+@{
+    ViewData["Title"] = "訂單狀態";
+}
+@*<center>
+    <div class="jello-vertical ">
+        <h1>訂單完成!</h1>
+    </div>
+
+</center>
+*@
+
+
+<div class="center-table" ">
+    <h1>訂單狀態</h1>
+    <hr />
+    <table class="table">
+        <tr>
+            <th>名稱</th>
+            <th>值</th>
+        </tr>
+        <tr>
+            <td>訂單ID</td>
+            <td>@Model.MerchantTradeNo</td>
+        </tr>
+        <tr>
+            <td>付款日期</td>
+            @if (Model.PaymentDate == "")
+            {
+                <td>尚未付款</td>
+            }
+            else
+            {
+                <td>@Model.PaymentDate</td>
+            }
+
+        </tr>
+
+        <tr>
+            <td>付款方式</td>
+            <td>@Model.PaymentType</td>
+            
+        </tr>
+        <tr>
+            <td>交易金額</td>
+            <td>@Model.TradeAmt</td>
+        </tr>
+        <tr>
+            <td>交易日期</td>
+            <td>@Model.TradeDate</td>
+        </tr>
+
+    </table>
+    <a class="btn btn-danger m-2" href="/Home">回首頁</a>
+    <a class="btn btn-primary" href="/Orderlist/MyOrder">回我的訂單</a>
+</div>
+
+@section topCSS{
+    <link href="~/css/animation.css" rel="stylesheet" />
+    <style>
+        .center-table {
+            margin: 0 auto;
+            text-align: center;
+        }
+    </style>
+}

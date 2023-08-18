@@ -5,6 +5,14 @@
     {
       "library": "bootstrap@5.3.0",
       "destination": "wwwroot/lib/bootstrap/dist/"
+    },
+    {
+      "library": "Chart.js@4.3.0",
+      "destination": "wwwroot/lib/Chart.js/"
+    },
+    {
+      "library": "microsoft-signalr@7.0.9",
+      "destination": "wwwroot/lib/microsoft-signalr/"
     }
   ]
 }

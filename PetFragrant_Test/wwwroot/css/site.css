@@ -81,14 +81,14 @@ html, body{
         text-align: right;
     }
 
-@@media (max-width:767px) {
+@media (max-width:767px) {
     .footer-clean .item {
         text-align: center;
         padding-bottom: 20px;
     }
 }
 
-@@media (max-width: 768px) {
+@media (max-width: 768px) {
     .footer-clean .item.social {
         text-align: center;
     }
@@ -113,13 +113,13 @@ html, body{
         opacity: 0.9;
     }
 
-@@media (max-width:991px) {
+@media (max-width:991px) {
     .footer-clean .item.social > a {
         margin-top: 40px;
     }
 }
 
-@@media (max-width:767px) {
+@media (max-width:767px) {
     .footer-clean .item.social > a {
         margin-top: 10px;
     }
@@ -132,7 +132,9 @@ html, body{
     opacity: 0.6;
 }
 
-
+.footer-clean ul li {
+    color: #8B7F79;
+}
 main {
     background-color: #F4F4F4;
     min-height: 100%;
@@ -167,6 +169,11 @@ main {
 
 }
 
+.img-con-ss {
+    width: 50px; /* 容器寬度 */
+    height: 50px; /* 容器高度 */
+    overflow: hidden; /* 隱藏超出範圍的內容 */
+}
 .img-con-s {
     width: 100px; /* 容器寬度 */
     height: 100px; /* 容器高度 */
@@ -197,4 +204,17 @@ main {
 
 .share:nth-child(odd){
     flex-direction: row-reverse;
+}
+
+
+.commontxt {
+    color: #6C5C53;
+    font-weight: bold;
+}
+
+.card-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }

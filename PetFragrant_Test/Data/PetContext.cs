@@ -1,10 +1,5 @@
 ﻿using PetFragrant_Test.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using Microsoft.Extensions.Options;
 
 namespace PetFragrant_Test.Data
 {
@@ -23,13 +18,17 @@ namespace PetFragrant_Test.Data
         public virtual DbSet<ProductSpec> ProductSpecs { get; set; }
         public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public virtual DbSet<Spec> Specs { get; set; }
+        public virtual DbSet<Verification> Verifications { get; set; }
+        public virtual DbSet<ReciveStore> ReciveStores  { get; set; }
+        public virtual DbSet<Keyword> Keywords { get; set; }
+        public virtual DbSet<Report> Reports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
             modelBuilder.Entity<Category>(entity =>
-            {
+            {   
                 entity.HasIndex(e => e.FatherCategoryId, "IX_Categories_FatherCategoryID");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
@@ -40,6 +39,7 @@ namespace PetFragrant_Test.Data
                     .WithMany(p => p.InverseFatherCategory)
                     .HasForeignKey(d => d.FatherCategoryId);
             });
+           
 
             modelBuilder.Entity<Coupon>(entity =>
             {
@@ -84,18 +84,31 @@ namespace PetFragrant_Test.Data
 
             modelBuilder.Entity<Order>(entity =>
             {
+                entity.ToTable("Orders"); // Specify the table name if it differs from the entity name
+
+                entity.Property(e => e.OrderId).HasColumnName("OrderID").IsRequired();
+                entity.Property(e => e.CustomerId).HasColumnName("CustomerID").IsRequired();
+                entity.Property(e => e.StoreID);
+                entity.Property(e => e.Orderdate).IsRequired();
+                entity.Property(e => e.Shipdate);
+                entity.Property(e => e.Arriiveddate);
+                entity.Property(e => e.Paymentdate);
+                entity.Property(e => e.Payment);
+                entity.Property(e => e.status);
+                entity.Property(e => e.Delivery);
+                entity.Property(e => e.Check);
+                entity.Property(e => e.CouponID);
+
+                entity.HasKey(e => e.OrderId); // Specify the primary key
+
                 entity.HasIndex(e => e.CustomerId, "IX_Orders_CustomerID");
-
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
-                entity.Property(e => e.CustomerId)
-                    .IsRequired()
-                    .HasColumnName("CustomerID");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.CustomerId);
+
             });
+
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
@@ -122,6 +135,12 @@ namespace PetFragrant_Test.Data
                 entity.HasKey(e => e.DiscoutID);
                 entity.Property(e => e.DiscoutName).HasColumnName("Name");
                 entity.Property(e => e.Description).HasColumnName("Description");
+                entity.Property(e => e.DiscountValue).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.DiscountType);
+                entity.Property(e => e.Start);
+                entity.Property(e => e.Period);
+                entity.Property(e => e.User);
+                entity.Property(e => e.MinimumAmount);
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -138,6 +157,8 @@ namespace PetFragrant_Test.Data
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoriesId);
             });
+
+
 
             modelBuilder.Entity<ProductSpec>(entity =>
             {
@@ -190,6 +211,33 @@ namespace PetFragrant_Test.Data
             });
 
 
+            modelBuilder.Entity<Verification>(entity =>
+            {
+                entity.HasKey(e => new { e.Email });
+                entity.Property(e => e.VerificationCode).HasColumnName("VerificationCode");
+            });
+
+            modelBuilder.Entity<ReciveStore>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name);
+                entity.Property(e => e.Address);
+            });
+
+            modelBuilder.Entity<Keyword>(entity =>
+            {
+                entity.HasKey(e => e.Name);
+                entity.Property(e => e.Amount);
+            }
+            );
+
+            modelBuilder.Entity<Report>(entity =>
+            {
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.Title);
+                entity.Property(e => e.Description);
+                entity.HasOne(e => e.Customer).WithMany(p => p.Reports).HasForeignKey(e => e.CustomerId);
+            });
             OnModelCreatingPartial(modelBuilder);
         }
 

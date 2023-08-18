@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "重設密碼";
+}
+
+<div class="bg-white rounded-2 shadow-sm p-2 mb-3 align-content-center align-items-center d-flex flex-column">
+    <h4>重設密碼</h4>
+    <hr />
+
+    <form method="post" action="ResetPsw" class="d-flex flex-column align-items-center">
+        <input name="email" value="@ViewBag.Email" hidden />
+        <label class="form-label">請輸入新密碼:</label>
+        <input type="password" name="password" class="input-group-text" />
+        <label class="form-label">請再輸入一次新密碼:</label>
+        <input type="password" name="passwordcheck" class="input-group-text" />
+
+        <button class="btn btn-danger m-2" type="submit">確定</button>
+    </form>
+
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+</div>

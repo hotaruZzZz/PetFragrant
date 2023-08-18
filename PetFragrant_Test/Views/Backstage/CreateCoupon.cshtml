@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "新增折價券";
 }
 
@@ -8,11 +7,15 @@
         <h1 class="text-center m-2">新增折價券</h1>
         <div class="p-2">
             <div class="m-3">
-                <label  class="form-label">折價券名稱</label>
+                <label class="form-label">折價券名稱</label>
                 <input type="text" class="form-control" placeholder="折價券名稱" name="DiscoutName">
             </div>
             <div class="m-3">
-                <label  class="form-label">折價券類型</label>
+                <label class="form-label">最低金額 (滿額折扣)</label>
+                <input type="text" class="form-control" placeholder="最低金額，無則填入0" name="MinimumAmount">
+            </div>
+            <div class="m-3">
+                <label class="form-label">折價券類型</label>
                 <select class="form-select" name="DiscountType">
                     <option value="折扣(%)">折扣(%)</option>
                     <option value="運費折抵">運費折抵</option>
@@ -20,24 +23,57 @@
                 </select>
             </div>
             <div class="m-3">
+                <label class="form-label">折價券使用對象</label>
+                <select class="form-select" name="User">
+                    <option value="所有人">所有人</option>
+                    <option value="鑽石香檳">鑽石香檳</option>
+                    <option value="金香檳">金香檳</option>
+                </select>
+            </div>
+            <div class="m-3">
                 <label class="form-label">折價券金額</label>
                 <input type="text" class="form-control" placeholder="請輸入折價金額，免運費則輸入0" name="DiscountValue">
             </div>
             <div class="m-3">
+                <label class="form-label">折價券起始日</label>
+                <input type="date" class="form-control" name="Start" id="startDate">
+            </div>
+            <div class="m-3">
                 <label class="form-label">折價券到期日</label>
-                <input type="date" class="form-control" name="Period">
+                <input type="date" class="form-control" name="Period" id="endDate">
             </div>
             <div class="form-floating m-3">
                 <textarea name="Description" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
                 <label for="floatingTextarea2">描述</label>
             </div>
-
         </div>
     </div>
     <div class="mt-2 text-end">
         <button class="btn btn-danger" type="submit">儲存</button>
         <button class="btn btn-success" asp-action="ManageCoupon">返回</button>
     </div>
-
 </form>
 
+@section endJS {
+    <script>
+        // 當使用者選擇起始日時，檢查是否小於或等於到期日
+        document.getElementById("startDate").addEventListener("change", function () {
+            var startDate = new Date(this.value);
+            var endDate = new Date(document.getElementById("endDate").value);
+            if (startDate > endDate) {
+                alert("折價券起始日不能大於到期日");
+                this.value = "";
+            }
+        });
+
+        // 當使用者選擇到期日時，檢查是否大於或等於起始日
+        document.getElementById("endDate").addEventListener("change", function () {
+            var startDate = new Date(document.getElementById("startDate").value);
+            var endDate = new Date(this.value);
+            if (endDate < startDate) {
+                alert("折價券到期日不能小於起始日");
+                this.value = "";
+            }
+        });
+    </script>
+}

@@ -14,6 +14,9 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using PetFragrant_Test.ViewModels;
 using System;
+using static Google.Apis.Requests.BatchRequest;
+using ECPay.Payment.Integration;
+using System.Threading.Channels;
 
 namespace PetFragrant_Test.Controllers
 {
@@ -58,17 +61,25 @@ namespace PetFragrant_Test.Controllers
         [HttpGet]
         public IActionResult Edit(string id)
         {
-            var user = _ctx.Customers
-            .FirstOrDefault(u => u.CustomerId == id);
-            var userInfo = new ApplicationUser
+            if(id != UserID())
             {
-                UserID = user.CustomerId,
-                Name = user.CustomerName,
-                Email = user.Email,
-                PhoneNo = user.PhoneNumber,
-                IsAdmin = user.IsAdmin
-            };
-            return View(userInfo);
+                return Redirect("/Account/Forbidden");
+            }
+            else
+            {
+                var user = _ctx.Customers
+                    .FirstOrDefault(u => u.CustomerId == id);
+                var userInfo = new ApplicationUser
+                {
+                    UserID = user.CustomerId,
+                    Name = user.CustomerName,
+                    Email = user.Email,
+                    PhoneNo = user.PhoneNumber,
+                    IsAdmin = user.IsAdmin
+                };
+                return View(userInfo);
+            }
+
         }
         // 編輯使用者資料
         [Authorize]
@@ -103,25 +114,42 @@ namespace PetFragrant_Test.Controllers
             }
             return RedirectToAction("/User/Index");
         }
+
+        [Authorize]
+        public IActionResult Coupon()
+        {
+            var all = _ctx.Discounts;
+            List<CouponViewModel> coupons = new List<CouponViewModel>();
+            foreach(var item in all)
+            {
+                if(item.Period > DateTime.Now)
+                {
+                    coupons.Add(new CouponViewModel { Name = item.DiscoutName, Type = item.DiscountType, Value = item.DiscountValue, Description = item.Description, Period = item.Period });
+                }
+            }
+            return View(coupons);
+        }
+
         //追蹤好物
         [Authorize]
-            public async Task<IActionResult> likes()
+        public IActionResult likes()
+        {
+            if (User.Identity.IsAuthenticated)
             {
-                if (User.Identity.IsAuthenticated)
-                {
-
-                var user = await _ctx.Customers
-                  .FirstOrDefaultAsync(u => u.CustomerId == UserID());
-                string userId = user.CustomerId;
                 var products = _ctx.Products
             .Include(p => p.MyLikes)
                 .ThenInclude(pp => pp.Customer)
-            .Where(p => p.MyLikes.Any(pp => pp.CustomerId.Equals(userId)));
-                
-                return View(products);
-                }
-                return null;
+            .Where(p => p.MyLikes.Any(pp => pp.CustomerId.Equals(UserID())));
+
+                IEnumerable<ProductViewModel> productVM = products.Select(p => new ProductViewModel
+                {
+                    ProductData = p
+                });
+
+                return View(productVM);
             }
+            return null;
+        }
 
         // 取得使用者ID
         private string UserID()
@@ -181,37 +209,65 @@ namespace PetFragrant_Test.Controllers
             return Redirect("/Products/ProductDetail/" + id);
         }
 
-
-        // 加入購物車 
+        // 取消追蹤
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> AddProduct(string productID, int quantity, string spec)
+        public async Task<IActionResult> Unfollow(string id)
         {
+            if (id != null)
+            {
+                var like = await _ctx.MyLikes.FirstAsync(like => like.ProdcutId == id && like.CustomerId == UserID());
+                if (like != null)
+                {
+                    _ctx.Remove(like);
+                    await _ctx.SaveChangesAsync();
 
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+            return RedirectToAction("User/likes");
+        }
+
+        [HttpPost]
+        public IActionResult AddProduct([FromForm] string productID, [FromForm] int quantity, [FromForm] string spec)
+        {
+            // 檢查用戶是否已經驗證
             if (User.Identity.IsAuthenticated)
             {
-                var user = await _ctx.Customers.FirstOrDefaultAsync(u => u.CustomerId == UserID());
-                if (user != null)
+                var user = _ctx.Customers.FirstOrDefault(u => u.CustomerId == UserID());
+                if (user != null && productID != null && quantity != 0)
                 {
                     string userId = user.CustomerId;
-                    if(spec == null)
+                    if (spec == null)
                     {
                         spec = "-1";
                     }
-                    ShoppingCart shopping = new ShoppingCart{
-                        CustomerId = UserID(),
-                        ProdcutId=productID,
+              
+                    // 建立您的購物車物件
+                    ShoppingCart shopping = new ShoppingCart
+                    {
+                        CustomerId = userId,
+                        ProdcutId = productID,
                         SpecId = spec,
                         Quantity = quantity
                     };
-                    var s = shopping;
+
+                    // 將購物車物件添加到資料庫
                     _ctx.Add(shopping);
                     _ctx.SaveChanges();
-                }
 
+                    // 返回成功結果給前端
+                    return Json(new { success = true, message = "產品已成功加入購物車！" });
+                }
             }
-            return null;
+
+            // 如果用戶未驗證或其他錯誤情況，返回失敗結果給前端
+            return Json(new { success = false, message = "發生錯誤，無法將產品加入購物車。" });
         }
+
 
         // 購物車頁面
         [Authorize]
@@ -219,7 +275,7 @@ namespace PetFragrant_Test.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-
+                var user = _ctx.Customers.Find(UserID());
                 var cart = _ctx.ShoppingCarts
                     .Include(p => p.Spec)
                     .Include(p => p.Prodcut)
@@ -236,8 +292,10 @@ namespace PetFragrant_Test.Controllers
                     },
                     ShoppingCartData = c
                 }).ToList();
-
-                var coupon = _ctx.Discounts.ToList();
+                var used = _ctx.Orders.Where(c => c.CouponID != null && c.CustomerId == UserID()).Select(c => c.CouponID);
+                var coupon = _ctx.Discounts
+                    .Where(c => c.Period >= DateTime.Now && c.Start <= DateTime.Now &&  
+                    !used.Contains(c.DiscoutID) && c.User == "所有人" || c.User == user.Level);
                 List<CouponViewModel> coupons = coupon.Select(c => new CouponViewModel
                 {
                     ID = c.DiscoutID,
@@ -245,7 +303,10 @@ namespace PetFragrant_Test.Controllers
                     Description = c.Description,
                     Value = c.DiscountValue,
                     Period = c.Period,
-                    Type = c.DiscountType
+                    Type = c.DiscountType,
+                    Start = c.Start,
+                    MinimumAmount = c.MinimumAmount,
+                    User = c.User
 
                 }).ToList();
                 ViewData["coupon"] = coupons;
@@ -254,6 +315,7 @@ namespace PetFragrant_Test.Controllers
             return null;
         }
 
+        // 從購物車移除商品
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> RemoveProduct(string id)
@@ -272,6 +334,8 @@ namespace PetFragrant_Test.Controllers
             return RedirectToAction("ShoppingCart");
         }
 
+        [Authorize]
+        // 計算購物車有多少商品
         public async Task<IActionResult> CountProduct()
         {
             string userId = UserID();
@@ -281,47 +345,109 @@ namespace PetFragrant_Test.Controllers
 
         }
 
-        [HttpPost]
-        public IActionResult Unfollow(string id)
+
+        // 測試用
+        public IActionResult TestPost()
         {
-            var like = _ctx.MyLikes.First(like => like.ProdcutId == id);
-            if(like != null)
-            {
-                _ctx.Remove(like);
-                _ctx.SaveChanges();
-                return RedirectToAction("User/likes");
-            }
+            return View();
+        }
+        [HttpPost]
+        public ContentResult TestPost(IFormCollection collection)
+        {
+            return null;
+        }
+
+        // 測試用
+
+
+        public IActionResult Test()
+        {
+
+
             return View();
         }
 
-        [Authorize]
-        public IActionResult Test()
-        {
-            var cart = _ctx.ShoppingCarts
-                .Include(p => p.Spec)
-                .Include(p => p.Prodcut)
-                    .ThenInclude(p => p.ProductSpecs)
-                        .ThenInclude(p => p.Spec)
-                .Where(p => p.CustomerId.Equals(UserID()));
-
-            IEnumerable<ShoppingCartViewModel> cartViewModels = cart.Select(c => new ShoppingCartViewModel
-            {
-                ProductData = new ProductViewModel
-                {
-                    ProductData = c.Prodcut,
-                    SpecData = c.Prodcut.ProductSpecs.Select(ps => ps.Spec)
-                },
-                ShoppingCartData = c
-            }).ToList(); 
-
-
-
-            return View(cartViewModels);
-        }
-
+        // 忘記密碼
         public IActionResult ForgotPsw(string id)
         {
             return View();
         }
+        [Authorize]
+        // 問題回報
+        public IActionResult Report()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Report(string Title, string Description)
+        {
+            if(Title != null)
+            {
+                Report report = new Report()
+                {
+                    CustomerId = UserID(),
+                    Title = Title,
+                    Description = Description
+                };
+                _ctx.Add(report);
+                _ctx.SaveChanges();
+            }
+            return Redirect("/User/");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public Task<JsonResult> UpdateCartSpec(string oldspecID, string specID, string productID)
+        {
+            using (var transaction = _ctx.Database.BeginTransaction())
+            {
+                try
+                {
+                    ShoppingCart cart = _ctx.ShoppingCarts.FirstOrDefault(p => p.SpecId == oldspecID && p.ProdcutId == productID &&
+                                p.CustomerId == UserID());
+                    cart.SpecId = specID;
+                    _ctx.Update(cart);
+                    _ctx.SaveChanges();
+
+                    return Task.FromResult(Json(new { success = true }));
+                }
+                catch(Exception ex)
+                {
+                    // 發生錯誤時回滾交易
+                    transaction.Rollback();
+                    // 可以處理或記錄錯誤訊息
+
+                    throw;
+                }
+            }
+
+        }
+
+        // 取消訂單 
+        [Authorize]
+        public IActionResult CancelOrder(string id)
+        {
+            ViewData["id"] = id;
+
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CancelOrder(string id, string CancelReason)
+        {
+            if(id != null)
+            {
+                Order order = _ctx.Orders.Find(id);
+                if(order != null)
+                {
+                    order.status = "顧客取消，原因:" + CancelReason;
+                    order.Check = true;
+                    _ctx.Update(order);
+                    _ctx.SaveChanges();
+                    
+                }
+            }
+            return Redirect("/Orderlist/MyOrder");
+        }
+
     }
 }

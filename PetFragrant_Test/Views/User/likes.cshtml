@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PetFragrant_Test.Models.Product>
+﻿@model IEnumerable<PetFragrant_Test.ViewModels.ProductViewModel>
 @{
     ViewData["Title"] = "likes";
 }
@@ -17,10 +17,10 @@
     @foreach (var item in Model)
     {
         <tr>
-                <td><img src="~/images/@(item.ProdcutId)/1.png" class="img-con-s mt-1 "></td>
-                <td><h6 class="card-title w-100" style="color:midnightblue">@item.ProductName</h6></td>
-                <td><p>@(item.Price * (decimal)(0.9))</p></td>
-                <td><a class="btn btn-danger"  onclick="unfollow('@item.ProdcutId')">取消追蹤</a></td>
+                <td valign="middle" align="center"><a href="/Products/ProductDetail/@(item.ProductData.ProdcutId)"><img src="~/images/@(item.ProductData.ProdcutId)/1.png" class="img-con-s mt-1 "></a></td>
+                <td valign="middle"><h6 class="card-title w-100" style="color:midnightblue">@item.ProductData.ProductName</h6></td>
+                <td valign="middle"><p>NT @Math.Round(item.ProductData.Price * (decimal)(0.9))</p></td>
+                <td valign="middle"><button type="button" class="btn btn-danger" onclick="unfollow('@item.ProductData.ProdcutId')">取消追蹤</button></td>
         </tr>
     }
     </tbody>
@@ -31,14 +31,16 @@
         function unfollow(productId) {
 
             $.ajax({
-                url: '/User/Unfollow',
+                url: '@Url.Action("Unfollow", "User")',
                 type: 'POST',
                 data: { id: productId },
                 success: function (response) {
+                    alert('fuck');
                     location.reload();
                 },
-                error: function (error) {
-
+                error: function (xhr, status, error) {
+                    //alert('WTF');
+                    location.reload();
                 }
             });
         }

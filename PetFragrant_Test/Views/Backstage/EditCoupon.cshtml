@@ -1,0 +1,101 @@
+﻿@model PetFragrant_Test.ViewModels.CouponViewModel
+@{
+    ViewData["Title"] = "編輯";
+}
+
+<h1 class="qtxt"><center>編輯</center></h1>
+
+
+<div class="row d-flex">
+    <div class="col-md-12 d-flex justify-content-center align-content-center">
+        <form asp-action="EditCoupon" class="w-50 qtxt">
+            <hr class="qhr" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <textarea asp-for="Name" class="form-control">
+                </textarea>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control">
+                </textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="m-3">
+                <label class="form-label">最低金額 (滿額折扣)</label>
+                <input asp-for="MinimumAmount" type="text" class="form-control" placeholder="最低金額，無則填入0" name="MinimumAmount">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">折價券類型</label>
+                <select class="form-select" name="Type">
+                    <option value="折扣(%)">折扣(%)</option>
+                    <option value="運費折抵">運費折抵</option>
+                    <option value="折抵">折抵</option>
+                </select>
+            </div>
+            <div class="m-3">
+                <label class="form-label">折價券使用對象</label>
+                <select class="form-select" name="User">
+                    <option value="所有人">所有人</option>
+                    <option value="鑽石香檳">鑽石香檳</option>
+                    <option value="金香檳">金香檳</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Value" class="control-label"></label>
+                <input asp-for="Value" class="form-control" />
+                <span asp-validation-for="Value" class="text-danger"></span>
+            </div>
+            <div class="m-3">
+                <label class="form-label">折價券起始日</label>
+                <input asp-for="Start" type="date" class="form-control" name="Start" id="startDate">
+                <span asp-validation-for="Start" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Period" class="control-label"></label>
+                <input asp-for="Period" class="form-control" />
+                <span asp-validation-for="Period" class="text-danger"></span>
+            </div>
+            <div class="form-group d-flex justify-content-end">
+
+                <input type="submit" value="Save" class="qbtn mt-2" />
+            </div>
+            <div class="form-group d-flex justify-content-end">
+                <a asp-action="ManageCoupon">回前頁</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section topCSS
+    {
+    <style>
+        .qhr {
+            border: 3px solid;
+            color: #641E16;
+        }
+
+        .qtxt {
+            color: #6C5C53;
+            font-weight: bold;
+        }
+
+        .qbtn {
+            width: 120px;
+            border-radius: 50px;
+            background-color: #6C5C53;
+            font-weight: bolder;
+            color: white !important;
+            border-color: transparent;
+        }
+    </style>
+
+
+}

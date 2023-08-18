@@ -1,0 +1,53 @@
+﻿@model IEnumerable<PetFragrant_Test.ViewModels.StoreViewModel>
+@{
+    ViewData["Title"] = "商店管理";
+}
+<!-- 麵包屑 -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb breadcrumb-chevron p-3  rounded-3">
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis text-decoration-none" href="/Home/">
+                <i class="bi bi-house-fill"></i>
+                <span class="breadcrumb-item">首頁</span>
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/Index">後台</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            <a class="link-body-emphasis fw-semibold text-decoration-none" href="#"> 商店管理</a>
+        </li>
+
+    </ol>
+</nav>
+<h1 class="qtxt"><center>商店管理</center></h1>
+<hr class="qhr" />
+<a class="btn btn-danger mb-2" href="CreateStore">新增店家</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">店家ID</th>
+            <th scope="col">店家名稱</th>
+            <th scope="col">店家地址</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var store in Model)
+        {
+            <tr>
+                <td>@store.Id</td>
+                <td>@store.Name</td>
+                <td>@store.Address</td>
+                <td></td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>
+
+@section topCSS{
+    <link rel="stylesheet" href="~/css/Backstage.css" />
+}

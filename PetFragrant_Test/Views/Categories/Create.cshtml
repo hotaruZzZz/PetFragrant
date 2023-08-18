@@ -4,35 +4,62 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1 class="qtxt"><center>創建類別</center></h1>
 
-<h4>Categories</h4>
+
 <hr />
-<div class="row">
+<div class="row d-flex justify-content-center align-content-center">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="CategoryName" class="control-label"></label>
-                <input asp-for="CategoryName" class="form-control" />
+                <label asp-for="CategoryName" class="control-label qtxt">類別</label>
+                <input asp-for="CategoryName" class="form-control mb-2" />
                 <span asp-validation-for="CategoryName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FatherCategoryId" class="control-label"></label>
+                <label asp-for="FatherCategoryId" class="control-label qtxt">父類別</label>
                 <select asp-for="FatherCategoryId" class="form-control" asp-items="ViewBag.FatherCategoryID">
-                    <option value="">選擇父類別</option>
+                    <option value="">==選擇父類別==</option>
                 </select>
             </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group d-flex justify-content-end mt-2">
+                <input type="submit" value="Create" class="qbtn" />
+            </div>
+            <div>
+                <a asp-action="Index">Back to List</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
+
+@section topCSS
+    {
+    <style>
+
+        .qhr {
+            border: 5px solid;
+            color: #641E16;
+        }
+
+        .qtxt {
+            color: #6C5C53;
+            font-weight: bold;
+        }
+
+        .qbtn {
+            width: 100px;
+            border-radius: 50px;
+            font-size: larger;
+            font-weight: bold;
+            border: none;
+            background-color: #6C5C53;
+            color: white;
+            border-color: transparent;
+        }
+    </style>
+    }

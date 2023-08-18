@@ -1,38 +1,66 @@
-﻿@model Category
+﻿
+@model Category
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1 class="qtxt"><center>編輯商品類別</center></h1>
 
-<h4>Categories</h4>
-<hr />
-<div class="row">
+<div class="row d-flex justify-content-center align-content-center">
     <div class="col-md-4">
+    <hr />
         <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CategoryId" />
-            <div class="form-group">
-                <label asp-for="CategoryName" class="control-label"></label>
-                <input asp-for="CategoryName" class="form-control" />
+            <div class="form-group qtxt">
+                <label asp-for="CategoryName" class="control-label">類別</label>
+                <input asp-for="CategoryName" class="form-control mb-2" />
                 <span asp-validation-for="CategoryName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FatherCategoryId" class="control-label"></label>
+            <div class="form-group qtxt ">
+                <label asp-for="FatherCategoryId" class="control-label">父類別</label>
                 <select asp-for="FatherCategoryId" class="form-control" asp-items="ViewBag.FatherCategoryID">
                     <option value="">==選擇父類別==</option>
                 </select>
                 <span asp-validation-for="FatherCategoryId" class="text-danger"></span>
+                <div class="form-group d-flex justify-content-end mt-2">
+                    <input type="submit" value="Save" class="qbtn" />
+                </div>
             </div>
           
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+         
+            <div>
+                <a asp-action="Index">Back to List</a>
             </div>
+
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
+@section topCSS
+    {
+    <style>
+
+        .qhr {
+            border: 5px solid;
+            color: #641E16;
+        }
+
+        .qtxt {
+            color: #6C5C53;
+            font-weight:bold;
+        }
+
+        .qbtn {
+            width: 100px;
+            border-radius: 50px;
+            font-size: larger;
+            font-weight: bold;
+            border: none;
+            background-color: #6C5C53;
+            color:white;
+            border-color:transparent;
+        }
+    </style>
+    }

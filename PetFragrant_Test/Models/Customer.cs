@@ -12,6 +12,7 @@ namespace PetFragrant_Test.Models
             MyLikes = new HashSet<MyLike>();
             Orders = new HashSet<Order>();
             ShoppingCarts = new HashSet<ShoppingCart>();
+            Reports = new HashSet<Report>();
         }
 
         public string CustomerId { get; set; }
@@ -28,5 +29,6 @@ namespace PetFragrant_Test.Models
         public virtual ICollection<MyLike> MyLikes { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<ShoppingCart> ShoppingCarts { get; set; }
+        public virtual ICollection<Report> Reports { get; set; }
     }
 }

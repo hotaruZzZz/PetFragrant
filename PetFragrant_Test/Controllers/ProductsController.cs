@@ -11,6 +11,9 @@ using PetFragrant_Test.Models;
 using System.IO;
 using Microsoft.VisualBasic.FileIO;
 using PetFragrant_Test.ViewModels;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using System;
 
 namespace PetFragrant_Test.Controllers
 {
@@ -23,12 +26,69 @@ namespace PetFragrant_Test.Controllers
             _context = context;
         }
 
-        // GET: Products
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public JsonResult GetFilteredProducts(string category, string productName, string price, string stockCheckbox)
         {
-            var petContext = _context.Products.Include(p => p.Categories);
-            return View(await petContext.ToListAsync());
+            
+            var query = _context.Products.Include(p => p.Categories).ThenInclude(c => c.FatherCategory).AsQueryable();
+
+            if (!string.IsNullOrEmpty(category) && category != "all")
+            {
+                query = query.Where(p => p.Categories.FatherCategory.CategoryName == category);
+            }
+
+            if (!string.IsNullOrEmpty(productName))
+            {
+                query = query.Where(p => p.ProductName.Contains(productName));
+            }
+
+            if (!string.IsNullOrEmpty(price) && price != "all" && decimal.TryParse(price, out decimal priceValue))
+            {
+                query = query.Where(p => p.Price <= priceValue);
+            }
+            if(string.IsNullOrEmpty(stockCheckbox) && stockCheckbox == "true")
+            {
+                query = query.Where(p => p.Inventory > 0);
+            }
+            var products = query.ToList();
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            };
+
+            return Json(products, options);
         }
+
+
+        // GET: Products
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> Index(string category, string productName, string price)
+        {
+            var query = _context.Products.Include(p => p.Categories).ThenInclude(c => c.FatherCategory).AsQueryable();
+
+            if (!string.IsNullOrEmpty(category) && category != "all")
+            {
+                query = query.Where(p => p.Categories.CategoryName == category);
+            }
+
+            if (!string.IsNullOrEmpty(productName))
+            {
+                query = query.Where(p => p.ProductName.Contains(productName));
+            }
+
+            if (!string.IsNullOrEmpty(price) && price != "all")
+            {
+                decimal priceValue;
+                if (decimal.TryParse(price, out priceValue))
+                {
+                    query = query.Where(p => p.Price <= priceValue);
+                }
+            }
+            ViewData["CategoriesID"] = new SelectList(_context.Categories.Where(c => c.FatherCategoryId == null), "CategoryName", "CategoryName");
+            var petContext = await query.ToListAsync();
+            return View(query);
+        }
+
 
         public async Task<IActionResult> ProductList()
         {
@@ -91,6 +151,7 @@ namespace PetFragrant_Test.Controllers
             }
         }
 
+     
 
         public async Task<IActionResult> Edit(string id)
         {
@@ -187,6 +248,8 @@ namespace PetFragrant_Test.Controllers
             ViewData["CategoriesID"] = new SelectList(_context.Categories.Where(c => c.FatherCategoryId == null), "CategoryId", "CategoryName");
             return View();
         }
+
+        [HttpGet]
         public JsonResult GetSubcategory(string id)
         {
             var category = _context.Categories.Where(c => c.FatherCategoryId.Equals(id));
@@ -248,26 +311,54 @@ namespace PetFragrant_Test.Controllers
             return _context.Products.Any(e => e.ProdcutId == id);
         }
 
+        // 搜尋商品
         [HttpGet, HttpPost]
         public async Task<IActionResult> Search(string? keyword)
         {
             List<Product> product = await _context.Products.Where(p => p.ProductName.Contains(keyword)).ToListAsync();
             ViewData["keyword"] = keyword;
-            
+            Keyword k = _context.Keywords.Find(keyword);
+            if(k != null)
+            {
+                k.Amount += 1;
+                _context.Update(k);
+                _context.SaveChanges();
+            }
+            else
+            {
+                Keyword newKeyword = new Keyword { Name = keyword, Amount=1 };
+                _context.Keywords.Add(newKeyword);
+                _context.SaveChanges();
+            }
             return View(product);
         }
 
         // 主類別
-        public IActionResult MainCategory(string name)
+        public IActionResult MainCategory(string name, int page = 1)
         {
+            int pageSize = 12; // 每頁顯示的商品數量
             var products = _context.Products
                 .Where(p => p.Categories.FatherCategory.CategoryName == name)
                 .ToList();
-            
+
             ViewData["Name"] = name;
+
+            // 計算總頁數
+            int totalPages = (int)Math.Ceiling(products.Count / (double)pageSize);
+
+            // 取得當前頁面的商品
+            var currentPageProducts = products
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
             ViewData["MainCategory"] = _context.Categories.Where(c => c.FatherCategory.CategoryName == name);
-            return View(products);
+            ViewData["Page"] = page;
+            ViewData["TotalPages"] = totalPages;
+
+            return View(currentPageProducts);
         }
+
 
         // 子類
         public IActionResult Subcategory(string name) 
