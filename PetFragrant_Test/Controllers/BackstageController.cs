@@ -168,7 +168,7 @@ namespace PetFragrant_Test.Controllers
             Discount discount = _ctx.Discounts.Find(id);
             _ctx.Discounts.Remove(discount);
             await _ctx.SaveChangesAsync();
-            return Redirect("/Backstage/ManageCoupon");
+            return RedirectToAction("ManageCoupon", "Backstage");
         }
         [Authorize(Policy = "IsAdmin")]
         public IActionResult ManageUser()
@@ -215,7 +215,7 @@ namespace PetFragrant_Test.Controllers
                 }
 
             }
-            return Redirect("/Backstage/ManageUser");
+            return RedirectToAction("ManageUser", "Backstage");
         }
         [Authorize(Policy = "IsAdmin")]
         private ApplicationUser ApplicationUser(string id)
@@ -354,7 +354,7 @@ namespace PetFragrant_Test.Controllers
                     _ctx.SaveChanges();
                 }
             }
-            return Redirect("/Backstage/ManageOrder");
+            return RedirectToAction("ManageOrder", "Backstage");
         }
 
         // 確定訂單 Confirm
@@ -373,7 +373,7 @@ namespace PetFragrant_Test.Controllers
                     _ctx.SaveChanges();
                 }
             }
-            return Redirect("/Backstage/ManageOrder");
+            return RedirectToAction("ManageOrder", "Backstage");
         }
 
         // 已出貨
@@ -392,7 +392,7 @@ namespace PetFragrant_Test.Controllers
                     _ctx.SaveChanges();
                 }
             }
-            return Redirect("/Backstage/ManageOrder");
+            return RedirectToAction("ManageOrder", "Backstage");
         }
         // 已到貨
         [HttpPost]
@@ -410,7 +410,7 @@ namespace PetFragrant_Test.Controllers
                     _ctx.SaveChanges();
                 }
             }
-            return Redirect("/Backstage/ManageOrder");
+            return RedirectToAction("ManageOrder", "Backstage");
         }
         // 完成訂單
         [HttpPost]
@@ -427,7 +427,7 @@ namespace PetFragrant_Test.Controllers
                     _ctx.SaveChanges();
                 }
             }
-            return Redirect("/Backstage/ManageOrder");
+            return RedirectToAction("ManageOrder", "Backstage");
         }
  
         //管理店家
@@ -468,7 +468,7 @@ namespace PetFragrant_Test.Controllers
                     _ctx.SaveChanges();
                 }
             }
-            return Redirect("/Backstage/ManageStore");
+            return RedirectToAction("ManageStore", "Backstage");
         }
 
         [HttpGet]

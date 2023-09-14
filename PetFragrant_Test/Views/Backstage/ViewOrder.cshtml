@@ -6,16 +6,17 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb breadcrumb-chevron p-3">
         <li class="breadcrumb-item">
-            <a class="link-body-emphasis text-decoration-none" href="/Home/">
+            <a class="link-body-emphasis text-decoration-none" asp-action="Index" asp-controller="Home">
                 <i class="bi bi-house-fill"></i>
                 <span class="breadcrumb-item">首頁</span>
             </a>
         </li>
         <li class="breadcrumb-item">
-            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/Index">後台</a>
+            <a class="link-body-emphasis fw-semibold text-decoration-none" asp-action="Index" asp-controller="Backstage">後台</a>
         </li>
         <li class="breadcrumb-item">
-            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/ManageOrder">訂單管理</a>
+            @* <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/ManageOrder">訂單管理</a> *@
+            <a class="link-body-emphasis fw-semibold text-decoration-none" asp-action="ManageOrder" asp-controller="Backstage">訂單管理</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
             預覽訂單

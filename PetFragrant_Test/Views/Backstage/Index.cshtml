@@ -4,14 +4,22 @@
 
 <div class="container d-flex bordercolor">
     <div class="left-block left">
-        <a href="/Backstage/ManageUser">客戶管理</a><hr>
-        <a href="/Backstage/ManageOrder">訂單管理</a><hr>
-        <a href="/Products/AddProduct">上架商品</a><hr>
-        <a href="/Products">商品管理</a><hr>
-        <a href="/Backstage/ManageCoupon">折價券管理</a><hr>
-        <a href="/Categories/Index">商品類別管理</a><hr>
-        <a href="/Backstage/ManageStore">商店管理</a><hr>
-        <a href="/Backstage/ManageReport">問題回饋</a>
+        @* <a href="/Backstage/ManageUser">客戶管理</a><hr> *@
+        <a asp-action="ManageUser" asp-controller="Backstage">客戶管理</a><hr>
+        @* <a href="/Backstage/ManageOrder">訂單管理</a><hr> *@
+        <a asp-action="ManageOrder" asp-controller="Backstage">訂單管理</a><hr>
+        @* <a href="/Products/AddProduct">上架商品</a><hr> *@
+        <a asp-action="AddProduct" asp-controller="Backstage">上架商品</a><hr>
+        @* <a href="/Products">商品管理</a><hr> *@
+        <a asp-action="Index" asp-controller="Products">商品管理</a><hr>
+        @* <a href="/Backstage/ManageCoupon">折價券管理</a><hr> *@
+        <a asp-action="ManageCoupon" asp-controller="Backstage">折價券管理</a><hr>
+        @* <a href="/Categories/Index">商品類別管理</a><hr> *@
+        <a asp-action="Index" asp-controller="Categories">商品類別管理</a><hr>
+        @* <a href="/Backstage/ManageStore">商店管理</a><hr> *@
+        <a asp-action="ManageStore" asp-controller="Backstage">商店管理</a><hr>
+        @* <a href="/Backstage/ManageReport">問題回饋</a> *@
+        <a asp-action="ManageReport" asp-controller="Backstage">問題回饋</a>
     </div>
     <div class="right-block d-flex">
         <div class="top">
@@ -78,7 +86,10 @@
         const monthInput_category = document.getElementById('monthInput_category');
         const yearInput = document.getElementById('yearInput');
         const yearInput_category = document.getElementById('yearInput_category');
-
+        const order_amount_year = @Url.Action("OrderAmountYear","Backstage");
+        const order_amount = @Url.Action("OrderAmount","Backstage");
+        const category_amount = @Url.Action("CategoryAmount","Backstage");
+        const category_amount_year = @Url.Action("CategoryAmountYear","Backstage");
 
         monthInput.addEventListener('change', function () {
             // Get the value of the input element when it changes
@@ -142,7 +153,8 @@
         // 取得訂單數量
         async function getOrderAmount(status, date) {
             try {
-                const response = await fetch(`/Backstage/OrderAmount?name=${encodeURIComponent(status)}&date=${encodeURIComponent(date)}`);
+                // /Backstage/OrderAmount
+                const response = await fetch(`${order_amount}?name=${encodeURIComponent(status)}&date=${encodeURIComponent(date)}`);
                 const data = await response.json();
                 return data; // Return the order amount
             } catch (error) {
@@ -154,7 +166,8 @@
         // 取得年分訂單數量
         async function getYearOrderAmount(status, year) {
             try {
-                const response = await fetch(`/Backstage/OrderAmountYear?name=${encodeURIComponent(status)}&year=${encodeURIComponent(year)}`);
+                // /Backstage/OrderAmountYear
+                const response = await fetch(`${order_amount_year}?name=${encodeURIComponent(status)}&year=${encodeURIComponent(year)}`);
                 const data = await response.json();
                 return data; // Return the order amount
             } catch (error) {
@@ -166,7 +179,8 @@
         // 取得類別數量
         async function getCategoryAmount(name, date) {
             try {
-                const response = await fetch(`/Backstage/CategoryAmount?name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}`);
+                // /Backstage/CategoryAmount
+                const response = await fetch(`${category_amount}?name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}`);
                 const data = await response.json();
                 return data; // Return the category amount
             } catch (error) {
@@ -178,7 +192,8 @@
         // 取得年分類別數量
         async function getYearCategoryAmount(name, year) {
             try {
-                const response = await fetch(`/Backstage/CategoryAmountYear?name=${encodeURIComponent(name)}&year=${encodeURIComponent(year)}`);
+                // /Backstage/CategoryAmountYear
+                const response = await fetch(`${category_amount_year}?name=${encodeURIComponent(name)}&year=${encodeURIComponent(year)}`);
                 const data = await response.json();
                 return data; // Return the category amount
             } catch (error) {
@@ -190,7 +205,8 @@
         // 取得年分類別數量
         async function getYearCategoryAmount(name, year) {
             try {
-                const response = await fetch(`/Backstage/CategoryAmountYear?name=${encodeURIComponent(name)}&year=${encodeURIComponent(year)}`);
+                // /Backstage/CategoryAmountYear
+                const response = await fetch(`${category_amount_year}?name=${encodeURIComponent(name)}&year=${encodeURIComponent(year)}`);
                 const data = await response.json();
                 return data; // Return the category amount
             } catch (error) {

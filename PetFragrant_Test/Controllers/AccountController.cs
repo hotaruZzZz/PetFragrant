@@ -90,11 +90,11 @@ namespace PetFragrant_Test.Controllers
                 bool isadmin = Convert.ToBoolean( claims.FirstOrDefault(c => c.Type == "IsAdmin").Value);
                 if (isadmin)
                 {
-                    return Redirect("~/Backstage");
+                    return RedirectToAction("Index","Backstage");
                 }
                 else
                 {
-                    return LocalRedirect("~/Home");
+                    return RedirectToAction("Index", "Home");
                 }
             
             }
@@ -199,7 +199,7 @@ namespace PetFragrant_Test.Controllers
         public async Task<IActionResult> Signout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return LocalRedirect("/");
+            return RedirectToAction("Index","Home");
         }
 
         public IActionResult Forbidden()
@@ -334,7 +334,7 @@ namespace PetFragrant_Test.Controllers
                     else
                     {
                         ViewData["ErrorMessage"] = "驗證碼錯誤，請重新輸入。";
-                        return Redirect("Home");
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 return View();
@@ -407,7 +407,7 @@ namespace PetFragrant_Test.Controllers
             // 無此用戶導向註冊畫面
             else
             {
-                return Redirect("/Account/Register");
+                return RedirectToAction("Register", "Account");
             }
         }
         [HttpGet]
@@ -442,7 +442,7 @@ namespace PetFragrant_Test.Controllers
                 var c = _ctx.Customers.Find(UserID());
                 if (email != c.Email)
                 {
-                    RedirectToAction("Forbidden");
+                    return RedirectToAction("Forbidden");
                 }
             }
             ViewBag.Email = email;
