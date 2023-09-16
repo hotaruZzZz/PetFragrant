@@ -326,7 +326,7 @@ namespace PetFragrant_Test.Controllers
                         _ctx.Update(user);
                         _ctx.SaveChanges();
                         ViewData["ResultMessage"] = "建立使用者成功!";  //顯示訊息
-                        ViewData["RedirectUrl"] = "/Home/Index";       //跳轉頁網址
+                        ViewData["RedirectUrl"] = "/PetFragrant/Home/Index";       //跳轉頁網址
                         ViewData["RedirectTime"] = 6; //倒數幾秒
                         ViewData["Message"] = "使用者帳號註冊成功!";  //顯示訊息
                         return View("~/Views/Shared/ResultMessage.cshtml");
@@ -334,7 +334,8 @@ namespace PetFragrant_Test.Controllers
                     else
                     {
                         ViewData["ErrorMessage"] = "驗證碼錯誤，請重新輸入。";
-                        return RedirectToAction("Index", "Home");
+                        return View("Home");
+                        // return RedirectToAction("Index", "Home");
                     }
                 }
                 return View();

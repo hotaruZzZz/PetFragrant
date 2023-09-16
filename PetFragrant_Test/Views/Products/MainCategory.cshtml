@@ -8,7 +8,7 @@
         <h1 class="display-5 fw-bold">@ViewBag.Name</h1>
         @foreach (var c in ViewBag.MainCategory)
         {
-            <a class="btn btn-outline-light" href="/子類別/@c.CategoryName">@c.CategoryName</a>
+            <a class="btn btn-outline-light" asp-controller="子類別" asp-action="@c.CategoryName">@c.CategoryName</a>
         }
     </div>
 </div>

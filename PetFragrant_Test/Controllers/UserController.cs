@@ -112,7 +112,7 @@ namespace PetFragrant_Test.Controllers
                 _ctx.SaveChanges();
                 return Redirect("/User/Index/");
             }
-            return RedirectToAction("/User/Index");
+            return RedirectToAction("Index");
         }
 
         [Authorize]

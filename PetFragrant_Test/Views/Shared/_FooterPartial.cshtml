@@ -1,11 +1,11 @@
-﻿<div class="container ">
+﻿<div class="container">
     <div class="row justify-content-center commontxt">
         <div class="col-sm-4 col-md-3 item">
             <h3>關於寵物香園</h3>
             <ul>
                 <hr>
-                <li><a href="/Home/About">品牌故事</a></li>
-                <li><a href="/Other/Problem#qbtn5" onclick="goToButton('qbtn5')"> 合作窗口</a></li>
+                <li><a asp-controller="Home" asp-action="About">品牌故事</a></li>
+                <li><a asp-controller="Other" asp-action="Problem" asp-fragment="qbtn5" onclick="goToButton('qbtn5')">合作窗口</a></li>
                 <li><a href="#">隱私權保護政策</a></li>
             </ul>
         </div>
@@ -13,19 +13,20 @@
             <h3>購買相關問題</h3>
             <ul>
                 <hr>
-                <li><a href="/Other/Problem#qbtn1" onclick="goToButton('qbtn1')">常見問題</a></li>
-                <li><a href="/Other/Problem#qbtn2" onclick="goToButton('qbtn2')">產品問題</a></li>
-                <li><a href="/Other/Problem#qbtn3" onclick="goToButton('qbtn3')">付款問題</a></li>
-                <li><a href="/Other/Problem#qbtn4" onclick="goToButton('qbtn4')">配送問題</a></li>
-                <li><a href="/Other/Problem#qbtn5" onclick="goToButton('qbtn5')">聯繫我們</a></li>
+                <li><a asp-controller="Other" asp-action="Problem" asp-fragment="qbtn1" onclick="goToButton('qbtn1')">常見問題</a></li>
+                <li><a asp-controller="Other" asp-action="Problem" asp-fragment="qbtn2" onclick="goToButton('qbtn2')">產品問題</a></li>
+                <li><a asp-controller="Other" asp-action="Problem" asp-fragment="qbtn3" onclick="goToButton('qbtn3')">付款問題</a></li>
+                <li><a asp-controller="Other" asp-action="Problem" asp-fragment="qbtn4" onclick="goToButton('qbtn4')">配送問題</a></li>
+                <li><a asp-controller="Other" asp-action="Problem" asp-fragment="qbtn5" onclick="goToButton('qbtn5')">聯繫我們</a></li>
+            </ul>
         </div>
         <div class="col-sm-4 col-md-3 item">
             <h3>會員權益</h3>
             <ul>
                 <hr>
-                <li><a href="/User/Report">會員問題回饋</a></li>
-                <li><a href="/Home/CustomerLevel">香檳會員等級</a></li>
-                <li><a href="/Home/CustomerLevel">如何成為鑽石香檳</a></li>
+                <li><a asp-controller="User" asp-action="Report">會員問題回饋</a></li>
+                <li><a asp-controller="Home" asp-action="CustomerLevel">香檳會員等級</a></li>
+                <li><a asp-controller="Home" asp-action="CustomerLevel">如何成為鑽石香檳</a></li>
             </ul>
         </div>
         <div class="col-lg-3 item social commontxt">

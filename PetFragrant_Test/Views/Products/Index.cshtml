@@ -12,7 +12,7 @@
             </a>
         </li>
         <li class="breadcrumb-item">
-            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/Index">後台</a>
+            <a class="link-body-emphasis fw-semibold text-decoration-none" asp-controller="Backstage" asp-action="Index">後台</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
             <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">商品管理</a>
@@ -97,7 +97,7 @@
             var stockCheckbox = $("#stockCheckbox").is(':checked');
 
             $.ajax({
-                url: "/Products/GetFilteredProducts",
+                url: '@Url.Action("GetFilteredProducts", "Products")',
                 type: "GET",
                 dataType: "json",
                 data: {

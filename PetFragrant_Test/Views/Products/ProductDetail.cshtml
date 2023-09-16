@@ -20,16 +20,16 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb breadcrumb-chevron p-3 bg-white rounded-3">
         <li class="breadcrumb-item">
-            <a class="link-body-emphasis text-decoration-none" href="/Home/">
+            <a class="link-body-emphasis text-decoration-none" asp-controller="Home" asp-action="Index">
                 <i class="bi bi-house-fill"></i>
                 <span class="breadcrumb-item">首頁</span>
             </a>
         </li>
         <li class="breadcrumb-item">
-            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/類別/@Model.CategoryData.FatherCategory.CategoryName">@Model.CategoryData.FatherCategory.CategoryName</a>
+            <a class="link-body-emphasis fw-semibold text-decoration-none" asp-controller="類別" asp-action="@Model.CategoryData.FatherCategory.CategoryName">@Model.CategoryData.FatherCategory.CategoryName</a>
         </li>
         <li class="breadcrumb-item">
-            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/子類別/@Model.CategoryData.CategoryName">@Model.CategoryData.CategoryName</a>
+            <a class="link-body-emphasis fw-semibold text-decoration-none" asp-controller="子類別" asp-action="@Model.CategoryData.CategoryName">@Model.CategoryData.CategoryName</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
             @Model.ProductData.ProductName
@@ -140,7 +140,6 @@
                     <hr>
                     <div class="describe mt-2 p-3" style="background-color: #f6f6f6;">
                         <p><b>付款方式 </b>信用卡、ATM、超商繳費</p>
-                        @*<p><b>運費 </b>$87</p>*@
                         <p><b>配送方式 </b>到店取貨</p>
                     </div>
                     <div class="buy d-flex justify-content-end align-items-center">
@@ -158,7 +157,7 @@
                     }
                     else
                     {
-                        <a href="/Account/Login" class="m-2 btn btn-danger">加入購物車</a>
+                        <a  asp-controller="Account" asp-action="Login" class="m-2 btn btn-danger">加入購物車</a>
                     }
                     
 
@@ -247,7 +246,7 @@
                     console.log(formData);
                     $.ajax({
                         type: 'POST',
-                        url: '/User/AddProduct',
+                        url: '@Url.Action("AddProduct", "User")',
                         data: formData,
                         success: function (response) {
                             // 處理伺服器的回應

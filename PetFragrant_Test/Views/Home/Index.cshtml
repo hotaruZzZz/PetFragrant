@@ -21,7 +21,7 @@
         <div class="d-flex flex-wrap commontxt">
             @foreach(var keyword in ViewBag.keyword)
             {
-                <a href="/Search?keyword=@keyword.Name" class="me-2 ">@keyword.Name</a>
+                <a  asp-controller="Search" asp-action="Index" asp-route-keyword="@keyword.Name"  class="me-2 ">@keyword.Name</a>
             }
        
             </div>
@@ -87,7 +87,7 @@
             {
                 <div class="col-12 col-md-3" >
                     <div class="card " >
-                        <a href="/Products/ProductDetail/@item.ProdcutId" class="pic">
+                        <a  asp-controller="Products" asp-action="ProductDetail" asp-route-id="@item.ProdcutId" class="pic">
                             <img src="~/images/@item.ProdcutId/1.png"
                                  class="card-img-top " alt="...">
                         </a>
@@ -120,7 +120,7 @@
             {
                 <div class="col-12 col-md-3">
                     <div class="card ">
-                        <a href="/Products/ProductDetail/@item.ProdcutId" class="pic">
+                        <a asp-controller="Products" asp-action="ProductDetail" asp-route-id="@item.ProdcutId" class="pic">
                             <img src="~/images/@item.ProdcutId/1.png"
                                  class="card-img-top " alt="...">
                         </a>
@@ -286,7 +286,7 @@
                 // 進行 AJAX 請求，獲取相符的結果
                 if (input.length > 0) {
                     $.ajax({
-                        url: '/Home/SearchKeyword',
+                        url: '@Url.Action("SearchKeyword", "Home")',
                         method: 'GET',
                         data: { keyword: input },
                         dataType: 'json',

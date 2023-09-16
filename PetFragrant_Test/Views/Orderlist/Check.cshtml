@@ -103,7 +103,7 @@
             // 使用Ajax請求獲取預設店家的地址
             $.ajax({
                 type: 'GET',
-                url: '/Backstage/GetAddress', // 假設有一個後端接口來獲取店家地址，URL根據您的實際情況修改
+                url: '@Url.Action("GetAddress", "Backstage")',
                 data: { id: storeId }, // 將storeId作為data的屬性傳遞給後端
                 success: function (response) {
                     // 在成功回調函式中處理伺服器的回應
@@ -123,7 +123,7 @@
                 // 使用Ajax請求獲取店家地址
                 $.ajax({
                     type: 'GET',
-                    url: '/Backstage/GetAddress', // 假設有一個後端接口來獲取店家地址，URL根據您的實際情況修改
+                    url: '@Url.Action("GetAddress", "Backstage")',
                     data: { id: storeId }, // 正確地將storeId作為data的屬性傳遞給後端
                     success: function (response) {
                         // 在成功回調函式中處理伺服器的回應

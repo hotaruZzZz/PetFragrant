@@ -1,7 +1,7 @@
 ﻿<div class="row">
     <ul class="d-flex classification">
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/類別/食品"
+            <a asp-action="食品" asp-controller="類別"
                class="text-white d-flex justify-content-center">
                 <i class="material-icons">local_dining</i>
                 食品
@@ -24,7 +24,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/類別/外出" class="text-white d-flex justify-content-center">
+            <a asp-action="外出" asp-controller="類別" class="text-white d-flex justify-content-center">
                 <i class="material-icons">restaurant</i>
                 外出
             </a>
@@ -46,7 +46,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/類別/玩具" class="text-white d-flex justify-content-center">
+            <a asp-action="玩具" asp-controller="類別" class="text-white d-flex justify-content-center">
                 <i class="material-icons">pets</i>
                 玩具
             </a>
@@ -68,7 +68,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/類別/居家" class="text-white d-flex justify-content-center">
+            <a  asp-action="居家" asp-controller="類別" class="text-white d-flex justify-content-center">
                 <i class="material-icons">sanitizer</i>
                 居家
             </a>
@@ -90,7 +90,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/類別/保健" class="text-white d-flex justify-content-center">
+            <a asp-action="保健" asp-controller="類別" class="text-white d-flex justify-content-center">
                 <i class="material-icons">health_and_safety</i>
                 保健
             </a>
@@ -112,7 +112,7 @@
             </div>
         </li>
         <li class="classify" onmouseover="displaySubMenu(this)" onmouseout="hideSubMenu(this)">
-            <a href="/類別/美容" class="text-white d-flex justify-content-center ">
+            <a asp-action="美容" asp-controller="類別" class="text-white d-flex justify-content-center ">
                 <i class="material-icons">auto_awesome</i>
                 美容
             </a>
@@ -164,13 +164,15 @@
         contentDiv.html("");
 
         $.ajax({
-            url: '/Products/GetProduct',
+            url: '@Url.Action("GetProduct", "Products")',
             type: 'GET',
             data: { id: id },
             success: function (data) {
                 $.each(data, function (index, item) {
+                    var productDetailUrl = '@Url.Action("ProductDetail", "Products")';
+                    console.log(productDetailUrl)
                     var cardDiv = $("<a>").addClass("m-2");
-                    cardDiv.attr("href", "/Products/ProductDetail/" + item.prodcutId);
+                    cardDiv.attr("href", productDetailUrl +'/'+ item.prodcutId);
                     cardDiv.attr("class", "d-flex  flex-column align-items-center");
 
                     var imgsrc = "/images/" + item.prodcutId + "/1.png";

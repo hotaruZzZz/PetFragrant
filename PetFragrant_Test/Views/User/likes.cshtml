@@ -17,7 +17,9 @@
     @foreach (var item in Model)
     {
         <tr>
-                <td valign="middle" align="center"><a href="/Products/ProductDetail/@(item.ProductData.ProdcutId)"><img src="~/images/@(item.ProductData.ProdcutId)/1.png" class="img-con-s mt-1 "></a></td>
+                <td valign="middle" align="center">
+                    <a asp-controller="Products" asp-action="ProductDetail" asp-route-id="@item.ProductData.ProdcutId"><img src="~/images/@(item.ProductData.ProdcutId)/1.png" class="img-con-s mt-1 "></a>
+                </td>
                 <td valign="middle"><h6 class="card-title w-100" style="color:midnightblue">@item.ProductData.ProductName</h6></td>
                 <td valign="middle"><p>NT @Math.Round(item.ProductData.Price * (decimal)(0.9))</p></td>
                 <td valign="middle"><button type="button" class="btn btn-danger" onclick="unfollow('@item.ProductData.ProdcutId')">取消追蹤</button></td>
@@ -39,7 +41,7 @@
                     location.reload();
                 },
                 error: function (xhr, status, error) {
-                    //alert('WTF');
+
                     location.reload();
                 }
             });

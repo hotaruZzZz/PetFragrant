@@ -1,4 +1,5 @@
 ﻿@model PetFragrant_Test.Models.Product
+@inject IUrlHelper Url
 
 @{
     ViewData["Title"] = "AddProduct";
@@ -7,13 +8,13 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb breadcrumb-chevron p-3">
         <li class="breadcrumb-item">
-            <a class="link-body-emphasis text-decoration-none" href="/Home/">
+            <a class="link-body-emphasis text-decoration-none" asp-controller="Home" asp-action="Index">
                 <i class="bi bi-house-fill"></i>
                 <span class="breadcrumb-item">首頁</span>
             </a>
         </li>
         <li class="breadcrumb-item">
-            <a class="link-body-emphasis fw-semibold text-decoration-none" href="/Backstage/Index">後台</a>
+            <a class="link-body-emphasis fw-semibold text-decoration-none" asp-controller="Backstage" asp-action="Index">後台</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
             新增產品
@@ -108,7 +109,7 @@
 
             function updateSubCategory(selectedMainCategory) {
                 $.ajax({
-                    url: '/Products/GetSubcategory',
+                    url: '@Url.Action("GetSubcategory","Products")',
                     type: 'GET',
                     data: { id: selectedMainCategory },
                     success: function (data) {

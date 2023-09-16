@@ -73,7 +73,7 @@
 
             function updateSubCategory(selectedMainCategory) {
                 $.ajax({
-                    url: '/Products/GetSubcategory',
+                    url: '@Url.Action("GetSubcategory", "Products")',
                     type: 'GET',
                     data: { id: selectedMainCategory },
                     success: function (data) {

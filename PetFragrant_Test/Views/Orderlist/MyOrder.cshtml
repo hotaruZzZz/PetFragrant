@@ -17,7 +17,7 @@
                 <img src="~/images/@item.orderproduct.First().ProdcutId/1.png" class="col-1 m-2">
                 <div class="col-2">
                     <p class="text-secondary">訂單編號</p>
-                    <a href="/Orderlist/GetInfo/@item.OrderId">@item.OrderId</a>
+                    <a  asp-controller="Orderlist" asp-action="GetInfo" asp-route-id="@item.OrderId">@item.OrderId</a>
                 </div>
                 <div class="col-1"><p class="text-secondary">訂單狀態</p><h5>@item.Status</h5></div>
                 <div class="col-1"><p class="text-secondary">總金額</p><h5>NT @Math.Round(item.TotalPrice)</h5></div>
@@ -47,11 +47,11 @@
                 <div class="col-1">
                     @if (item.Status == "未確認")
                     {
-                        <a class="btn btn-danger" href="/User/CancelOrder/@item.OrderId">取消訂單</a>
+                        <a class="btn btn-danger"  asp-controller="User" asp-action="CancelOrder" asp-route-id="@item.OrderId">取消訂單</a>
                     }
                     else
                     {
-                        <a class="btn btn-danger disabled" href="/User/CancelOrder/@item.OrderId">取消訂單</a>
+                        <a class="btn btn-danger disabled" asp-controller="User" asp-action="CancelOrder" asp-route-id="@item.OrderId">取消訂單</a>
                     }
                 </div>
             </div>
@@ -63,7 +63,7 @@
                 @foreach (var p in item.orderproduct)
                 {
                     <div class="d-flex align-items-center">
-                        <a href="/Products/ProductDetail/@p.ProdcutId" class="col-1 m-2">
+                        <a asp-controller="Products" asp-action="ProductDetail" asp-route-id="@p.ProdcutId" class="col-1 m-2">
                             <img src="~/images/@p.ProdcutId/1.png" class="img-con-ss">
                         </a>
 

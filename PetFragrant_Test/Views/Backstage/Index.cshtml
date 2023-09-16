@@ -9,7 +9,7 @@
         @* <a href="/Backstage/ManageOrder">訂單管理</a><hr> *@
         <a asp-action="ManageOrder" asp-controller="Backstage">訂單管理</a><hr>
         @* <a href="/Products/AddProduct">上架商品</a><hr> *@
-        <a asp-action="AddProduct" asp-controller="Backstage">上架商品</a><hr>
+        <a asp-action="AddProduct" asp-controller="Products">上架商品</a><hr>
         @* <a href="/Products">商品管理</a><hr> *@
         <a asp-action="Index" asp-controller="Products">商品管理</a><hr>
         @* <a href="/Backstage/ManageCoupon">折價券管理</a><hr> *@
@@ -86,18 +86,19 @@
         const monthInput_category = document.getElementById('monthInput_category');
         const yearInput = document.getElementById('yearInput');
         const yearInput_category = document.getElementById('yearInput_category');
-        const order_amount_year = @Url.Action("OrderAmountYear","Backstage");
-        const order_amount = @Url.Action("OrderAmount","Backstage");
-        const category_amount = @Url.Action("CategoryAmount","Backstage");
-        const category_amount_year = @Url.Action("CategoryAmountYear","Backstage");
 
+        //const order_amount_year = @Url.Action("OrderAmountYear","Backstage");
+        //const order_amount = @Url.Action("OrderAmount","Backstage");
+        //const category_amount = @Url.Action("CategoryAmount","Backstage");
+        //const category_amount_year = @Url.Action("CategoryAmountYear","Backstage");
+        
         monthInput.addEventListener('change', function () {
             // Get the value of the input element when it changes
             const selectedValue = monthInput.value;
 
             updateChartData(selectedValue);
         });
-
+        console.log(monthInput)
         yearInput.addEventListener('change', function () {
             // Get the value of the input element when it changes
             const selectedValue = yearInput.value;
