@@ -98,7 +98,7 @@
 
             updateChartData(selectedValue);
         });
-        console.log(monthInput)
+        //console.log(monthInput)
         yearInput.addEventListener('change', function () {
             // Get the value of the input element when it changes
             const selectedValue = yearInput.value;
@@ -109,14 +109,14 @@
         monthInput_category.addEventListener('change', function () {
             // Get the value of the input element when it changes
             const selectedValue = monthInput_category.value;
-            console.log(selectedValue)
+            //console.log(selectedValue)
             updateCategoryChart(selectedValue);
         });
 
         yearInput_category.addEventListener('change', function () {
             // Get the value of the input element when it changes
             const selectedValue = yearInput_category.value;
-            console.log(selectedValue)
+            //console.log(selectedValue)
             updateYearCategoryChart(selectedValue);
         });
 
@@ -155,7 +155,11 @@
         async function getOrderAmount(status, date) {
             try {
                 // /Backstage/OrderAmount
-                const response = await fetch(`${order_amount}?name=${encodeURIComponent(status)}&date=${encodeURIComponent(date)}`);
+
+                const url = `@Url.Action("OrderAmount", "Backstage")?name=${encodeURIComponent(status)}&date=${encodeURIComponent(date)}`;
+                // 使用fetch取得資料
+                const response = await fetch(url);
+                //const response = await fetch(`${order_amount}?name=${encodeURIComponent(status)}&date=${encodeURIComponent(date)}`);
                 const data = await response.json();
                 return data; // Return the order amount
             } catch (error) {
@@ -168,7 +172,10 @@
         async function getYearOrderAmount(status, year) {
             try {
                 // /Backstage/OrderAmountYear
-                const response = await fetch(`${order_amount_year}?name=${encodeURIComponent(status)}&year=${encodeURIComponent(year)}`);
+                const url = `@Url.Action("OrderAmountYear", "Backstage")?name=${encodeURIComponent(status)}&year=${encodeURIComponent(year)}`;
+                // 使用fetch取得資料
+                const response = await fetch(url);
+                //const response = await fetch(`${order_amount_year}?name=${encodeURIComponent(status)}&year=${encodeURIComponent(year)}`);
                 const data = await response.json();
                 return data; // Return the order amount
             } catch (error) {
@@ -181,7 +188,10 @@
         async function getCategoryAmount(name, date) {
             try {
                 // /Backstage/CategoryAmount
-                const response = await fetch(`${category_amount}?name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}`);
+                const url = `@Url.Action("CategoryAmount", "Backstage")?name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}`;
+                // 使用fetch取得資料
+                const response = await fetch(url);
+                //const response = await fetch(`${category_amount}?name=${encodeURIComponent(name)}&date=${encodeURIComponent(date)}`);
                 const data = await response.json();
                 return data; // Return the category amount
             } catch (error) {
@@ -194,7 +204,10 @@
         async function getYearCategoryAmount(name, year) {
             try {
                 // /Backstage/CategoryAmountYear
-                const response = await fetch(`${category_amount_year}?name=${encodeURIComponent(name)}&year=${encodeURIComponent(year)}`);
+                const url = `@Url.Action("CategoryAmountYear", "Backstage")?name=${encodeURIComponent(name)}&year=${encodeURIComponent(year)}`;
+                // 使用fetch取得資料
+                const response = await fetch(url);
+                //const response = await fetch(`${category_amount_year}?name=${encodeURIComponent(name)}&year=${encodeURIComponent(year)}`);
                 const data = await response.json();
                 return data; // Return the category amount
             } catch (error) {
@@ -203,18 +216,6 @@
             }
         }
 
-        // 取得年分類別數量
-        async function getYearCategoryAmount(name, year) {
-            try {
-                // /Backstage/CategoryAmountYear
-                const response = await fetch(`${category_amount_year}?name=${encodeURIComponent(name)}&year=${encodeURIComponent(year)}`);
-                const data = await response.json();
-                return data; // Return the category amount
-            } catch (error) {
-                console.error('獲取類別銷售數量時發生錯誤：', error);
-                return 0;
-            }
-        }
 
         // 更新圖表
         async function updateChartData(selectedValue) {
@@ -224,7 +225,7 @@
                 const amount3 = await getOrderAmount('未確認', selectedValue);
                 const amount4 = await getOrderAmount('取消', selectedValue);
                 const amount5 = await getOrderAmount('已到貨', selectedValue);
-                console.log(amount1);
+                // console.log(amount1);
 
                 var myChart = echarts.init(document.getElementById('leftchart'));
                 myChart.resize({
