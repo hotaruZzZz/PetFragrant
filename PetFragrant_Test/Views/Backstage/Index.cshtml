@@ -159,7 +159,7 @@
                 const url = `@Url.Action("OrderAmount", "Backstage")?name=${encodeURIComponent(status)}&date=${encodeURIComponent(date)}`;
                 // 使用fetch取得資料
                 const response = await fetch(url);
-                //const response = await fetch(`${order_amount}?name=${encodeURIComponent(status)}&date=${encodeURIComponent(date)}`);
+                // const response = await fetch(`${order_amount}?name=${encodeURIComponent(status)}&date=${encodeURIComponent(date)}`);
                 const data = await response.json();
                 return data; // Return the order amount
             } catch (error) {
