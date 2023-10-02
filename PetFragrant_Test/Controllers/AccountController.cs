@@ -475,7 +475,7 @@ namespace PetFragrant_Test.Controllers
                         _ctx.SaveChanges();
                         ViewData["Title"] = "修改密碼成功!";
                         ViewData["ResultMessage"] = "修改密碼成功!";
-                        ViewData["RedirectUrl"] = "/Home/Index";
+                        ViewData["RedirectUrl"] = "/PetFragrant/Home/Index";
                         ViewData["RedirectTime"] = 6;
                         ViewData["Message"] = "修改密碼成功!";
                         return View("~/Views/Shared/ResultMessage.cshtml");

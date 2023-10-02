@@ -63,7 +63,7 @@ namespace PetFragrant_Test.Controllers
         {
             if(id != UserID())
             {
-                return Redirect("/Account/Forbidden");
+                return RedirectToAction("Forbidden", "Account");
             }
             else
             {
@@ -110,9 +110,10 @@ namespace PetFragrant_Test.Controllers
                 customer.PhoneNumber = user.PhoneNo;
                 _ctx.Update(customer);
                 _ctx.SaveChanges();
-                return Redirect("/User/Index/");
+                return RedirectToAction("Index", "User");
+                // return Redirect("/User/Index/");
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "User");
         }
 
         [Authorize]
@@ -192,7 +193,8 @@ namespace PetFragrant_Test.Controllers
                             };
                             _ctx.Add(myLike);
                             _ctx.SaveChanges();
-                            return Redirect("/Products/ProductDetail/" + id);
+                            return RedirectToAction("ProductDetail", "Products", new { id = id });
+                            // return Redirect("/Products/ProductDetail/" + id);
                         }
                     }
                     else
@@ -200,13 +202,13 @@ namespace PetFragrant_Test.Controllers
                         var Like = _ctx.MyLikes.FirstOrDefault(p => p.ProdcutId  == id && p.CustomerId == userId);
                         _ctx.MyLikes.Remove(Like);
                         _ctx.SaveChanges();
-                        return Redirect("/Products/ProductDetail/" + id);
+                        return RedirectToAction("ProductDetail", "Products", new { id = id });
                     }
                 }
 
             }
 
-            return Redirect("/Products/ProductDetail/" + id);
+            return RedirectToAction("ProductDetail", "Products", new { id = id });
         }
 
         // 取消追蹤
@@ -228,7 +230,7 @@ namespace PetFragrant_Test.Controllers
             {
                 return NotFound();
             }
-            return RedirectToAction("User/likes");
+            return RedirectToAction("likes", "User");
         }
 
         [HttpPost]
@@ -331,7 +333,7 @@ namespace PetFragrant_Test.Controllers
             {
                 return NotFound();
             }
-            return RedirectToAction("ShoppingCart");
+            return RedirectToAction("ShoppingCart","User");
         }
 
         [Authorize]
@@ -392,7 +394,7 @@ namespace PetFragrant_Test.Controllers
                 _ctx.Add(report);
                 _ctx.SaveChanges();
             }
-            return Redirect("/User/");
+            return RedirectToAction("Index", "User");
         }
 
         [HttpPost]
@@ -446,7 +448,7 @@ namespace PetFragrant_Test.Controllers
                     
                 }
             }
-            return Redirect("/Orderlist/MyOrder");
+            return RedirectToAction("MyOrder", "Orderlist");
         }
 
     }
