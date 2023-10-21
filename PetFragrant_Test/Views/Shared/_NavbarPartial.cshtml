@@ -118,7 +118,7 @@
         var id = "@User.Claims.FirstOrDefault(c => c.Type == "UserID")?.Value";
         //console.log(id);
         $.ajax({
-            url: '/Account/CartAmt',
+            url: '@Url.Action("CartAmt", "Account")',
             method: 'GET',
             data: { id: id },
             success: function (result) {
